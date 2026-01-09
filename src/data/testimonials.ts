@@ -1,0 +1,58 @@
+export const TESTIMONIALS = [
+  {
+    name: "Sarah D.",
+    role: "Mahasiswa",
+    content: "\"Penyelamat banget buat anak kost! Pick up dan delivery nya on time, bajunya wangi banget dan rapi. Harganya juga sangat terjangkau.\"",
+    rating: 5,
+    avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuAeSG5nQsEftZRQrRP6oR9OATz1bF2lqs0XPAabq9x505_cyqqP4xnJ7EG8BVCvJvMCx_r2ELA8Zmcly6Jyss0L97GH8cQc65Ga3weKSzlwRA4rIompSy3F0oLfm1b9zsv1x8HhRxVHAJ8o3RKBrjALMQxtnL1Yjm1QMpBWcZ2rLvJx26PLavmv_DGz21DjnH7tSUH5sA_vlUHMBvuGewGfEyLvNzb4AXU_zhpBZ_N1OgjmzdwF_YRFlg0nJw4LqGHqtFiWYoCyn2E",
+  },
+  {
+    name: "Budi Santoso",
+    role: "Karyawan Swasta",
+    content: "\"Layanan Dry Clean nya juara. Jas kantor saya bersih sempurna tanpa noda. Sangat recommended untuk pakaian formal.\"",
+    rating: 5,
+    avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuBiuer1jVLVhR9lQuBPs201y2ligMvRiozGV2G9212gLokOo-zLgXciGRYrG_tJVehDhCJv9vAMy6Ve0f4jBNBM_KBf2Gy1fkC6Gp_t4-MOLNb7FEkZ-awFdcvVJxeCJZzVGQPiW8ZdlxlQhlxmp608eCdgI3pIV6iacHeI_1ofm0SdLDlPd2I0M7O1-JaHAKXMRTK6TIu9jReuBnmViYNi-7H1SZEbOuhsIeTvb9DRsP20qPDMlHyIu77QvJivqwbnrZYkAY1aC7s",
+  },
+  {
+    name: "Linda W.",
+    role: "Ibu Rumah Tangga",
+    content: "\"Suka banget sama wanginya, tahan lama. Aplikasinya juga gampang dipake buat tracking status cucian. Mantap!\"",
+    rating: 5,
+    avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuAckKRe-ZXwVjswwx2ByLSDL-kTTEDxscZW1R1EMUy5WZzKCXqEoAYSzNkqsz6MIZF_zZ8uMkOfQXd_lsQThuIoDEoVrHCtkLudWAnjGiTkcNjlCRp4k8M_js6Z31Tw7yrCBK5pfW_6LkU40lG3YppwSN_vziWy5SHU9sMslAg2T5iXTpS4XO1CHmzPNlMcgUKpwLKimfPvuV3wTFxbfUbKAhCA2xQs-1sr8oDbSgykdCrelR6M5O28vDkF5qrVaVOjM0ksgueu_Ro",
+  },
+  {
+    name: "Rizky Pratama",
+    role: "Freelancer",
+    content: "\"Fitur trackingnya sangat membantu, jadi tau kapan cucian selesai. Kurirnya juga ramah banget.\"",
+    rating: 5,
+    avatar: "https://img.freepik.com/free-photo/portrait-stylish-man-cafe_329181-2096.jpg?semt=ais_hybrid&w=740&q=80",
+  },
+  {
+    name: "Siti Aminah",
+    role: "Guru",
+    content: "\"Harga bersahabat untuk kualitas se-premium ini. Wanginya soft dan nggak bikin apek meskipun disimpan lama.\"",
+    rating: 4.5,
+    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cGVvcGxlfGVufDB8fDB8fHww",
+  },
+  {
+    name: "Toni Gunawan",
+    role: "Chef",
+    content: "\"Baju kerja saya yang penuh noda minyak bisa bersih total. Sangat impress dengan quality control-nya.\"",
+    rating: 5,
+    avatar: "https://images.unsplash.com/photo-1542909168-82c3e7fdca5c?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGh1bWFufGVufDB8fDB8fHww",
+  },
+  {
+    name: "Dewi Lestari",
+    role: "Mahasiswi",
+    content: "\"Sering dapat promo diskon yang lumayan banget. Cocok buat kantong mahasiswa yang ingin praktis.\"",
+    rating: 4.5,
+    avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cGVyc29ufGVufDB8fDB8fHww",
+  },
+  {
+    name: "Ahmad Fauzi",
+    role: "Pengusaha",
+    content: "\"Saya langganan paket corporate untuk seragam karyawan. Pelayanannya profesional dan konsisten.\"",
+    rating: 5,
+    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHBlb3BsZXxlbnwwfHwwfHx8MA%3D%3D",
+  },
+]

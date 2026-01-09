@@ -1,0 +1,36 @@
+export const SERVICES = [
+  {
+    title: "Cuci Komplit",
+    desc: "Cuci, kering, setrika, dan packing rapi. Cocok untuk pakaian sehari-hari.",
+    price: "Rp 8.000",
+    unit: "/kg",
+    image: "https://laundrylangganan.com/wp-content/uploads/2024/05/cuci-setrika-wangi.webp",
+    tag: "Best Seller",
+    tagColor: "bg-yellow-100 text-yellow-800",
+  },
+  {
+    title: "Express Wash",
+    desc: "Layanan kilat prioritas. Selesai dalam 24 jam atau kurang.",
+    price: "Rp 12.000",
+    unit: "/kg",
+    image: "https://image.idntimes.com/post/20250214/7-a274b0c5ce43b6a911459f10efd9a65f-e2558ab82048eab06733a5f279cea92f.jpg",
+    tag: "24 Jam",
+    tagColor: "bg-yellow-100 text-yellow-800",
+  },
+  {
+    title: "Dry Clean",
+    desc: "Perawatan khusus untuk jas, gaun, dan bahan sensitif lainnya.",
+    price: "Rp 25.000",
+    unit: "/pcs",
+    image: "https://imgx.parapuan.co/crop/0x0:0x0/x/photo/2022/06/17/dry-cleaning-jasjpeg-20220617025020.jpeg",
+    tag: null,
+  },
+  {
+    title: "Setrika Saja",
+    desc: "Jasa setrika uap profesional untuk hasil yang super rapi dan licin.",
+    price: "Rp 6.000",
+    unit: "/kg",
+    image: "https://www.sinarlistrik.com/wp-content/uploads/2025/09/Setrika-Murah-Dibawah-200-Ribu-dengan-Kualitas-Premium.jpg",
+    tag: null,
+  },
+]

@@ -44,6 +44,15 @@
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
+
+  /* Landing Page Colors */
+  --color-primary: #1a1a1a;
+  --color-primary-dark: #2563eb;
+  --color-background-light: #f7f7f7;
+  --color-background-dark: #191919;
+  --color-surface-light: #ffffff;
+  --color-surface-dark: #1e293b;
+  --font-primary: 'Poppins', sans-serif;
 }
 
 :root {
@@ -141,12 +150,59 @@ body {
   .flex-start {
     @apply flex items-center justify-start;
   }
+
+  .flex-end {
+    @apply flex items-center justify-end;
+  }
+
+  img {
+    user-drag: none;
+    -webkit-user-drag: none; /* For Safari */
+    user-select: none; /* Prevent selection */
+    touch-action: none; /* Disable touch gestures */
+    -webkit-user-select: none; /* For Safari */
+  }
+
+  /* Marquee Animation */
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-100% - var(--gap)));
+    }
+  }
+
+  @keyframes marquee-vertical {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(calc(-100% - var(--gap)));
+    }
+  }
+
+  .animate-marquee-scrolling {
+    animation: marquee var(--duration) linear infinite;
+  }
+
+  .animate-marquee-scrolling-vertical {
+    animation: marquee-vertical var(--duration) linear infinite;
+  }
+
+  /* Robust Pause on Hover */
+  .hover-pause:hover .animate-marquee-scrolling,
+  .hover-pause:hover .animate-marquee-scrolling-vertical {
+    animation-play-state: paused;
+  }
 }
 
-img {
-  user-drag: none;
-  -webkit-user-drag: none; /* For Safari */
-  user-select: none; /* Prevent selection */
-  touch-action: none; /* Disable touch gestures */
-  -webkit-user-select: none; /* For Safari */
+/* Shimmer Animation */
+@keyframes shimmer {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(200%);
+  }
 }
