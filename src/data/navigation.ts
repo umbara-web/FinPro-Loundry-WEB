@@ -3,4 +3,5 @@ export const navLinks = [
   { label: 'Layanan', href: '#services' },
   { label: 'Lokasi', href: '#locations' },
   { label: 'Testimoni', href: '#testimonials' },
+  { label: 'Tentang', href: '/about' },
 ];
