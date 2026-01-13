@@ -7,12 +7,12 @@ import { Locations } from '@/src/components/Home/Location/page';
 import { Testimonials } from '@/src/components/Home/Testimonials/page';
 import { CallToAction } from '@/src/components/Home/CallToAction/page';
 import { Footer } from '@/src/components/layout/MainFooter';
-// import { LocationPermissionModal } from '@/src/components/landing/location-permission-modal';
+import { LocationPermissionModal } from '@/src/components/Home/Location/location-permission-modal';
 
 export default function Home() {
   return (
     <main className='text-lp-primary relative min-h-screen overflow-x-hidden bg-white antialiased dark:bg-black dark:text-white'>
-      {/* <LocationPermissionModal /> */}
+      <LocationPermissionModal />
       <Navbar />
       <Hero />
       <TrustedBy />
