@@ -4,10 +4,13 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 import AuthSessionProvider from '@/src/providers/authSessionProvider';
-import AuthWatcher from '@/src/components/authWatcher';
+import AuthWatcher from '@/src/components/auth/auth-watcher';
 import { ThemeProvider } from '@/src/providers/theme-provider';
-import { WashingMachine } from 'lucide-react';
-// import { Toaster } from 'sonner';
+import { Toaster } from 'sonner';
+import SocialAuthWrapper from '@/src/components/auth/social-auth-wrapper';
+import { AuthProvider } from '@/src/context/AuthContext';
+import QueryProvider from '@/src/providers/query-provider';
+import { WalletProvider } from '@/src/context/WalletContext';
 
 export const metadata: Metadata = {
   title: 'FreshLaundry',
@@ -35,19 +38,23 @@ export default function RootLayout({
       </head>
       <body className={clsx(poppins.variable, 'antialiased')}>
         <AuthSessionProvider>
-          {/* <SocialAuthWrapper> */}
-          <AuthWatcher />
-          <ThemeProvider
-            attribute='class'
-            defaultTheme='system'
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>
-          {/* </SocialAuthWrapper> */}
+          <AuthProvider>
+            <SocialAuthWrapper>
+              <AuthWatcher />
+              <ThemeProvider
+                attribute='class'
+                defaultTheme='system'
+                enableSystem
+                disableTransitionOnChange
+              >
+                <QueryProvider>
+                  <WalletProvider>{children}</WalletProvider>
+                </QueryProvider>
+              </ThemeProvider>
+            </SocialAuthWrapper>
+          </AuthProvider>
         </AuthSessionProvider>
-        {/* <Toaster richColors position='top-right' /> */}
+        <Toaster richColors position='top-right' />
       </body>
     </html>
   );

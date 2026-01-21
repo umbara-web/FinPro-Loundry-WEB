@@ -2,8 +2,9 @@ import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
-
 import { DecodedToken } from '@/src/types/auth';
+import GoogleProvider from 'next-auth/providers/google';
+import FacebookProvider from 'next-auth/providers/facebook';
 
 async function refreshAccessToken(token: any) {
   try {
@@ -82,6 +83,15 @@ const handler = NextAuth({
           return null;
         }
       },
+    }),
+
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID || '',
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+    }),
+    FacebookProvider({
+      clientId: process.env.FACEBOOK_CLIENT_ID || '',
+      clientSecret: process.env.FACEBOOK_CLIENT_SECRET || '',
     }),
   ],
 

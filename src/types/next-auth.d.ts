@@ -8,6 +8,7 @@ declare module 'next-auth' {
     role: string;
     accessToken: string;
     refreshToken: string;
+    isVerified?: boolean;
   }
 
   interface Session extends DefaultSession {
@@ -15,6 +16,8 @@ declare module 'next-auth' {
       email: string;
       name: string;
       role: string;
+      image?: string | null;
+      isVerified: boolean;
     } | null;
     accessToken?: string | null;
     error?: string | null;
@@ -31,5 +34,6 @@ declare module 'next-auth/jwt' {
     accessToken?: string | null;
     refreshToken?: string | null;
     error?: string | null;
+    isVerified?: boolean;
   }
 }
