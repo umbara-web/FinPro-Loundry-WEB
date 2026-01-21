@@ -9,7 +9,7 @@ import { navLinks } from '@/src/data/navigation';
 import { NavbarLogo } from '@/src/components/Home/Navbar/navbar-logo';
 import { NavbarActions } from '@/src/components/Home/Navbar/navbar-actions';
 import { NavbarMobile } from '@/src/components/Home/Navbar/navbar-mobile';
-import { cn } from '@/src/lib/utils';
+import { cn } from '@/src/lib/utils/utils';
 
 export function Navbar() {
   const { data: session, status } = useSession();
