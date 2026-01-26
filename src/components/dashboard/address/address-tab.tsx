@@ -1,4 +1,4 @@
-import { AddressListSection } from '@/src/components/dashboard/address/address-list-section';
+import { AddressListSection } from './address-list-section';
 
 export function AddressTab() {
   return (

@@ -29,7 +29,7 @@ export async function fetchDashboardData(): Promise<DashboardData> {
     // 1. Fetch Active Orders
     const activeRes = await getOrders({
       page: 1,
-      limit: 50,
+      limit: 100,
       sortOrder: 'desc',
       sortBy: 'created_at',
     });
@@ -45,7 +45,7 @@ export async function fetchDashboardData(): Promise<DashboardData> {
     // 2. Fetch Recent Activities (Orders sorted by update)
     const recentOrdersRes = await getOrders({
       page: 1,
-      limit: 5,
+      limit: 100,
       sortOrder: 'desc',
       sortBy: 'updated_at',
     });

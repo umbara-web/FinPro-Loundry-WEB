@@ -9,7 +9,7 @@ interface NavbarMobileProps {
   isMobileMenuOpen: boolean;
   setIsMobileMenuOpen: (open: boolean) => void;
   isLoggedIn: boolean;
-  // isVerified: boolean;
+  isVerified: boolean;
   menuItems: Array<{ label: string; href: string }>;
 }
 
@@ -17,7 +17,7 @@ export function NavbarMobile({
   isMobileMenuOpen,
   setIsMobileMenuOpen,
   isLoggedIn,
-  // isVerified,
+  isVerified,
   menuItems,
 }: NavbarMobileProps) {
   return (
@@ -44,7 +44,7 @@ export function NavbarMobile({
             className='fixed inset-x-4 top-24 z-50 h-auto rounded-2xl border border-gray-200 bg-white p-6 shadow-xl lg:hidden dark:border-gray-800 dark:bg-black'
           >
             <nav className='flex flex-col gap-2'>
-              {/* {isLoggedIn && !isVerified && (
+              {isLoggedIn && !isVerified && (
                 <div className='mb-2 flex items-center justify-center gap-2 rounded-lg border border-yellow-200 bg-yellow-50 p-2 text-sm font-medium text-yellow-800 dark:border-yellow-900/50 dark:bg-yellow-900/20 dark:text-yellow-500'>
                   <span className='relative flex h-2 w-2'>
                     <span className='absolute inline-flex h-full w-full animate-ping rounded-full bg-yellow-400 opacity-75'></span>
@@ -52,7 +52,7 @@ export function NavbarMobile({
                   </span>
                   Akun Belum Diverifikasi
                 </div>
-              )} */}
+              )}
               {menuItems.map((item) => (
                 <Link
                   key={item.label}

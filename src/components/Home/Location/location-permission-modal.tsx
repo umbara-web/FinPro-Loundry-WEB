@@ -1,67 +1,18 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, LocateFixed, X } from 'lucide-react';
-
-const LOCATION_PERMISSION_KEY = 'freshlaundry_location_asked';
+import { useLocationPermission } from '../Location/use-location-permission';
 
 export function LocationPermissionModal() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [permissionError, setPermissionError] = useState(false);
-
-  useEffect(() => {
-    // Show modal on every visit/refresh as requested
-    const timer = setTimeout(() => setIsOpen(true), 1500);
-    return () => clearTimeout(timer);
-  }, []);
-
-  const handleAllow = async () => {
-    setIsLoading(true);
-    setPermissionError(false);
-    try {
-      if ('geolocation' in navigator) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            // Store location in localStorage for later use
-            localStorage.setItem(
-              'freshlaundry_user_location',
-              JSON.stringify({
-                latitude: position.coords.latitude,
-                longitude: position.coords.longitude,
-                timestamp: Date.now(),
-              })
-            );
-            localStorage.setItem(LOCATION_PERMISSION_KEY, 'granted');
-            setIsOpen(false);
-            setIsLoading(false);
-          },
-          (error) => {
-            // Instead of logging, show error state in modal
-            setPermissionError(true);
-            setIsLoading(false);
-          }
-        );
-      } else {
-        localStorage.setItem(LOCATION_PERMISSION_KEY, 'unsupported');
-        setIsOpen(false);
-        setIsLoading(false);
-      }
-    } catch (error) {
-      setPermissionError(true);
-      setIsLoading(false);
-    }
-  };
-
-  const handleDismiss = () => {
-    localStorage.setItem(LOCATION_PERMISSION_KEY, 'dismissed');
-    setIsOpen(false);
-  };
-
-  const handleRefresh = () => {
-    window.location.reload();
-  };
+  const {
+    isOpen,
+    isLoading,
+    permissionError,
+    handleAllow,
+    handleDismiss,
+    handleRefresh,
+  } = useLocationPermission();
 
   return (
     <AnimatePresence>
@@ -82,7 +33,7 @@ export function LocationPermissionModal() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className='fixed top-1/2 left-1/2 z-101 w-[90%] max-w-md -translate-x-1/2 -translate-y-1/2'
+            className='fixed top-1/2 left-1/2 z-100 w-[90%] max-w-md -translate-x-1/2 -translate-y-1/2'
           >
             <div className='overflow-hidden rounded-2xl bg-white shadow-2xl dark:bg-gray-900'>
               {/* Blue Header */}
@@ -116,7 +67,7 @@ export function LocationPermissionModal() {
                   {permissionError ? (
                     <button
                       onClick={handleRefresh}
-                      className='flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-gray-900 font-semibold text-white transition-all hover:bg-gray-800 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100'
+                      className='flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-gray-900 font-semibold text-white transition-all hover:bg-gray-800 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100'
                     >
                       OK (Refresh Halaman)
                     </button>
@@ -125,14 +76,14 @@ export function LocationPermissionModal() {
                       <button
                         onClick={handleAllow}
                         disabled={isLoading}
-                        className='flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-gray-900 font-semibold text-white transition-all hover:bg-gray-800 disabled:opacity-50 dark:bg-white dark:text-gray-900 dark:hover:bg-blue-300'
+                        className='flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-gray-900 font-semibold text-white transition-all hover:bg-gray-800 disabled:opacity-50 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100'
                       >
                         <LocateFixed className='h-5 w-5' />
                         {isLoading ? 'Meminta izin...' : 'Izinkan Lokasi'}
                       </button>
                       <button
                         onClick={handleDismiss}
-                        className='h-12 w-full cursor-pointer rounded-xl bg-gray-100 font-semibold text-gray-700 transition-all hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'
+                        className='h-12 w-full rounded-xl bg-gray-100 font-semibold text-gray-700 transition-all hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'
                       >
                         Nanti Saja
                       </button>

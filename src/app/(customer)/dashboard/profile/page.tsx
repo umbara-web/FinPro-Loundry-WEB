@@ -4,13 +4,12 @@ import { useState } from 'react';
 import { useAuth } from '@/src/context/AuthContext';
 import { useProfileForm } from '@/src/hooks/use-profile-form';
 import { useSecurityForm } from '@/src/hooks/use-security-form';
-import { ProfileHeader } from '@/src/components/profile/profile-header';
-import { ProfileTabs } from '@/src/components/profile/profile-tabs';
-import { PersonalInfoTab } from '@/src/components/profile/personal-info-tab';
-// import { AddressTab } from '@/src/components/profile/address-tab';
-import { SecurityTab } from '@/src/components/profile/security-tab';
-// import { PaymentHistoryTab } from '@/src/components/profile/payment-history-tab';
-// import { ComplaintHistoryTab } from '@/src/components/profile/complaint-history-tab';
+import { ProfileHeader } from '@/src/components/dashboard/profile/profile-header';
+import { ProfileTabs } from '@/src/components/dashboard/profile/profile-tabs';
+import { PersonalInfoTab } from '@/src/components/dashboard/profile/personal-info-tab';
+import { AddressTab } from '@/src/components/dashboard/address/address-tab';
+import { SecurityTab } from '@/src/components/dashboard/profile/security-tab';
+import { PaymentHistoryTab } from '@/src/components/dashboard/payment/payment-history/payment-history-tab';
 
 export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState('personal-info');
@@ -64,7 +63,7 @@ export default function ProfilePage() {
           />
         )}
 
-        {/* {activeTab === 'address' && <AddressTab />} */}
+        {activeTab === 'address' && <AddressTab />}
 
         {activeTab === 'security' && (
           <SecurityTab
@@ -73,9 +72,7 @@ export default function ProfilePage() {
           />
         )}
 
-        {/* {activeTab === 'payment-history' && <PaymentHistoryTab />} */}
-
-        {/* {activeTab === 'complaint-history' && <ComplaintHistoryTab />} */}
+        {activeTab === 'payment-history' && <PaymentHistoryTab />}
 
         {activeTab !== 'payment-history' &&
           activeTab !== 'complaint-history' && (

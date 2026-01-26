@@ -8,7 +8,7 @@ export function AddressWidget() {
   const { primaryAddress } = useWallet();
 
   return (
-    <div className='dark:bg-lp-surface-dark bg-lp-surface-light overflow-hidden rounded-xl border border-slate-200 shadow-sm dark:border-[#324d67]'>
+    <div className='dark:bg-surface-dark bg-surface-light overflow-hidden rounded-xl border border-slate-200 shadow-sm dark:border-[#324d67]'>
       <AddressHeader />
       <MapPreview />
       <AddressContent address={primaryAddress} />
@@ -24,7 +24,7 @@ function AddressHeader() {
       </h3>
       <Link
         href='/dashboard/addresses'
-        className='hover:bg-primary/10 text-primary rounded p-1.5 transition-colors'
+        className='hover:bg-primary/10 text-primary rounded-lg p-1.5 transition-colors hover:text-blue-500 dark:text-white dark:hover:bg-slate-400 dark:hover:text-blue-800'
       >
         <Edit className='h-5 w-5' />
       </Link>

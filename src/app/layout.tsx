@@ -24,8 +24,6 @@ const poppins = Poppins({
   variable: '--font-poppins',
 });
 
-// import SocialAuthWrapper from '@/src/components/auth/social-auth-wrapper';
-
 export default function RootLayout({
   children,
 }: Readonly<{

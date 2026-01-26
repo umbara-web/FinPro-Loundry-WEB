@@ -40,10 +40,10 @@ export function Locations() {
                 </div>
                 <div>
                   <h4 className='text-primary font-bold dark:text-white'>
-                    FreshLaundry Pusat - Jakarta Selatan
+                    FreshLaundry Pusat - Depok
                   </h4>
                   <p className='text-sm text-gray-500 dark:text-gray-400'>
-                    Jl. Kemang Raya No. 12, Jakarta Selatan
+                    Grand Depok City Jl. Bulevard No.01, Depok Jawa Barat
                   </p>
                 </div>
               </div>
@@ -53,10 +53,10 @@ export function Locations() {
                 </div>
                 <div>
                   <h4 className='text-primary font-bold dark:text-white'>
-                    FreshLaundry Branch - BSD City
+                    FreshLaundry Branch - Jakarta Selatan
                   </h4>
                   <p className='text-sm text-gray-500 dark:text-gray-400'>
-                    Ruko Golden Boulevard, Blok F, BSD City
+                    Jl. Kemang Raya No. 12, Jakarta Selatan
                   </p>
                 </div>
               </div>

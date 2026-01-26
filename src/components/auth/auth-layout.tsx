@@ -3,8 +3,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { IconArrowLeft } from '@tabler/icons-react';
-import { WashingMachine } from 'lucide-react';
-import ColourfulText from '@/src/components/ui/colourful-text';
 import { ReactNode } from 'react';
 import { AuthLogo } from './shared/auth-logo';
 

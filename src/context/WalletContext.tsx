@@ -30,7 +30,7 @@ const WalletContext = createContext<WalletContextType | undefined>(undefined);
 export function WalletProvider({ children }: { children: React.ReactNode }) {
   // Initialize with the hardcoded value from the design
   const [balance, setBalance] = useState(0);
-  const [points, setPoints] = useState(350); // Hardcoded initial points for demo
+  const [points, setPoints] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
   // Data States

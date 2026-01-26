@@ -5,13 +5,14 @@ import { Address } from '@/src/types/address';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Check, Edit2, MapPin, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { Button } from '@/src/components/ui/button';
+import { Button } from '../../ui/button';
 
 interface AddressListSectionProps {
   onEdit?: (address: Address) => void;
   showActions?: boolean;
   onSelect?: (address: Address) => void;
   selectedId?: string;
+  layout?: 'list' | 'grid';
 }
 
 export function AddressListSection({
@@ -19,6 +20,7 @@ export function AddressListSection({
   showActions = true,
   onSelect,
   selectedId,
+  layout = 'list',
 }: AddressListSectionProps) {
   const queryClient = useQueryClient();
 
@@ -87,7 +89,13 @@ export function AddressListSection({
   }
 
   return (
-    <div className='custom-scrollbar flex max-h-100 flex-col gap-4 overflow-y-auto pr-2'>
+    <div
+      className={`custom-scrollbar ${
+        layout === 'grid'
+          ? 'grid grid-cols-1 md:grid-cols-2'
+          : 'flex flex-col pr-2'
+      } max-h-100 gap-4 overflow-y-auto`}
+    >
       {addresses.map((address: Address) => {
         const isSelected = selectedId === address.id;
         const isPrimary = address.isPrimary;

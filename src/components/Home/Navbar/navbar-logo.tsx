@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { WashingMachine } from 'lucide-react';
-import ColourfulText from '@/src/components/ui/colourful-text';
+import { ColourfulText } from '@/src/components/ui/colourful-text';
 import { motion } from 'framer-motion';
 
 interface NavbarLogoProps {
@@ -28,10 +28,10 @@ export function NavbarLogo({ isLoggedIn, pathname }: NavbarLogoProps) {
         className='flex items-center gap-1'
         onClick={handleLogoClick}
       >
-        <div className='text-lp-primary dark:text-lp-background-light flex size-10 items-center justify-center rounded-xl bg-transparent'>
+        <div className='text-primary dark:text-background-light flex size-10 items-center justify-center rounded-xl bg-transparent'>
           <WashingMachine className='h-6 w-6' />
         </div>
-        <h2 className='text-lp-primary text-xl font-bold tracking-tight dark:text-white'>
+        <h2 className='text-primary text-xl font-bold tracking-tight dark:text-white'>
           <ColourfulText text='FreshLaundry' />
         </h2>
       </Link>
