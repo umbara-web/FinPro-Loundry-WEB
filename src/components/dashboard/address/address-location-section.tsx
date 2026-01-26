@@ -9,7 +9,7 @@ import { Input } from '@/src/components/ui/input';
 import { Textarea } from '@/src/components/ui/textarea';
 import { UseFormReturn } from 'react-hook-form';
 import { AddressFormValues } from '@/src/lib/schemas/address-schemas';
-import { LocationPicker } from '@/src/components/map/location-picker';
+import { LocationPicker } from './map/location-picker';
 
 interface AddressLocationSectionProps {
   form: UseFormReturn<AddressFormValues>;

@@ -18,8 +18,6 @@ const iconRetinaUrl =
 const shadowUrl =
   'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png';
 
-// Override global Leaflet icon options
-// We do this check to prevent re-running logic unnecessarily, though it's safe in useEffect
 if (typeof window !== 'undefined') {
   // @ts-ignore
   delete L.Icon.Default.prototype._getIconUrl;

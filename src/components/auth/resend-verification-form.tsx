@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 import { Button } from '@/src/components/ui/button';
 import { authApi } from '@/src/lib/api/auth-api';
 import { WashingMachine, Mail, CheckCircle } from 'lucide-react';
-import ColourfulText from '@/src/components/ui/colourful-text';
+import { ColourfulText } from '@/src/components/ui/colourful-text';
 import FormField from './form-field';
 import Link from 'next/link';
 
@@ -65,10 +65,10 @@ export function ResendVerificationForm() {
     <div className='w-full space-y-6'>
       <div className='flex flex-col items-center gap-2 text-center'>
         <div className='flex items-center gap-1'>
-          <div className='text-lp-primary dark:text-lp-background-light flex size-10 items-center justify-center rounded-xl bg-transparent'>
+          <div className='text-primary dark:text-background-light flex size-10 items-center justify-center rounded-xl bg-transparent'>
             <WashingMachine className='h-6 w-6' />
           </div>
-          <h2 className='text-lp-primary text-xl font-bold tracking-tight dark:text-white'>
+          <h2 className='text-primary text-xl font-bold tracking-tight dark:text-white'>
             <ColourfulText text='FreshLaundry' />
           </h2>
         </div>

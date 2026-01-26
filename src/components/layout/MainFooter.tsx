@@ -4,12 +4,13 @@ import { WashingMachine, Facebook, Instagram, Twitter } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import ColourfulText from '@/src/components/ui/colourful-text';
+import { ColourfulText } from '@/src/components/ui/colourful-text';
+import { FooterLinks } from './footer-links';
 
 export function Footer() {
   const pathname = usePathname();
   return (
-    <footer className='bg-surface-light border-t border-gray-200 pt-16 pb-8 dark:border-gray-800 dark:bg-[#0b1018]'>
+    <footer className='bg-surface-light border-t border-gray-200 pt-16 pb-8 dark:border-gray-800 dark:bg-slate-950'>
       <div className='container mx-auto px-4 md:px-6 lg:px-8'>
         <div className='mb-12 grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-5'>
           {/* Brand Info */}
@@ -61,119 +62,36 @@ export function Footer() {
           </div>
 
           {/* Links 1 */}
-          <div>
-            <h4 className='mb-6 font-bold text-black dark:text-white'>
-              Layanan
-            </h4>
-            <ul className='space-y-4'>
-              <li>
-                <a
-                  href='#'
-                  className='text-gray-500 transition-colors hover:text-blue-500 dark:hover:text-white'
-                >
-                  Kiloan
-                </a>
-              </li>
-              <li>
-                <a
-                  href='#'
-                  className='text-gray-500 transition-colors hover:text-blue-500 dark:hover:text-white'
-                >
-                  Satuan / Dry Clean
-                </a>
-              </li>
-              <li>
-                <a
-                  href='#'
-                  className='text-gray-500 transition-colors hover:text-blue-500 dark:hover:text-white'
-                >
-                  Karpet & Gorden
-                </a>
-              </li>
-              <li>
-                <a
-                  href='#'
-                  className='text-gray-500 transition-colors hover:text-blue-500 dark:hover:text-white'
-                >
-                  Sepatu & Tas
-                </a>
-              </li>
-            </ul>
-          </div>
+          <FooterLinks
+            title='Layanan'
+            links={[
+              { label: 'Kiloan', href: '#' },
+              { label: 'Satuan / Dry Clean', href: '#' },
+              { label: 'Karpet & Gorden', href: '#' },
+              { label: 'Sepatu & Tas', href: '#' },
+            ]}
+          />
 
           {/* Links 2 */}
-          <div>
-            <h4 className='mb-6 font-bold text-black dark:text-white'>
-              Perusahaan
-            </h4>
-            <ul className='space-y-4'>
-              <li>
-                <a
-                  href='#'
-                  className='text-gray-500 transition-colors hover:text-blue-500 dark:hover:text-white'
-                >
-                  Tentang Kami
-                </a>
-              </li>
-              <li>
-                <a
-                  href='#'
-                  className='text-gray-500 transition-colors hover:text-blue-500 dark:hover:text-white'
-                >
-                  Karir
-                </a>
-              </li>
-              <li>
-                <a
-                  href='#'
-                  className='text-gray-500 transition-colors hover:text-blue-500 dark:hover:text-white'
-                >
-                  Blog
-                </a>
-              </li>
-              <li>
-                <a
-                  href='#'
-                  className='text-gray-500 transition-colors hover:text-blue-500 dark:hover:text-white'
-                >
-                  Kontak
-                </a>
-              </li>
-            </ul>
-          </div>
+          <FooterLinks
+            title='Perusahaan'
+            links={[
+              { label: 'Tentang Kami', href: '#' },
+              { label: 'Karir', href: '#' },
+              { label: 'Blog', href: '#' },
+              { label: 'Kontak', href: '#' },
+            ]}
+          />
 
           {/* Links 3 */}
-          <div>
-            <h4 className='mb-6 font-bold text-black dark:text-white'>
-              Bantuan
-            </h4>
-            <ul className='space-y-4'>
-              <li>
-                <a
-                  href='#'
-                  className='text-gray-500 transition-colors hover:text-blue-500 dark:hover:text-white'
-                >
-                  FAQ
-                </a>
-              </li>
-              <li>
-                <a
-                  href='#'
-                  className='text-gray-500 transition-colors hover:text-blue-500 dark:hover:text-white'
-                >
-                  Syarat & Ketentuan
-                </a>
-              </li>
-              <li>
-                <a
-                  href='#'
-                  className='text-gray-500 transition-colors hover:text-blue-500 dark:hover:text-white'
-                >
-                  Kebijakan Privasi
-                </a>
-              </li>
-            </ul>
-          </div>
+          <FooterLinks
+            title='Bantuan'
+            links={[
+              { label: 'FAQ', href: '#' },
+              { label: 'Syarat & Ketentuan', href: '#' },
+              { label: 'Kebijakan Privasi', href: '#' },
+            ]}
+          />
         </div>
 
         <div className='flex flex-col items-center justify-between gap-4 border-t border-gray-200 pt-8 md:flex-row dark:border-gray-800'>

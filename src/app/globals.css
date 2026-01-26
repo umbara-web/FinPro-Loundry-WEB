@@ -130,6 +130,11 @@ body {
   font-family: var(--font-poppins);
 }
 
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem; /* Adjust based on navbar height */
+}
+
 @layer components {
   .custom-container {
     margin: 0 auto;
@@ -153,14 +158,6 @@ body {
 
   .flex-end {
     @apply flex items-center justify-end;
-  }
-
-  img {
-    user-drag: none;
-    -webkit-user-drag: none; /* For Safari */
-    user-select: none; /* Prevent selection */
-    touch-action: none; /* Disable touch gestures */
-    -webkit-user-select: none; /* For Safari */
   }
 
   /* Marquee Animation */
@@ -197,7 +194,14 @@ body {
   }
 }
 
-/* Shimmer Animation */
+img {
+  user-drag: none;
+  -webkit-user-drag: none; /* For Safari */
+  user-select: none; /* Prevent selection */
+  touch-action: none; /* Disable touch gestures */
+  -webkit-user-select: none; /* For Safari */
+}
+
 @keyframes shimmer {
   from {
     transform: translateX(-100%);

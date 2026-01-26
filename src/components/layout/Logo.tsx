@@ -1,6 +1,6 @@
 import type { ElementType } from 'react';
 import { WashingMachine, type LucideIcon } from 'lucide-react';
-import ColourfulText from '@/src/components/ui/colourful-text';
+import { ColourfulText } from '@/src/components/ui/colourful-text';
 
 type LogoProps = {
   text?: string;

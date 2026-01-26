@@ -6,8 +6,6 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Button } from '@/src/components/ui/button';
 import { authApi } from '@/src/lib/api/auth-api';
-import { WashingMachine } from 'lucide-react';
-import ColourfulText from '@/src/components/ui/colourful-text';
 import { VerifyInvalidToken, VerifySuccess } from './verify-status';
 import { PasswordField } from './password-field';
 import { AuthLogo } from './shared/auth-logo';

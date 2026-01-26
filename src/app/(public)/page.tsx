@@ -11,7 +11,7 @@ import { LocationPermissionModal } from '@/src/components/Home/Location/location
 
 export default function Home() {
   return (
-    <main className='text-lp-primary relative min-h-screen overflow-x-hidden bg-white antialiased dark:bg-black dark:text-white'>
+    <main className='text-primary relative min-h-screen overflow-x-hidden bg-white antialiased dark:bg-black dark:text-white'>
       <LocationPermissionModal />
       <Navbar />
       <Hero />
