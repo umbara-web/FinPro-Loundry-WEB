@@ -16,7 +16,7 @@ import {
 import clsx from 'clsx';
 
 const sidebarLinks = [
-  { href: '/worker/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/worker-dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/worker/attendance', label: 'Attendance Log', icon: CalendarClock },
   { href: '/worker/tasks', label: 'My Tasks', icon: ClipboardList, badge: true },
   { href: '/worker/history', label: 'History', icon: History },
