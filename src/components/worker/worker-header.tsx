@@ -25,7 +25,7 @@ export function WorkerHeader({
   });
 
   return (
-    <header className="sticky top-0 z-10 flex h-20 shrink-0 items-center justify-between border-b border-slate-100 bg-white/80 px-6 backdrop-blur-md lg:px-10 dark:border-slate-800 dark:bg-[#1b2027]/80">
+    <header className="sticky top-0 z-10 flex h-20 shrink-0 items-center justify-between border-b border-slate-100 bg-white/80 px-6 backdrop-blur-md lg:px-10 dark:border-slate-800 dark:bg-[#111a22]/80">
       <div className="flex items-center gap-4">
         <Button
           variant="ghost"
@@ -46,9 +46,9 @@ export function WorkerHeader({
       </div>
 
       <div className="flex items-center gap-4">
-        <button className="relative rounded-full p-2 text-slate-400 transition-colors hover:bg-teal-500/5 hover:text-teal-500">
+        <button className="relative rounded-full p-2 text-slate-400 transition-colors hover:bg-[#137fec]/10 hover:text-[#137fec]">
           <Bell className="h-5 w-5" />
-          <span className="absolute right-2 top-2 h-2 w-2 rounded-full border border-white bg-red-500 dark:border-[#1b2027]"></span>
+          <span className="absolute right-2 top-2 h-2 w-2 rounded-full border border-white bg-red-500 dark:border-[#111a22]"></span>
         </button>
 
         <div className="mx-1 h-8 w-px bg-slate-200 dark:bg-slate-700"></div>

@@ -53,6 +53,18 @@
   --color-surface-light: #ffffff;
   --color-surface-dark: #1e293b;
   --font-primary: 'Poppins', sans-serif;
+
+  /* Station Dashboard Colors */
+  --color-station-primary: #0a7ff5;
+  --color-station-bg: #101922;
+  --color-station-surface: #1e293b;
+  --color-station-border: #223649;
+  --color-station-border-hover: #2d465e;
+  --color-station-text-muted: #8fadcc;
+  --color-station-yellow: #eab308;
+  --color-station-blue: #137fec;
+  --color-station-red: #ef4444;
+  --color-station-green: #22c55e;
 }
 
 :root {

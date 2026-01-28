@@ -10,14 +10,14 @@ export function OvertimeCard() {
 
   if (isLoading) {
     return (
-      <div className="rounded-2xl bg-white dark:bg-[#151a1f] p-5 shadow-sm border border-slate-100 dark:border-slate-800 animate-pulse">
+      <div className="rounded-2xl bg-white dark:bg-[#233648] p-5 shadow-sm border border-slate-100 dark:border-slate-800 animate-pulse">
         <div className="h-20 bg-slate-100 dark:bg-slate-800 rounded-lg"></div>
       </div>
     );
   }
 
   return (
-    <div className="rounded-2xl bg-white dark:bg-[#151a1f] p-5 shadow-sm border border-slate-100 dark:border-slate-800 flex flex-col justify-center">
+    <div className="rounded-2xl bg-white dark:bg-[#233648] p-5 shadow-sm border border-slate-100 dark:border-slate-800 flex flex-col justify-center">
       <div className="flex items-center gap-3 mb-2">
         <div className="p-2 rounded-lg bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400">
           <Timer className="h-5 w-5" />
