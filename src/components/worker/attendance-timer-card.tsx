@@ -56,16 +56,16 @@ export function AttendanceTimerCard() {
 
   if (isLoading) {
     return (
-      <div className="lg:col-span-2 rounded-2xl bg-white dark:bg-[#151a1f] p-6 lg:p-8 shadow-sm border border-slate-100 dark:border-slate-800 animate-pulse">
+      <div className="lg:col-span-2 rounded-2xl bg-white dark:bg-[#233648] p-6 lg:p-8 shadow-sm border border-slate-100 dark:border-slate-800 animate-pulse">
         <div className="h-32 bg-slate-100 dark:bg-slate-800 rounded-lg"></div>
       </div>
     );
   }
 
   return (
-    <div className="lg:col-span-2 rounded-2xl bg-white dark:bg-[#151a1f] p-6 lg:p-8 shadow-sm border border-slate-100 dark:border-slate-800 relative overflow-hidden group">
+    <div className="lg:col-span-2 rounded-2xl bg-white dark:bg-[#233648] p-6 lg:p-8 shadow-sm border border-slate-100 dark:border-slate-800 relative overflow-hidden group">
       {/* Background Decoration */}
-      <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-teal-500/5 group-hover:bg-teal-500/10 transition-colors duration-500 blur-3xl"></div>
+      <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[#137fec]/5 group-hover:bg-[#137fec]/10 transition-colors duration-500 blur-3xl"></div>
       
       <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 h-full">
         <div className="flex flex-col gap-2">
@@ -97,7 +97,7 @@ export function AttendanceTimerCard() {
               'flex items-center justify-center gap-3 w-full sm:w-48 h-16 rounded-xl shadow-lg font-bold text-lg transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed',
               isClockedIn
                 ? 'bg-red-500 hover:bg-red-600 text-white shadow-red-500/25'
-                : 'bg-teal-500 hover:bg-teal-600 text-white shadow-teal-500/25'
+                : 'bg-[#137fec] hover:bg-blue-600 text-white shadow-[#137fec]/25'
             )}
           >
             {isClockedIn ? (

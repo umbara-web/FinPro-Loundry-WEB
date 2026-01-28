@@ -57,7 +57,7 @@ export function TaskCard({ task, onStart, onAccept }: TaskCardProps) {
   const PriorityIcon = priority.icon;
 
   return (
-    <div className="group flex flex-col rounded-xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:border-teal-500/30 hover:shadow-md dark:border-slate-800 dark:bg-[#151a1f]">
+    <div className="group flex flex-col rounded-xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:border-[#137fec]/30 hover:shadow-md dark:border-slate-800 dark:bg-[#233648]">
       <div className="flex flex-1 flex-col gap-4 p-5">
         <div className="flex items-start justify-between">
           <div className="flex flex-col">
@@ -123,7 +123,7 @@ export function TaskCard({ task, onStart, onAccept }: TaskCardProps) {
         {task.isStarted ? (
           <button
             onClick={onStart}
-            className="flex items-center gap-2 rounded-lg bg-teal-500 px-4 py-2 text-sm font-bold text-white shadow-sm transition-colors hover:bg-teal-600"
+            className="flex items-center gap-2 rounded-lg bg-[#137fec] px-4 py-2 text-sm font-bold text-white shadow-sm transition-colors hover:bg-blue-600"
           >
             Start Process <ArrowRight className="h-4 w-4" />
           </button>
