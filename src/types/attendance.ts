@@ -17,6 +17,10 @@ export interface AttendanceRecord {
   status: string;
   check_in_at: string;
   check_out_at: string | null;
+  outlet?: {
+    id: string;
+    name: string;
+  };
 }
 
 export interface AttendanceHistoryResponse {
