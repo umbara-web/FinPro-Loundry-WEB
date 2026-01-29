@@ -27,12 +27,12 @@ export function MobileBottomNav({ basePath = '' }: MobileBottomNavProps) {
     {
       icon: <Fingerprint className="w-5 h-5" />,
       label: 'Absen',
-      href: `${basePath}/attendance`,
+      href: `${basePath}/worker-attendance`,
     },
     {
       icon: <History className="w-5 h-5" />,
       label: 'Log',
-      href: `${basePath}/attendance/history`,
+      href: `${basePath}/worker-attendance/history`,
     },
     {
       icon: <User className="w-5 h-5" />,
@@ -42,7 +42,7 @@ export function MobileBottomNav({ basePath = '' }: MobileBottomNavProps) {
   ];
 
   const isActive = (href: string) => {
-    if (href === `${basePath}/attendance`) {
+    if (href === `${basePath}/worker-attendance`) {
       return pathname === href;
     }
     return pathname.startsWith(href);

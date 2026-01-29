@@ -66,7 +66,7 @@ export function AttendanceView() {
   );
 
   const handleViewAllHistory = () => {
-    router.push('/attendance/history');
+    router.push('/worker-attendance/history');
   };
 
   const userName = user?.name?.split(' ')[0] || 'Karyawan';
