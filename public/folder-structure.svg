@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="3600" viewBox="0 0 1400 3600">
+  <defs>
+    <style>
+      .title { font: 700 16px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+      text { font: 14px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; white-space: pre; }
+      .note { font: 12px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; fill: #555; }
+    </style>
+  </defs>
+  <rect x="0" y="0" width="100%" height="100%" fill="#ffffff" />
+  <text x="12" y="28" class="title">Folder Structure: web/</text>
+  <text x="12" y="56">
+    <tspan x="12" dy="18">web/</tspan>
+    <tspan x="12" dy="18">├── public/</tspan>
+    <tspan x="12" dy="18">│   ├── icons/</tspan>
+    <tspan x="12" dy="18">│   │   ├── bca.svg</tspan>
+    <tspan x="12" dy="18">│   │   ├── bri.svg</tspan>
+    <tspan x="12" dy="18">│   │   ├── cashlez.svg</tspan>
+    <tspan x="12" dy="18">│   │   ├── crowne.png</tspan>
+    <tspan x="12" dy="18">│   │   ├── gopay.svg</tspan>
+    <tspan x="12" dy="18">│   │   ├── indomaret.svg</tspan>
+    <tspan x="12" dy="18">│   │   ├── mandiri.svg</tspan>
+    <tspan x="12" dy="18">│   │   ├── paxel.svg</tspan>
+    <tspan x="12" dy="18">│   │   ├── paytren.svg</tspan>
+    <tspan x="12" dy="18">│   │   ├── pos-indonesia.svg</tspan>
+    <tspan x="12" dy="18">│   │   ├── pramuka-city.png</tspan>
+    <tspan x="12" dy="18">│   │   ├── purwadhika.jpg</tspan>
+    <tspan x="12" dy="18">│   │   ├── purwadhika.svg</tspan>
+    <tspan x="12" dy="18">│   │   ├── senayan-city.svg</tspan>
+    <tspan x="12" dy="18">│   │   ├── siloam.svg</tspan>
+    <tspan x="12" dy="18">│   │   ├── sinarmas.svg</tspan>
+    <tspan x="12" dy="18">│   │   └── ui.png</tspan>
+    <tspan x="12" dy="18">│   └── images/</tspan>
+    <tspan x="12" dy="18">│       └── auth/</tspan>
+    <tspan x="12" dy="18">│           └── register-side.png</tspan>
+    <tspan x="12" dy="18">├── src/</tspan>
+    <tspan x="12" dy="18">│   ├── app/</tspan>
+    <tspan x="12" dy="18">│   │   ├── globals.css</tspan>
+    <tspan x="12" dy="18">│   │   ├── layout.tsx</tspan>
+    <tspan x="12" dy="18">│   │   ├── favicon.ico</tspan>
+    <tspan x="12" dy="18">│   │   ├── api/</tspan>
+    <tspan x="12" dy="18">│   │   │   └── auth/</tspan>
+    <tspan x="12" dy="18">│   │   │       └── [...nextauth]/</tspan>
+    <tspan x="12" dy="18">│   │   ├── (public)/</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── page.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── about/</tspan>
+    <tspan x="12" dy="18">│   │   │   │   └── page.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── contact/</tspan>
+    <tspan x="12" dy="18">│   │   │   │   └── page.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   └── auth/</tspan>
+    <tspan x="12" dy="18">│   │   │       ├── login/</tspan>
+    <tspan x="12" dy="18">│   │   │       ├── register/</tspan>
+    <tspan x="12" dy="18">│   │   │       ├── resend-verification/</tspan>
+    <tspan x="12" dy="18">│   │   │       ├── reset-password/</tspan>
+    <tspan x="12" dy="18">│   │   │       └── verify-email/</tspan>
+    <tspan x="12" dy="18">│   │   └── (customer)/</tspan>
+    <tspan x="12" dy="18">│   │       ├── layout.tsx</tspan>
+    <tspan x="12" dy="18">│   │       └── dashboard/</tspan>
+    <tspan x="12" dy="18">│   │           ├── page.tsx</tspan>
+    <tspan x="12" dy="18">│   │           ├── addresses/</tspan>
+    <tspan x="12" dy="18">│   │           ├── complaints/</tspan>
+    <tspan x="12" dy="18">│   │           ├── notifications/</tspan>
+    <tspan x="12" dy="18">│   │           ├── orders/</tspan>
+    <tspan x="12" dy="18">│   │           ├── payment-history/</tspan>
+    <tspan x="12" dy="18">│   │           ├── profile/</tspan>
+    <tspan x="12" dy="18">│   │           └── top-up/</tspan>
+    <tspan x="12" dy="18">│   ├── components/</tspan>
+    <tspan x="12" dy="18">│   │   ├── layout/</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── MainNavbar.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── MainFooter.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── footer-links.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   └── Logo.tsx</tspan>
+    <tspan x="12" dy="18">│   │   ├── ui/</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── 3d-pin.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── alert-dialog.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── animated-testimonials.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── button.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── calendar-day-button.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── calendar-styles.ts</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── calendar.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── carousel-buttons.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── carousel-hooks.ts</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── carousel-types.ts</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── carousel.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── checkbox.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── colourful-text.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── dialog.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── dropdown-menu-styles.ts</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── dropdown-menu.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── form.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── input.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── label.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── marquee.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── mode-toggle.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── pagination.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── popover.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── sheet.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── switch.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   └── textarea.tsx</tspan>
+    <tspan x="12" dy="18">│   │   ├── auth/</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── auth-layout.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── protected-route.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── auth-watcher.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── form-divider.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── form-field.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── form-footer.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── password-field.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── login-form.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── register-form.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── resend-verification-form.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── Reset-password-views.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── social-auth-wrapper.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── social-login-buttons.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── success-message.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── verify-content.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── verify-status.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   └── shared/</tspan>
+    <tspan x="12" dy="18">│   │   │       ├── auth-error.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │       ├── auth-footer.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │       ├── auth-header.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │       ├── auth-logo.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │       └── auth-submit-button.tsx</tspan>
+    <tspan x="12" dy="18">│   │   ├── dashboard/</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── address/</tspan>
+    <tspan x="12" dy="18">│   │   │   │   ├── address-card.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   │   ├── address-form.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   │   ├── address-list-section.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   │   ├── address-location-section.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   │   ├── address-recipient-section.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   │   └── address-settings-section.tsx</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── complaint/</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── main/</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── notifications/</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── orders/</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── payment/</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── pickup/</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── profile/</tspan>
+    <tspan x="12" dy="18">│   │   │   └── widgets/</tspan>
+    <tspan x="12" dy="18">│   │   └── Home/</tspan>
+    <tspan x="12" dy="18">│   │       ├── AboutUs/</tspan>
+    <tspan x="12" dy="18">│   │       ├── CallToAction/</tspan>
+    <tspan x="12" dy="18">│   │       ├── Contact/</tspan>
+    <tspan x="12" dy="18">│   │       ├── HeroSection/</tspan>
+    <tspan x="12" dy="18">│   │       ├── HowItWork/</tspan>
+    <tspan x="12" dy="18">│   │       │   └── page.tsx</tspan>
+    <tspan x="12" dy="18">│   │       ├── Location/</tspan>
+    <tspan x="12" dy="18">│   │       ├── Navbar/</tspan>
+    <tspan x="12" dy="18">│   │       ├── ServicesSection/</tspan>
+    <tspan x="12" dy="18">│   │       ├── Testimonials/</tspan>
+    <tspan x="12" dy="18">│   │       └── TrustedBy/</tspan>
+    <tspan x="12" dy="18">│   ├── context/</tspan>
+    <tspan x="12" dy="18">│   │   ├── AuthContext.tsx</tspan>
+    <tspan x="12" dy="18">│   │   └── WalletContext.tsx</tspan>
+    <tspan x="12" dy="18">│   ├── data/</tspan>
+    <tspan x="12" dy="18">│   │   ├── hero.ts</tspan>
+    <tspan x="12" dy="18">│   │   ├── how-it-works.ts</tspan>
+    <tspan x="12" dy="18">│   │   ├── navigation.ts</tspan>
+    <tspan x="12" dy="18">│   │   ├── services.ts</tspan>
+    <tspan x="12" dy="18">│   │   ├── testimonials.ts</tspan>
+    <tspan x="12" dy="18">│   │   └── trusted-companies-data.ts</tspan>
+    <tspan x="12" dy="18">│   ├── hooks/</tspan>
+    <tspan x="12" dy="18">│   │   ├── use-address-form.ts</tspan>
+    <tspan x="12" dy="18">│   │   ├── use-complaint-submission.ts</tspan>
+    <tspan x="12" dy="18">│   │   ├── use-create-pickup.ts</tspan>
+    <tspan x="12" dy="18">│   │   ├── use-debounce.ts</tspan>
+    <tspan x="12" dy="18">│   │   ├── use-navbar-scroll.ts</tspan>
+    <tspan x="12" dy="18">│   │   ├── use-order.ts</tspan>
+    <tspan x="12" dy="18">│   │   ├── use-order-search.ts</tspan>
+    <tspan x="12" dy="18">│   │   ├── use-order-stats.ts</tspan>
+    <tspan x="12" dy="18">│   │   ├── use-orders-query.ts</tspan>
+    <tspan x="12" dy="18">│   │   ├── use-payment-stats.ts</tspan>
+    <tspan x="12" dy="18">│   │   ├── use-payments-query.ts</tspan>
+    <tspan x="12" dy="18">│   │   ├── use-profile-form.ts</tspan>
+    <tspan x="12" dy="18">│   │   └── use-security-form.ts</tspan>
+    <tspan x="12" dy="18">│   ├── lib/</tspan>
+    <tspan x="12" dy="18">│   │   ├── api/</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── axios-instance.ts</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── auth-api.ts</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── complaint-api.ts</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── order-api.ts</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── payment-api.ts</tspan>
+    <tspan x="12" dy="18">│   │   │   ├── pickup-api.ts</tspan>
+    <tspan x="12" dy="18">│   │   │   └── user-api.ts</tspan>
+    <tspan x="12" dy="18">│   │   ├── constants/</tspan>
+    <tspan x="12" dy="18">│   │   │   └── order-status.ts</tspan>
+    <tspan x="12" dy="18">│   │   ├── schemas/</tspan>
+    <tspan x="12" dy="18">│   │   │   └── address-schemas.ts</tspan>
+    <tspan x="12" dy="18">│   │   └── utils/</tspan>
+    <tspan x="12" dy="18">│   │       ├── format.ts</tspan>
+    <tspan x="12" dy="18">│   │       ├── membership.ts</tspan>
+    <tspan x="12" dy="18">│   ���       ├── search.ts</tspan>
+    <tspan x="12" dy="18">│   │       └── utils.ts</tspan>
+    <tspan x="12" dy="18">│   ├── providers/</tspan>
+    <tspan x="12" dy="18">│   │   ├── authSessionProvider.tsx</tspan>
+    <tspan x="12" dy="18">│   │   ├── query-provider.tsx</tspan>
+    <tspan x="12" dy="18">│   │   └── theme-provider.tsx</tspan>
+    <tspan x="12" dy="18">│   └── types/</tspan>
+    <tspan x="12" dy="18">│       ├── address.ts</tspan>
+    <tspan x="12" dy="18">│       ├── auth.ts</tspan>
+    <tspan x="12" dy="18">│       ├── dashboard-data.ts</tspan>
+    <tspan x="12" dy="18">│       ├── next-auth.d.ts</tspan>
+    <tspan x="12" dy="18">│       ├── order.ts</tspan>
+    <tspan x="12" dy="18">│       ├── payment.ts</tspan>
+    <tspan x="12" dy="18">│       ├── pickup.ts</tspan>
+    <tspan x="12" dy="18">│       └── reset-password.ts</tspan>
+    <tspan x="12" dy="18">├── .gitignore</tspan>
+    <tspan x="12" dy="18">├── .prettierrc</tspan>
+    <tspan x="12" dy="18">├── components.json</tspan>
+    <tspan x="12" dy="18">├── eslint.config.mjs</tspan>
+    <tspan x="12" dy="18">├── next.config.ts</tspan>
+    <tspan x="12" dy="18">├── package.json</tspan>
+    <tspan x="12" dy="18">├── postcss.config.mjs</tspan>
+    <tspan x="12" dy="18">├── README.md</tspan>
+    <tspan x="12" dy="18">└── tsconfig.json</tspan>
+  </text>
+  <text x="12" y="3550" class="note">Catatan: Diagram menampilkan direktori dan file utama berdasarkan daftar saat ini.</text>
+</svg>

@@ -3,39 +3,36 @@
 import { useEffect } from 'react';
 import {
   MapContainer,
-  TileLayer,
   Marker,
+  TileLayer,
   useMap,
   useMapEvents,
 } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-// Fix Leaflet marker icon
-const iconUrl = 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png';
-const iconRetinaUrl =
+const ICON_URL = 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png';
+const ICON_RETINA_URL =
   'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png';
-const shadowUrl =
+const SHADOW_URL =
   'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png';
 
 if (typeof window !== 'undefined') {
   // @ts-ignore
   delete L.Icon.Default.prototype._getIconUrl;
   L.Icon.Default.mergeOptions({
-    iconRetinaUrl,
-    iconUrl,
-    shadowUrl,
+    iconRetinaUrl: ICON_RETINA_URL,
+    iconUrl: ICON_URL,
+    shadowUrl: SHADOW_URL,
   });
 }
 
-// Controller component to handle map events and updates
-function MapController({
-  onLocationSelect,
-  center,
-}: {
-  onLocationSelect: (lat: number, lng: number) => void;
+type MapControllerProps = {
   center: [number, number];
-}) {
+  onLocationSelect: (lat: number, lng: number) => void;
+};
+
+function MapController({ center, onLocationSelect }: MapControllerProps) {
   const map = useMap();
 
   useEffect(() => {
@@ -43,19 +40,19 @@ function MapController({
   }, [center, map]);
 
   useMapEvents({
-    click(e) {
-      onLocationSelect(e.latlng.lat, e.latlng.lng);
+    click(event) {
+      onLocationSelect(event.latlng.lat, event.latlng.lng);
     },
   });
 
   return null;
 }
 
-interface MapViewProps {
+export type MapViewProps = {
   center: [number, number];
   onLocationSelect: (lat: number, lng: number) => void;
   zoom?: number;
-}
+};
 
 export default function MapView({
   center,

@@ -4,11 +4,11 @@ export interface Address {
   recipientName: string;
   recipientPhone: string;
   fullAddress: string;
-  city: string; // District/Kecamatan
+  city: string; // Kota/Kabupaten
   postalCode: string;
   notes?: string;
-  latitude: number;
-  longitude: number;
+  latitude: number | null;
+  longitude: number | null;
   isPrimary: boolean;
   createdAt: string;
   updatedAt: string;
@@ -24,7 +24,7 @@ export interface AddressInput {
   city: string;
   postalCode: string;
   notes?: string;
-  latitude: number;
-  longitude: number;
+  latitude: number | null;
+  longitude: number | null;
   isPrimary?: boolean;
 }

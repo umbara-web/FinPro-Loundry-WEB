@@ -55,7 +55,7 @@ export default function AddressPage() {
             setEditingAddress(null);
             setIsFormOpen(true);
           }}
-          className='h-10 w-auto cursor-pointer rounded-lg bg-blue-500 px-5 text-sm font-bold text-white shadow-lg shadow-blue-500/50'
+          className='h-10 w-auto cursor-pointer rounded-lg bg-blue-500 px-5 text-sm font-bold text-white shadow-lg shadow-blue-500/50 dark:hover:bg-gray-300 dark:hover:text-black'
         >
           <Plus className='h-5 w-5' />
           Tambah Alamat Baru

@@ -1,5 +1,4 @@
 import {
-  FormControl,
   FormField,
   FormItem,
   FormLabel,
@@ -9,73 +8,105 @@ import { Input } from '@/src/components/ui/input';
 import { Textarea } from '@/src/components/ui/textarea';
 import { UseFormReturn } from 'react-hook-form';
 import { AddressFormValues } from '@/src/lib/schemas/address-schemas';
-import { LocationPicker } from './map/location-picker';
+import { LocationPicker, ResolvedAddress } from './map/location-picker';
 
-interface AddressLocationSectionProps {
+export type LocationSectionHandlers = {
+  onLocationSelect: (lat: number, lng: number) => void;
+  onAddressChange: (addr: ResolvedAddress) => void;
+};
+
+type Props = {
   form: UseFormReturn<AddressFormValues>;
-}
+  handlers: LocationSectionHandlers;
+};
 
-export function AddressLocationSection({ form }: AddressLocationSectionProps) {
+type ControlProps = {
+  control: UseFormReturn<AddressFormValues>['control'];
+};
+
+export function AddressLocationSection({ form, handlers }: Props) {
+  const { control, watch, formState } = form;
+  const { onLocationSelect, onAddressChange } = handlers;
+
   return (
     <>
-      <FormField
-        control={form.control}
-        name='fullAddress'
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Alamat Lengkap</FormLabel>
-            <FormControl>
-              <Textarea
-                placeholder='Alamat Lengkap Anda'
-                className='resize-none'
-                {...field}
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
+      <FullAddressField control={control} />
+      <CityPostalRow control={control} />
+      <LocationPicker
+        latitude={watch('latitude')}
+        longitude={watch('longitude')}
+        onLocationSelect={onLocationSelect}
+        onAddressChange={onAddressChange}
+        error={formState.errors.latitude?.message}
       />
-
-      <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
-        <FormField
-          control={form.control}
-          name='city'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Kecamatan/Kota</FormLabel>
-              <FormControl>
-                <Input placeholder='Kecamatan/Kota Anda' {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name='postalCode'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Kode Pos</FormLabel>
-              <FormControl>
-                <Input placeholder='Kode Pos Anda' {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      </div>
-
-      <div className='space-y-2'>
-        <LocationPicker
-          latitude={form.watch('latitude')}
-          longitude={form.watch('longitude')}
-          onLocationSelect={(lat, lng) => {
-            form.setValue('latitude', lat);
-            form.setValue('longitude', lng);
-          }}
-          error={form.formState.errors.latitude?.message}
-        />
-      </div>
     </>
+  );
+}
+
+function FullAddressField({ control }: ControlProps) {
+  return (
+    <FormField
+      control={control}
+      name='fullAddress'
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel className='text-sm font-bold text-black dark:text-white'>
+            Alamat Lengkap <span className='text-red-500'>*</span>
+          </FormLabel>
+          <Textarea placeholder='Alamat Lengkap Anda' {...field} />
+          <p className='text-xs text-red-500 italic'>
+            Sesuaikan alamat lengkap anda, jika alamat di atas tidak sesuai
+            seperti : Nama Jalan No Rumah, RT/RW, Kelurahan, Kecamatan,
+            Kota/Kabupaten, Provinsi dan Kode Pos
+          </p>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
+}
+
+function CityPostalRow({ control }: ControlProps) {
+  return (
+    <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+      <CityField control={control} />
+      <PostalCodeField control={control} />
+    </div>
+  );
+}
+
+function CityField({ control }: ControlProps) {
+  return (
+    <FormField
+      control={control}
+      name='city'
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel className='text-sm font-bold text-black dark:text-white'>
+            Kota/Kabupaten <span className='text-red-500'>*</span>
+          </FormLabel>
+          <Input placeholder='Kota/Kabupaten Anda' {...field} />
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
+}
+
+function PostalCodeField({ control }: ControlProps) {
+  return (
+    <FormField
+      control={control}
+      name='postalCode'
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel className='text-sm font-bold text-black dark:text-white'>
+            Kode Pos <span className='text-red-500'>*</span>
+          </FormLabel>
+          <Input placeholder='Kode Pos Anda' {...field} />
+          <FormMessage />
+        </FormItem>
+      )}
+    />
   );
 }
