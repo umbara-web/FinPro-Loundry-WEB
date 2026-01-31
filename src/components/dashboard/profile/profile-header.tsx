@@ -15,6 +15,7 @@ export function ProfileHeader({
   profilePictureUrl,
   onAvatarUpload,
 }: ProfileHeaderProps) {
+  const { user } = useAuth();
   const { points } = useWallet();
   const tier = getMembershipTier(points);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -77,7 +78,13 @@ export function ProfileHeader({
               </span>
             </div>
             <p className='mt-1 text-sm text-gray-500 dark:text-gray-400'>
-              Bergabung sejak September 2023
+              Bergabung sejak{' '}
+              {user?.created_at
+                ? new Intl.DateTimeFormat('id-ID', {
+                    month: 'long',
+                    year: 'numeric',
+                  }).format(new Date(user.created_at))
+                : '-'}
             </p>
           </div>
           <div className='mt-4 w-full sm:mt-0 sm:ml-auto sm:w-auto'>

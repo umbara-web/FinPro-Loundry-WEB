@@ -86,7 +86,7 @@ export function SecurityTab({
             </div>
             <label className='inline-flex cursor-pointer items-center'>
               <input type='checkbox' value='' className='peer sr-only' />
-              <div className="bg-primary peer peer relative h-6 w-11 rounded-full peer-checked:bg-blue-600 peer-focus:outline-none after:absolute after:start-0.5 after:top-0.5 after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white rtl:peer-checked:after:-translate-x-full dark:after:border-black dark:after:bg-black" />
+              <div className="peer peer relative h-6 w-11 rounded-full bg-white peer-checked:bg-blue-600 peer-focus:outline-none after:absolute after:start-0.5 after:top-0.5 after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white rtl:peer-checked:after:-translate-x-full dark:after:border-black dark:after:bg-black" />
             </label>
           </div>
         </div>

@@ -1,14 +1,14 @@
 'use client';
 
+import { useCallback, useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
+import axios from 'axios';
 import { Button } from '@/src/components/ui/button';
 import { Input } from '@/src/components/ui/input';
 import { Label } from '@/src/components/ui/label';
-import { MapPin, Loader2 } from 'lucide-react';
-import React, { useState, useEffect } from 'react';
+import { Loader2, MapPin } from 'lucide-react';
 import { toast } from 'sonner';
-import dynamic from 'next/dynamic';
 
-// Dynamically import MapView to avoid SSR issues with Leaflet
 const MapView = dynamic(() => import('./map-view'), {
   ssr: false,
   loading: () => (
@@ -18,134 +18,252 @@ const MapView = dynamic(() => import('./map-view'), {
   ),
 });
 
-interface LocationPickerProps {
-  latitude?: number;
-  longitude?: number;
+export type ResolvedAddress = {
+  fullAddress?: string;
+  city?: string;
+  postalCode?: string;
+};
+
+type LocationPickerProps = {
+  latitude?: number | null;
+  longitude?: number | null;
   onLocationSelect: (lat: number, lng: number) => void;
+  onAddressChange: (addr: ResolvedAddress) => void;
   error?: string;
+};
+
+type LocationPickerState = {
+  latText: string;
+  lngText: string;
+  center: [number, number];
+  loadingAddress: boolean;
+};
+
+type LocationPickerHandlers = {
+  handleMapSelect: (lat: number, lng: number) => Promise<void>;
+  handleCurrentLocation: () => void;
+  handleLatChange: (value: string) => void;
+  handleLngChange: (value: string) => void;
+};
+
+function toStringOrEmpty(value?: number | null): string {
+  return typeof value === 'number' ? value.toString() : '';
 }
 
-export function LocationPicker({
-  latitude,
-  longitude,
-  onLocationSelect,
-  error,
-}: LocationPickerProps) {
-  const [lat, setLat] = useState(latitude?.toString() || '');
-  const [lng, setLng] = useState(longitude?.toString() || '');
+function getCenter(
+  latitude?: number | null,
+  longitude?: number | null
+): [number, number] {
+  if (typeof latitude === 'number' && typeof longitude === 'number') {
+    return [latitude, longitude];
+  }
+  return [-6.2088, 106.8456]; // Jakarta
+}
 
-  // Default to Jakarta if no coordinates provided
-  const defaultCenter: [number, number] = [-6.2088, 106.8456];
-  const mapCenter: [number, number] =
-    latitude && longitude ? [latitude, longitude] : defaultCenter;
+function parseNumber(value: string): number | null {
+  const num = Number(value);
+  return Number.isFinite(num) ? num : null;
+}
 
-  const handleCurrentLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const newLat = position.coords.latitude;
-          const newLng = position.coords.longitude;
-          setLat(newLat.toString());
-          setLng(newLng.toString());
-          onLocationSelect(newLat, newLng);
-        },
-        (error) => {
-          console.error('Error getting location:', {
-            code: error.code,
-            message: error.message,
-          });
+function useReverseGeocode(onAddressChange: (addr: ResolvedAddress) => void): {
+  loading: boolean;
+  fetchAddress: (lat: number, lng: number) => Promise<void>;
+} {
+  const [loading, setLoading] = useState(false);
 
-          let errorMessage = 'Gagal mengambil lokasi.';
-          switch (error.code) {
-            case error.PERMISSION_DENIED:
-              errorMessage =
-                'Izin lokasi ditolak. Mohon izinkan akses lokasi di browser anda.';
-              break;
-            case error.POSITION_UNAVAILABLE:
-              errorMessage = 'Informasi lokasi tidak tersedia.';
-              break;
-            case error.TIMEOUT:
-              errorMessage = 'Waktu permintaan lokasi habis.';
-              break;
-          }
-          toast.error(errorMessage);
-        }
-      );
-    } else {
-      console.error('Geolocation is not supported by this browser.');
-      toast.error('Browser tidak mendukung geolokasi.');
-    }
-  };
+  const fetchAddress = useCallback(
+    async (lat: number, lng: number) => {
+      try {
+        setLoading(true);
+        const res = await axios.get(`/api/reverse-geocode`, {
+          params: { lat, lon: lng },
+        });
+        onAddressChange(res.data as ResolvedAddress);
+      } catch (error: any) {
+        console.error(
+          'reverse-geocode error',
+          error?.response?.data || error?.message || error
+        );
+        toast.error('Gagal mengambil detail alamat');
+      } finally {
+        setLoading(false);
+      }
+    },
+    [onAddressChange]
+  );
 
-  const handleManualChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    type: 'lat' | 'lng'
-  ) => {
-    const value = e.target.value;
-    if (type === 'lat') {
-      setLat(value);
-      const num = parseFloat(value);
-      if (!isNaN(num)) onLocationSelect(num, parseFloat(lng) || 0);
-    } else {
-      setLng(value);
-      const num = parseFloat(value);
-      if (!isNaN(num)) onLocationSelect(parseFloat(lat) || 0, num);
-    }
-  };
+  return { loading, fetchAddress };
+}
+
+function useLocationPickerLogic(
+  props: LocationPickerProps
+): [LocationPickerState, LocationPickerHandlers] {
+  const [latText, setLatText] = useState(toStringOrEmpty(props.latitude));
+  const [lngText, setLngText] = useState(toStringOrEmpty(props.longitude));
+  const center = getCenter(props.latitude, props.longitude);
+  const { loading, fetchAddress } = useReverseGeocode(props.onAddressChange);
 
   useEffect(() => {
-    if (latitude) setLat(latitude.toString());
-    if (longitude) setLng(longitude.toString());
-  }, [latitude, longitude]);
+    setLatText(toStringOrEmpty(props.latitude));
+    setLngText(toStringOrEmpty(props.longitude));
+  }, [props.latitude, props.longitude]);
+
+  const handleMapSelect = useCallback(
+    async (lat: number, lng: number) => {
+      setLatText(lat.toString());
+      setLngText(lng.toString());
+      props.onLocationSelect(lat, lng);
+      await fetchAddress(lat, lng);
+    },
+    [fetchAddress, props]
+  );
+
+  const handleCurrentLocation = useCallback(() => {
+    if (!navigator.geolocation) {
+      toast.error('Browser tidak mendukung geolokasi');
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      ({ coords }) => handleMapSelect(coords.latitude, coords.longitude),
+      () => toast.error('Gagal mengambil lokasi')
+    );
+  }, [handleMapSelect]);
+
+  const handleLatChange = (value: string) => {
+    setLatText(value);
+    const lat = parseNumber(value);
+    const lng = parseNumber(lngText);
+    if (lat != null && lng != null) {
+      handleMapSelect(lat, lng);
+    }
+  };
+
+  const handleLngChange = (value: string) => {
+    setLngText(value);
+    const lat = parseNumber(latText);
+    const lng = parseNumber(value);
+    if (lat != null && lng != null) {
+      handleMapSelect(lat, lng);
+    }
+  };
+
+  return [
+    {
+      latText,
+      lngText,
+      center,
+      loadingAddress: loading,
+    },
+    {
+      handleMapSelect,
+      handleCurrentLocation,
+      handleLatChange,
+      handleLngChange,
+    },
+  ];
+}
+
+type MapSectionProps = {
+  center: [number, number];
+  onSelect: (lat: number, lng: number) => Promise<void>;
+  onCurrentLocation: () => void;
+};
+
+function MapSection({ center, onSelect, onCurrentLocation }: MapSectionProps) {
+  return (
+    <div className='relative aspect-video w-full overflow-hidden rounded-md border'>
+      <MapView center={center} onLocationSelect={onSelect} />
+      <div className='absolute right-4 bottom-4 z-600'>
+        <Button
+          type='button'
+          variant='default'
+          size='sm'
+          className='cursor-pointer shadow-md'
+          onClick={(event) => {
+            event.stopPropagation();
+            onCurrentLocation();
+          }}
+        >
+          <MapPin className='mr-2 h-4 w-4' />
+          Lokasi Saya
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+type LatLngInputsProps = {
+  latText: string;
+  lngText: string;
+  onLatChange: (value: string) => void;
+  onLngChange: (value: string) => void;
+};
+
+function LatLngInputs({
+  latText,
+  lngText,
+  onLatChange,
+  onLngChange,
+}: LatLngInputsProps) {
+  return (
+    <div className='grid grid-cols-2 gap-4'>
+      <div className='space-y-1'>
+        <Label className='text-muted-foreground text-xs'>Latitude</Label>
+        <Input
+          value={latText}
+          onChange={(event) => onLatChange(event.target.value)}
+          placeholder='-6.200000'
+        />
+      </div>
+      <div className='space-y-1'>
+        <Label className='text-muted-foreground text-xs'>Longitude</Label>
+        <Input
+          value={lngText}
+          onChange={(event) => onLngChange(event.target.value)}
+          placeholder='106.816666'
+        />
+      </div>
+    </div>
+  );
+}
+
+type HelperTextProps = {
+  loadingAddress: boolean;
+  error?: string;
+};
+
+function HelperText({ loadingAddress, error }: HelperTextProps) {
+  if (loadingAddress) {
+    return (
+      <p className='text-muted-foreground text-xs'>
+        Mengambil detail alamat dari koordinat...
+      </p>
+    );
+  }
+  if (error) {
+    return <p className='text-destructive text-sm font-medium'>{error}</p>;
+  }
+  return null;
+}
+
+export function LocationPicker(props: LocationPickerProps) {
+  const [state, handlers] = useLocationPickerLogic(props);
 
   return (
     <div className='space-y-3'>
       <Label>Pinpoint Lokasi</Label>
-      <div className='relative aspect-video w-full overflow-hidden rounded-md border'>
-        <MapView
-          center={mapCenter}
-          onLocationSelect={(newLat, newLng) => {
-            setLat(newLat.toString());
-            setLng(newLng.toString());
-            onLocationSelect(newLat, newLng);
-          }}
-        />
-        <div className='absolute right-4 bottom-4 z-400'>
-          <Button
-            type='button'
-            variant='secondary'
-            size='sm'
-            className='shadow-md'
-            onClick={(e) => {
-              e.stopPropagation(); // Prevent map click propagation
-              handleCurrentLocation();
-            }}
-          >
-            <MapPin className='mr-2 h-4 w-4' />
-            Lokasi Saya
-          </Button>
-        </div>
-      </div>
-
-      <div className='grid grid-cols-2 gap-4'>
-        <div className='space-y-1'>
-          <Label className='text-muted-foreground text-xs'>Latitude</Label>
-          <Input
-            value={lat}
-            onChange={(e) => handleManualChange(e, 'lat')}
-            placeholder='-6.200000'
-          />
-        </div>
-        <div className='space-y-1'>
-          <Label className='text-muted-foreground text-xs'>Longitude</Label>
-          <Input
-            value={lng}
-            onChange={(e) => handleManualChange(e, 'lng')}
-            placeholder='106.816666'
-          />
-        </div>
-      </div>
-      {error && <p className='text-destructive text-sm font-medium'>{error}</p>}
+      <MapSection
+        center={state.center}
+        onSelect={handlers.handleMapSelect}
+        onCurrentLocation={handlers.handleCurrentLocation}
+      />
+      <LatLngInputs
+        latText={state.latText}
+        lngText={state.lngText}
+        onLatChange={handlers.handleLatChange}
+        onLngChange={handlers.handleLngChange}
+      />
+      <HelperText loadingAddress={state.loadingAddress} error={props.error} />
     </div>
   );
 }

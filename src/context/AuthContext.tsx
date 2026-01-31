@@ -14,7 +14,7 @@ export interface User {
   phone?: string;
   birthDate?: string;
   profile_picture_url?: string;
-  // add other fields if likely returned
+  created_at?: string;
 }
 
 interface AuthContextType {
@@ -55,11 +55,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const login = async (data: { email: string; password: string }) => {
-    // Setup: backend sets cookie. We just need user data.
-    const res = await authApi.login(data);
-    // res structure: { message: "Login successful", data: { user, token } }
-    if (res.data && res.data.user) {
-      setUser(res.data.user);
+    await authApi.login(data); // backend sets cookie
+
+    const me = await authApi.getMe(); //ambil data lengkap
+
+    if (me?.data) {
+      setUser(me.data);
       setIsAuthenticated(true);
       window.location.assign('/'); // User requirement
     }
@@ -73,12 +74,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
     setUser(null);
     setIsAuthenticated(false);
-    // User requirement: Navbar re-renders public. If on protected route, redirects.
-    // For now we just clear state. Protected routes should handle redirect.
+
     router.refresh();
-    // Usually redirect to login or home. User flow 4.4 mentions "kembali ke navbar publik".
-    // If they were on dashboard, they should be redirected.
-    // Ideally we redirect to /login or /
+
     router.push('/auth/login');
   };
 

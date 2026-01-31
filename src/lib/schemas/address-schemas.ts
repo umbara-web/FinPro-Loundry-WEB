@@ -9,11 +9,11 @@ export const addressSchema = z.object({
     .max(15, 'Nomor telepon maksimal 15 digit')
     .regex(/^(\+62|62|0)[0-9]+$/, 'Format nomor telepon tidak valid'),
   fullAddress: z.string().min(10, 'Alamat lengkap minimal 10 karakter'),
-  city: z.string().min(1, 'Kecamatan/Kota wajib diisi'),
+  city: z.string().min(1, 'Kota/Kabupaten wajib diisi'),
   postalCode: z.string().min(5, 'Kode pos minimal 5 digit'),
   notes: z.string().optional(),
-  latitude: z.number(),
-  longitude: z.number(),
+  latitude: z.number().nullable(),
+  longitude: z.number().nullable(),
   isPrimary: z.boolean(),
 });
 

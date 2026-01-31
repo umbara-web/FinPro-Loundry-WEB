@@ -1,63 +1,75 @@
-import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  AddressFormValues,
-  addressSchema,
-} from '@/src/lib/schemas/address-schemas';
-import { Address } from '@/src/types/address';
+'use client';
 
-interface UseAddressFormProps {
-  initialData?: Address | null;
-  open: boolean;
+import { useEffect } from 'react';
+import { useForm, UseFormReturn } from 'react-hook-form';
+import { AddressFormValues } from '@/src/lib/schemas/address-schemas';
+import { ResolvedAddress } from '@/src/components/dashboard/address/map/location-picker';
+import { LocationSectionHandlers } from '@/src/components/dashboard/address/address-location-section';
+
+function getDefaultValues(
+  initial?: Partial<AddressFormValues> | null
+): AddressFormValues {
+  return {
+    label: '',
+    recipientName: '',
+    recipientPhone: '',
+    fullAddress: '',
+    city: '',
+    postalCode: '',
+    latitude: null,
+    longitude: null,
+    notes: '',
+    isPrimary: false,
+    ...initial,
+  };
 }
 
-export function useAddressForm({ initialData, open }: UseAddressFormProps) {
+function setLocationValues(
+  form: UseFormReturn<AddressFormValues>,
+  lat: number,
+  lng: number
+) {
+  form.setValue('latitude', lat, { shouldValidate: true });
+  form.setValue('longitude', lng, { shouldValidate: true });
+}
+
+function updateAddressFields(
+  form: UseFormReturn<AddressFormValues>,
+  addr: ResolvedAddress
+) {
+  const { fullAddress, city, postalCode } = addr;
+  if (fullAddress) form.setValue('fullAddress', fullAddress);
+  const cityValue = [city].filter(Boolean).join(', ');
+  if (cityValue) form.setValue('city', cityValue);
+  if (postalCode) form.setValue('postalCode', postalCode);
+}
+
+export function useAddressFormState(
+  initial?: Partial<AddressFormValues> | null
+): {
+  form: UseFormReturn<AddressFormValues>;
+  handlers: LocationSectionHandlers;
+} {
   const form = useForm<AddressFormValues>({
-    resolver: zodResolver(addressSchema),
-    defaultValues: {
-      label: '',
-      recipientName: '',
-      recipientPhone: '',
-      fullAddress: '',
-      city: '',
-      postalCode: '',
-      notes: '',
-      latitude: 0,
-      longitude: 0,
-      isPrimary: false,
-    },
+    defaultValues: getDefaultValues(initial),
   });
 
+  // Reset form values whenever initial data changes (e.g., editing different address)
   useEffect(() => {
-    if (initialData) {
-      form.reset({
-        label: initialData.label,
-        recipientName: initialData.recipientName,
-        recipientPhone: initialData.recipientPhone,
-        fullAddress: initialData.fullAddress,
-        city: initialData.city,
-        postalCode: initialData.postalCode,
-        notes: initialData.notes || '',
-        latitude: initialData.latitude,
-        longitude: initialData.longitude,
-        isPrimary: initialData.isPrimary,
-      });
-    } else {
-      form.reset({
-        label: '',
-        recipientName: '',
-        recipientPhone: '',
-        fullAddress: '',
-        city: '',
-        postalCode: '',
-        notes: '',
-        latitude: 0,
-        longitude: 0,
-        isPrimary: false,
-      });
-    }
-  }, [initialData, form, open]);
+    form.reset(getDefaultValues(initial));
+  }, [initial, form]);
 
-  return form;
+  const handleLocationSelect = (lat: number, lng: number) =>
+    setLocationValues(form, lat, lng);
+
+  const handleAddressChange = (addr: ResolvedAddress) =>
+    updateAddressFields(form, addr);
+
+  return {
+    form,
+    handlers: {
+      onLocationSelect: handleLocationSelect,
+      onAddressChange: handleAddressChange,
+    },
+  };
 }

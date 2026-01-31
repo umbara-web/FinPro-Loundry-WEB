@@ -1,6 +1,12 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useMemo,
+} from 'react';
 import { Order } from '@/src/types/order';
 import { Address } from '@/src/types/address';
 import {
@@ -8,140 +14,108 @@ import {
   NotificationItem,
 } from '@/src/types/dashboard-data';
 import { useAuth } from './AuthContext';
-
-interface WalletContextType {
-  balance: number;
-  topUp: (amount: number) => Promise<boolean>;
-  isLoading: boolean;
-  points: number;
-  cartCount: number;
-  notificationCount: number;
-  addToCart: () => void;
-  addNotification: () => void;
-  deleteNotification: (id: string) => void;
-  clearNotifications: () => void;
-  activeOrders: Order[];
-  notifications: NotificationItem[];
-  primaryAddress: Address | null;
-}
+import { WalletContextType, PartialOrder } from '@/src/types/wallet-context';
+import { loadReadMap } from '@/src/lib/utils/notification-storage';
+import { useNotificationActions } from '@/src/hooks/useNotificationActions';
+import { useWalletActions } from '@/src/hooks/useWalletActions';
 
 const WalletContext = createContext<WalletContextType | undefined>(undefined);
 
 export function WalletProvider({ children }: { children: React.ReactNode }) {
-  // Initialize with the hardcoded value from the design
   const [balance, setBalance] = useState(0);
-  const [points, setPoints] = useState(0);
+  const [points] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-
-  // Data States
-  const [activeOrders, setActiveOrders] = useState<Order[]>([]);
+  const [activeOrders, setActiveOrders] = useState<PartialOrder[]>([]);
   const [primaryAddress, setPrimaryAddress] = useState<Address | null>(null);
-  // Ephemeral notifications (TopUp, etc.)
   const [localNotifications, setLocalNotifications] = useState<
     NotificationItem[]
   >([]);
-
-  // Real database-derived notifications
   const [dbNotifications, setDbNotifications] = useState<NotificationItem[]>(
     []
   );
-
-  // Derived Counts
-  const cartCount = activeOrders.length;
-  // Combine local and DB notifications, sort by time desc
-  const notifications = [...localNotifications, ...dbNotifications].sort(
-    (a, b) => new Date(b.time || 0).getTime() - new Date(a.time || 0).getTime()
-  );
-
-  const notificationCount = notifications.filter((n) => !n.read).length;
+  const [readMap, setReadMap] = useState<Record<string, boolean>>({});
 
   const { user } = useAuth();
 
+  // Load readMap saat user berubah
   useEffect(() => {
-    if (!user) return; // Don't fetch if not authenticated
+    setReadMap(loadReadMap(user));
+  }, [user?.id, user?.email]);
 
-    const loadData = async () => {
-      const data = await fetchDashboardData();
-      setActiveOrders(data.activeOrders);
+  // Fetch dashboard data
+  useEffect(() => {
+    if (!user) return;
+    fetchDashboardData().then((data) => {
+      setActiveOrders(data.activeOrders as PartialOrder[]);
       setPrimaryAddress(data.primaryAddress);
       setDbNotifications(data.notifications);
-    };
-
-    loadData();
+    });
   }, [user]);
 
-  const topUp = async (amount: number) => {
-    setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setBalance((prev) => prev + amount);
+  // Computed notifications dengan status read dari readMap
+  const notifications = useMemo(() => {
+    return [...localNotifications, ...dbNotifications]
+      .map((n) => ({ ...n, read: readMap[n.id] ?? n.read }))
+      .sort(
+        (a, b) =>
+          new Date(b.time || 0).getTime() - new Date(a.time || 0).getTime()
+      );
+  }, [localNotifications, dbNotifications, readMap]);
 
-    const newNotif: NotificationItem = {
-      id: `topup-${Date.now()}`,
-      title: 'Top Up Berhasil',
-      message: `Top Up sebesar Rp ${amount.toLocaleString('id-ID')} berhasil.`,
-      time: new Date().toISOString(),
-      type: 'success',
-      read: false,
-    };
+  const notificationCount = useMemo(() => {
+    return notifications.filter((n) => !n.read).length;
+  }, [notifications]);
 
-    setLocalNotifications((prev) => [newNotif, ...prev]);
-    setIsLoading(false);
-    return true;
-  };
+  const cartCount = activeOrders.length;
 
-  const addToCart = () => {
-    const mockOrder: any = {
-      id: `ORD-${Date.now()}`,
-      status: 'PENDING_PAYMENT',
-      created_at: new Date().toISOString(),
-    };
-    setActiveOrders((prev) => [mockOrder, ...prev]);
+  // Custom hooks untuk actions
+  const { topUp, addToCart } = useWalletActions({
+    setBalance,
+    setIsLoading,
+    setActiveOrders,
+    setLocalNotifications,
+  });
 
-    const newNotif: NotificationItem = {
-      id: `order-new-${Date.now()}`,
-      title: 'Pesanan Dibuat',
-      message: 'Pesanan baru berhasil dibuat.',
-      time: new Date().toISOString(),
-      type: 'info',
-      read: false,
-    };
-    setLocalNotifications((prev) => [newNotif, ...prev]);
-  };
+  const notificationActions = useNotificationActions({
+    user,
+    localNotifications,
+    dbNotifications,
+    setLocalNotifications,
+    setDbNotifications,
+    setReadMap,
+  });
 
-  const addNotification = () => {};
-
-  const addNotificationItem = (item: NotificationItem) => {
-    setLocalNotifications((prev) => [item, ...prev]);
-  };
-
-  const deleteNotification = (id: string) => {
-    setLocalNotifications((prev) => prev.filter((n) => n.id !== id));
-    setDbNotifications((prev) => prev.filter((n) => n.id !== id));
-  };
-
-  const clearNotifications = () => {
-    setLocalNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
-    setDbNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
-  };
+  const contextValue = useMemo<WalletContextType>(
+    () => ({
+      balance,
+      topUp,
+      isLoading,
+      points,
+      cartCount,
+      notificationCount,
+      addToCart,
+      activeOrders,
+      notifications,
+      primaryAddress,
+      ...notificationActions,
+    }),
+    [
+      balance,
+      topUp,
+      isLoading,
+      points,
+      cartCount,
+      notificationCount,
+      addToCart,
+      activeOrders,
+      notifications,
+      primaryAddress,
+      notificationActions,
+    ]
+  );
 
   return (
-    <WalletContext.Provider
-      value={{
-        balance,
-        topUp,
-        isLoading,
-        points,
-        cartCount,
-        notificationCount,
-        addToCart,
-        addNotification,
-        deleteNotification,
-        clearNotifications,
-        activeOrders,
-        notifications,
-        primaryAddress,
-      }}
-    >
+    <WalletContext.Provider value={contextValue}>
       {children}
     </WalletContext.Provider>
   );
@@ -149,8 +123,6 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
 
 export function useWallet() {
   const context = useContext(WalletContext);
-  if (context === undefined) {
-    throw new Error('useWallet must be used within a WalletProvider');
-  }
+  if (!context) throw new Error('useWallet must be used within WalletProvider');
   return context;
 }
