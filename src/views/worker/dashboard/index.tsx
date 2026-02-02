@@ -4,13 +4,23 @@ import { useState, useEffect } from 'react';
 import { TaskQueueSidebar, TaskDetailPanel } from '@/src/components/worker/station';
 import { useStationTasks } from '@/src/hooks/use-station-tasks';
 import { StationTask, StationType } from '@/src/types/station';
+import clsx from 'clsx';
+
+const STATION_TABS: { id: StationType; label: string; color: string }[] = [
+  { id: 'WASHING', label: 'Cuci', color: '#3b82f6' },
+  { id: 'IRONING', label: 'Setrika', color: '#f59e0b' },
+  { id: 'PACKING', label: 'Packing', color: '#10b981' },
+];
 
 export function WorkerDashboardView() {
-  // Station type - can be made dynamic based on user assignment
-  const stationType: StationType = 'WASHING';
-
+  const [activeStation, setActiveStation] = useState<StationType>('WASHING');
   const [selectedTask, setSelectedTask] = useState<StationTask | null>(null);
-  const { data: tasks, isLoading } = useStationTasks(stationType);
+  const { data: tasks, isLoading } = useStationTasks(activeStation);
+
+  // Reset selected task when station changes
+  useEffect(() => {
+    setSelectedTask(null);
+  }, [activeStation]);
 
   // Auto-select first in-progress task if none selected
   useEffect(() => {
@@ -24,14 +34,37 @@ export function WorkerDashboardView() {
 
   return (
     <>
+      {/* Station Selector Tabs */}
+      <div className="flex border-b border-[--color-station-border] bg-[--color-station-surface] md:hidden">
+        {STATION_TABS.map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveStation(tab.id)}
+            className={clsx(
+              'flex-1 py-3 text-center text-sm font-semibold transition-colors',
+              activeStation === tab.id
+                ? 'border-b-2 text-white'
+                : 'text-[--color-station-text-muted] hover:text-white'
+            )}
+            style={{
+              borderColor: activeStation === tab.id ? tab.color : 'transparent',
+            }}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
       <TaskQueueSidebar
         tasks={tasks || []}
         activeTaskId={selectedTask?.id}
         onTaskSelect={setSelectedTask}
-        stationType={stationType}
+        stationType={activeStation}
         isLoading={isLoading}
+        stationTabs={STATION_TABS}
+        onStationChange={setActiveStation}
       />
-      <TaskDetailPanel task={selectedTask} stationType={stationType} />
+      <TaskDetailPanel task={selectedTask} stationType={activeStation} />
 
       {/* Mobile placeholder - shows instead of TaskDetailPanel on small screens */}
       <div className="flex flex-1 flex-col items-center justify-center bg-[--color-station-bg] p-8 text-center md:hidden">

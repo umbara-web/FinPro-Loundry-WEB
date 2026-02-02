@@ -1,5 +1,5 @@
-import { AttendanceView } from '@/src/views/worker/attendance';
+import { AttendanceView } from '@/src/views/attendance';
 
 export default function WorkerAttendancePage() {
-  return <AttendanceView />;
+  return <AttendanceView basePath="/worker-attendance" />;
 }
