@@ -42,10 +42,10 @@ export function TaskDetailPanel({ task, stationType }: TaskDetailPanelProps) {
 
   // Calculate total items and progress
   const totalItems = Object.values(itemCounts).reduce((sum, count) => sum + count, 0);
-  const expectedItems = task ? Math.round(task.weight * 3) : 0; // Rough estimate: 3 items per kg
+  const expectedItems = task ? Math.round(task.weight * 3) : 0; // Estimated 3 items per kg
   const progress = expectedItems > 0 ? Math.round((totalItems / expectedItems) * 100) : 0;
 
-  // Check for mismatch (demo: show alert when items count is significant but doesn't match expected)
+  // Check for mismatch based on estimated items
   useEffect(() => {
     if (totalItems > 0 && Math.abs(totalItems - expectedItems) > 5) {
       setShowMismatchAlert(true);

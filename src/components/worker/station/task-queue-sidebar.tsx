@@ -5,12 +5,20 @@ import { StationTask, StationType, getStationConfig } from '@/src/types/station'
 import { TaskQueueCard } from './task-queue-card';
 import clsx from 'clsx';
 
+interface StationTab {
+  id: StationType;
+  label: string;
+  color: string;
+}
+
 interface TaskQueueSidebarProps {
   tasks: StationTask[];
   activeTaskId?: string;
   onTaskSelect: (task: StationTask) => void;
   stationType: StationType;
   isLoading?: boolean;
+  stationTabs?: StationTab[];
+  onStationChange?: (station: StationType) => void;
 }
 
 export function TaskQueueSidebar({
@@ -19,12 +27,37 @@ export function TaskQueueSidebar({
   onTaskSelect,
   stationType,
   isLoading = false,
+  stationTabs,
+  onStationChange,
 }: TaskQueueSidebarProps) {
   const config = getStationConfig(stationType);
   const pendingCount = tasks.filter((t) => t.status === 'WAITING').length;
 
   return (
     <aside className="flex h-full w-full shrink-0 flex-col border-r border-[--color-station-border] bg-[--color-station-bg] md:w-[380px]">
+      {/* Station Tabs (Desktop) */}
+      {stationTabs && onStationChange && (
+        <div className="hidden border-b border-[--color-station-border] md:flex">
+          {stationTabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => onStationChange(tab.id)}
+              className={clsx(
+                'flex-1 py-3 text-center text-sm font-semibold transition-colors',
+                stationType === tab.id
+                  ? 'border-b-2 text-white'
+                  : 'text-[--color-station-text-muted] hover:text-white'
+              )}
+              style={{
+                borderColor: stationType === tab.id ? tab.color : 'transparent',
+              }}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+      )}
+
       {/* Header */}
       <div className="sticky top-0 z-10 flex items-center justify-between border-b border-[--color-station-border] bg-[--color-station-bg]/50 p-4 backdrop-blur-sm">
         <div>

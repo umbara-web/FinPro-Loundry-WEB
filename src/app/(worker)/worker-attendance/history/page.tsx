@@ -1,5 +1,5 @@
-import { AttendanceHistoryView } from '@/src/views/worker/attendance/history';
+import { AttendanceHistoryView } from '@/src/views/attendance/history';
 
 export default function WorkerAttendanceHistoryPage() {
-  return <AttendanceHistoryView />;
+  return <AttendanceHistoryView basePath="/worker-attendance" />;
 }

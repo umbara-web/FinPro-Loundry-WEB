@@ -86,13 +86,11 @@ async function processStationTask(data: ProcessTaskData): Promise<{ message: str
 interface BypassRequestData {
   taskId: string;
   reason: string;
-  outletAdminId: string;
 }
 
 async function requestBypass(data: BypassRequestData): Promise<{ message: string }> {
   const response = await api.post(`/worker/station/tasks/${data.taskId}/bypass`, {
     reason: data.reason,
-    outletAdminId: data.outletAdminId,
   });
   return response.data;
 }
@@ -144,11 +142,9 @@ export const useBypassRequest = () => {
 
   return useMutation({
     mutationFn: (data: { taskId: string; stationType: StationType; reason: string }) => {
-      // Note: outletAdminId should come from context or be determined by backend
       return requestBypass({
         taskId: data.taskId,
         reason: data.reason,
-        outletAdminId: '', // Backend should determine this based on outlet
       });
     },
     onSuccess: () => {
