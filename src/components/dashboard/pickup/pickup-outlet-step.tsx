@@ -19,11 +19,11 @@ function SectionHeader() {
   return (
     <div className='mb-4 border-t border-slate-300 pt-4 dark:border-slate-700'>
       <div className='mb-2 flex items-center gap-3'>
-        <div className='flex items-center justify-center rounded-lg bg-blue-500 p-2 text-white'>
+        <div className='flex items-center justify-center rounded-lg bg-blue-500/20 p-2 text-blue-500'>
           <Store className='h-6 w-6' />
         </div>
         <h2 className='text-xl font-bold text-black dark:text-white'>
-          3. Outlet Terdekat
+          4. Outlet Terdekat
         </h2>
       </div>
       <p className='text-sm text-gray-600 dark:text-gray-400'>
@@ -117,8 +117,8 @@ export function PickupOutletStep({ selectedAddress }: PickupOutletStepProps) {
     ],
     queryFn: () =>
       pickupApi.findNearestOutlet(
-        selectedAddress!.latitude.toString(),
-        selectedAddress!.longitude.toString()
+        selectedAddress!.latitude!.toString(),
+        selectedAddress!.longitude!.toString()
       ),
     enabled: !!selectedAddress?.latitude && !!selectedAddress?.longitude,
   });

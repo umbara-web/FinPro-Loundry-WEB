@@ -59,7 +59,7 @@ function WelcomeText({
 
 function CreateOrderButton() {
   return (
-    <Link href='/customer/pickup/new'>
+    <Link href='/dashboard/orders?tab=submission'>
       <Button
         variant='outline'
         className='group flex h-12 w-auto transform cursor-pointer items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 text-white shadow-lg shadow-blue-500/20 transition-all hover:border hover:border-blue-600 hover:bg-white hover:text-blue-600 hover:shadow-lg hover:shadow-blue-500/20 active:scale-95 dark:text-white dark:hover:text-black'

@@ -27,8 +27,6 @@ function OrderTabsContent() {
     params.set('tab', tabId);
     // Reset pagination when switching tabs if needed, but for now just switch tab
     if (tabId === 'submission') {
-      // cleanup history params if switching to submission?
-      // simple replacement for now
       router.push(`${pathname}?tab=${tabId}`);
     } else {
       router.push(`${pathname}?tab=${tabId}`);
@@ -37,10 +35,13 @@ function OrderTabsContent() {
 
   return (
     <div className='flex h-full flex-col gap-6'>
-      <div className='flex items-center gap-3 border-l-4 border-blue-500 pl-4'>
-        <h2 className='text-xl font-bold text-slate-900 dark:text-white'>
+      <div className='flex flex-col gap-3'>
+        <h2 className='text-3xl font-bold text-slate-900 dark:text-white'>
           Pesanan
         </h2>
+        <p>
+          Tentukan Item, Lokasi, dan Jadwal penjemputan untuk mulai mencuci.
+        </p>
       </div>
 
       {/* Sub-tabs */}

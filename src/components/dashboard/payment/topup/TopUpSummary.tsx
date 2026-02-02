@@ -115,7 +115,7 @@ function TotalSection({ total }: { total: number }) {
       <span className='text-base font-bold text-slate-900 dark:text-white'>
         Total Bayar
       </span>
-      <span className='text-primary text-xl font-black'>
+      <span className='text-xl font-black text-black dark:text-white'>
         Rp {total.toLocaleString('id-ID')}
       </span>
     </div>

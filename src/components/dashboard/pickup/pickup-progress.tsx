@@ -17,7 +17,7 @@ export function PickupProgress({
         <span className='text-sm font-medium text-black dark:text-white'>
           Langkah {currentStep} dari {totalSteps}: {stepName}
         </span>
-        <span className='text-primary text-sm font-bold'>
+        <span className='text-primary text-sm font-bold dark:text-white'>
           {Math.round(progress)}%
         </span>
       </div>

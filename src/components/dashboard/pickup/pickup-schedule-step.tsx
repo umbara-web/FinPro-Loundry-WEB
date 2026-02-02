@@ -32,7 +32,7 @@ export function PickupScheduleStep({
   return (
     <section>
       <div className='mb-4 flex items-center gap-3 border-t border-slate-300 pt-4 dark:border-slate-700'>
-        <div className='flex items-center justify-center rounded-lg bg-blue-500 p-2 text-white'>
+        <div className='flex items-center justify-center rounded-lg bg-blue-500/20 p-2 text-blue-500'>
           <Calendar className='h-6 w-6' />
         </div>
         <h2 className='text-xl font-bold text-black dark:text-white'>

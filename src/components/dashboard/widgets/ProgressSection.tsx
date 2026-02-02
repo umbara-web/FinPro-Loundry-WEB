@@ -77,9 +77,9 @@ function StepIndicator({
   isCurrent: boolean;
 }) {
   const dotClass = isCurrent
-    ? 'size-3 bg-primary ring-4 ring-blue-500/20'
+    ? 'size-3 bg-blue-500 ring-4 ring-blue-500/20'
     : isActive
-      ? 'size-2 bg-primary'
+      ? 'size-2 bg-blue-500'
       : 'size-2 bg-slate-400 dark:bg-slate-600';
 
   return (
@@ -88,7 +88,7 @@ function StepIndicator({
     >
       <div className={`rounded-full ${dotClass}`}></div>
       <span
-        className={`text-[10px] ${isActive ? 'text-primary font-bold' : 'text-slate-500 dark:text-slate-400'}`}
+        className={`text-[10px] ${isActive ? 'text-primary font-bold dark:text-white' : 'text-slate-500 dark:text-slate-400'}`}
       >
         {label}
       </span>
