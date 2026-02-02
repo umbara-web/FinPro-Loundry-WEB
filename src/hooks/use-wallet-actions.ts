@@ -42,7 +42,6 @@ export function useWalletActions({
   );
 
   const addToCart = useCallback(() => {
-    // ✅ Sekarang valid karena PartialOrder hanya require id, status, created_at
     const mockOrder: PartialOrder = {
       id: `ORD-${Date.now()}`,
       status: OrderStatus.WAITING_PAYMENT,

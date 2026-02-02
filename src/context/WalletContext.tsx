@@ -16,8 +16,8 @@ import {
 import { useAuth } from './AuthContext';
 import { WalletContextType, PartialOrder } from '@/src/types/wallet-context';
 import { loadReadMap } from '@/src/lib/utils/notification-storage';
-import { useNotificationActions } from '@/src/hooks/useNotificationActions';
-import { useWalletActions } from '@/src/hooks/useWalletActions';
+import { useNotificationActions } from '@/src/hooks/use-notification-actions';
+import { useWalletActions } from '@/src/hooks/use-wallet-actions';
 
 const WalletContext = createContext<WalletContextType | undefined>(undefined);
 

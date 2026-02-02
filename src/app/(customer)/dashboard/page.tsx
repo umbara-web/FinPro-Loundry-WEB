@@ -6,7 +6,7 @@ import {
   ActiveOrders,
   AddressWidget,
   ActivityWidget,
-} from '@/src/components/dashboard/main/dashboard-widgets';
+} from '@/src/components/dashboard/widgets';
 
 export default function DashboardPage() {
   return (

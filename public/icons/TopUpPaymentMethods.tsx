@@ -38,8 +38,8 @@ const EWALLET_METHODS: PaymentMethodConfig[] = [
     id: 'dana',
     name: 'DANA',
     icon: '/icons/Dana.svg',
-    iconWidth: 60,
-    iconHeight: 60,
+    iconWidth: 65,
+    iconHeight: 40,
     category: 'ewallet',
   },
 ];
@@ -76,7 +76,7 @@ export function TopUpPaymentMethods({
   onMethodChange,
 }: TopUpPaymentMethodsProps) {
   return (
-    <div className='dark:bg-surface-dark rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-[#324d67]'>
+    <div className='dark:bg-lp-surface-dark rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-[#324d67]'>
       <h3 className='mb-4 text-sm font-bold tracking-wider text-slate-900 uppercase dark:text-white'>
         Metode Pembayaran
       </h3>
@@ -142,14 +142,14 @@ function PaymentMethodItem({
   const containerClasses = clsx(
     'flex cursor-pointer items-center justify-between rounded-xl border p-4 transition-all',
     isSelected
-      ? 'text-primary dark:bg-slate-800 border-blue-500 dark:text-black'
+      ? 'text-primary dark:bg-primary/5 border-blue-500 dark:text-black'
       : 'border-slate-200 hover:border-blue-500 hover:bg-slate-50 dark:border-[#324d67] dark:bg-[#111a22] dark:text-white dark:hover:border-blue-500'
   );
 
   return (
     <label className={containerClasses}>
       <div className='flex items-center gap-3'>
-        <div className='flex h-10 w-20 items-center justify-center rounded dark:bg-white'>
+        <div className='flex h-10 w-20 items-center justify-center rounded bg-slate-100 dark:bg-[#111a22]'>
           <Image
             src={method.icon}
             alt={method.id}

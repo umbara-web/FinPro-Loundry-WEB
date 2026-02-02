@@ -62,7 +62,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       {/* Sidebar */}
       <div
         className={clsx(
-          'dark:border-card-border fixed inset-y-0 left-0 z-50 flex h-full w-[85vw] max-w-75 shrink-0 flex-col border-r border-gray-200 bg-white transition-transform duration-300 lg:static lg:flex lg:w-72 dark:border-slate-700 dark:bg-[#101922]',
+          'dark:border-card-border dark:bg-station-bg fixed inset-y-0 left-0 z-50 flex h-full w-[85vw] max-w-75 shrink-0 flex-col border-r border-gray-200 bg-white transition-transform duration-300 lg:static lg:flex lg:w-72 dark:border-slate-700',
           isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         )}
       >
@@ -127,7 +127,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         <div className='mt-auto border-t border-slate-200 p-6 dark:border-slate-700'>
           <button
             onClick={logout}
-            className='flex w-full cursor-pointer items-center justify-end gap-3 text-black transition-colors hover:text-blue-600 dark:text-white dark:hover:text-blue-600'
+            className='flex w-full cursor-pointer items-center justify-end gap-3 text-red-500 transition-colors hover:text-blue-600 dark:hover:text-blue-600'
           >
             <LogOut className='h-5 w-5' />
             <p className='text-sm font-medium'>Keluar</p>

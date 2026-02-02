@@ -6,6 +6,7 @@ import { PickupOutletStep } from '@/src/components/dashboard/pickup/pickup-outle
 import { PickupSummary } from '@/src/components/dashboard/pickup/pickup-summary';
 import { PickupProgress } from '@/src/components/dashboard/pickup/pickup-progress';
 import { useCreatePickup } from '@/src/hooks/use-create-pickup';
+import { PickupItemsStep } from '../pickup/pickup-items-step';
 
 export function OrderSubmissionTab() {
   const {
@@ -24,6 +25,12 @@ export function OrderSubmissionTab() {
     stepName,
     nearestOutlet,
     isOutletLoading,
+    items,
+    manualItems,
+    handleUpdateItem,
+    handleAddManualItem,
+    handleUpdateManualItemQuantity,
+    handleRemoveManualItem,
   } = useCreatePickup();
 
   return (
@@ -31,7 +38,7 @@ export function OrderSubmissionTab() {
       <div className='mb-8'>
         <PickupProgress
           currentStep={currentStep}
-          totalSteps={3}
+          totalSteps={4}
           stepName={stepName}
           progress={progress}
         />
@@ -48,6 +55,14 @@ export function OrderSubmissionTab() {
             timeSlot={timeSlot}
             setTimeSlot={setTimeSlot}
           />
+          <PickupItemsStep
+            items={items}
+            onUpdateItem={handleUpdateItem}
+            manualItems={manualItems}
+            onAddManualItem={handleAddManualItem}
+            onUpdateManualItem={handleUpdateManualItemQuantity}
+            onRemoveManualItem={handleRemoveManualItem}
+          />
           <PickupOutletStep selectedAddress={selectedAddress} />
         </div>
         <div className='flex flex-col gap-6 lg:w-95'>
@@ -61,6 +76,8 @@ export function OrderSubmissionTab() {
             setNotes={setNotes}
             onSubmit={handleSubmit}
             isLoading={isLoading}
+            items={items}
+            manualItems={manualItems}
           />
         </div>
       </div>

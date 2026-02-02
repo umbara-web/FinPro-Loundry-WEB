@@ -21,23 +21,30 @@ function calculateProgress(
   selectedAddress: Address | undefined,
   date: string,
   timeSlot: string,
-  isOutletValid: boolean
+  isOutletValid: boolean,
+  itemsCount: number,
+  manualItemsCount: number
 ) {
   let progress = 0;
-  if (selectedAddress) progress += 33;
-  if (date && timeSlot) progress += 33;
-  if (isOutletValid) progress += 34;
+  if (selectedAddress) progress += 25;
+  if (date && timeSlot) progress += 25;
+  if (itemsCount > 0 || manualItemsCount > 0) progress += 25;
+  if (isOutletValid) progress += 25;
   return Math.min(progress, 100);
 }
 
 function getCurrentStep(
   selectedAddress: Address | undefined,
   date: string,
-  timeSlot: string
+  timeSlot: string,
+  itemsCount: number,
+  manualItemsCount: number
 ) {
   if (!selectedAddress) return { step: 1, name: 'Lokasi Penjemputan' };
   if (!date || !timeSlot) return { step: 2, name: 'Jadwal Penjemputan' };
-  return { step: 3, name: 'Outlet Terdekat' };
+  if (itemsCount === 0 && manualItemsCount === 0)
+    return { step: 3, name: 'Daftar Item Laundry' };
+  return { step: 4, name: 'Outlet Terdekat' };
 }
 
 export function useCreatePickup() {
@@ -48,6 +55,45 @@ export function useCreatePickup() {
   const [date, setDate] = useState('');
   const [timeSlot, setTimeSlot] = useState('');
   const [notes, setNotes] = useState('');
+
+  const [items, setItems] = useState<Record<string, number>>({});
+  const [manualItems, setManualItems] = useState<
+    { name: string; quantity: number }[]
+  >([]);
+
+  const handleUpdateItem = (id: string, delta: number) => {
+    setItems((prev) => {
+      const current = prev[id] || 0;
+      const next = Math.max(0, current + delta);
+      if (next === 0) {
+        const { [id]: _, ...rest } = prev;
+        return rest;
+      }
+      return { ...prev, [id]: next };
+    });
+  };
+
+  const handleAddManualItem = (item: { name: string; quantity: number }) => {
+    setManualItems((prev) => [...prev, item]);
+  };
+
+  const handleUpdateManualItemQuantity = (index: number, delta: number) => {
+    setManualItems((prev) =>
+      prev
+        .map((item, i) => {
+          if (i === index) {
+            const newQuantity = Math.max(0, item.quantity + delta);
+            return { ...item, quantity: newQuantity };
+          }
+          return item;
+        })
+        .filter((item) => item.quantity > 0)
+    );
+  };
+
+  const handleRemoveManualItem = (index: number) => {
+    setManualItems((prev) => prev.filter((_, i) => i !== index));
+  };
 
   // Fetch addresses to set default
   const { data: addresses } = useQuery({
@@ -75,8 +121,8 @@ export function useCreatePickup() {
     ],
     queryFn: () =>
       pickupApi.findNearestOutlet(
-        selectedAddress!.latitude.toString(),
-        selectedAddress!.longitude.toString()
+        selectedAddress!.latitude!.toString(),
+        selectedAddress!.longitude!.toString()
       ),
     enabled: !!selectedAddress?.latitude && !!selectedAddress?.longitude,
   });
@@ -114,17 +160,24 @@ export function useCreatePickup() {
     });
   };
 
+  const itemsCount = Object.values(items).reduce((a, b) => a + b, 0);
+  const manualItemsCount = manualItems.length;
+
   const isOutletValid = !!nearestOutlet?.isWithinRange;
   const progress = calculateProgress(
     selectedAddress,
     date,
     timeSlot,
-    isOutletValid
+    isOutletValid,
+    itemsCount,
+    manualItemsCount
   );
   const { step: currentStep, name: stepName } = getCurrentStep(
     selectedAddress,
     date,
-    timeSlot
+    timeSlot,
+    itemsCount,
+    manualItemsCount
   );
 
   return {
@@ -143,5 +196,11 @@ export function useCreatePickup() {
     stepName,
     nearestOutlet,
     isOutletLoading,
+    items,
+    manualItems,
+    handleUpdateItem,
+    handleAddManualItem,
+    handleUpdateManualItemQuantity,
+    handleRemoveManualItem,
   };
 }

@@ -107,7 +107,7 @@ export function AddressListSection({
             className={`relative cursor-pointer rounded-xl border-2 p-5 transition-all ${
               isSelected
                 ? 'border-blue-500 bg-blue-500/5 shadow-md'
-                : 'bg-surface-dark border-slate-200 hover:border-slate-300 dark:border-[#233648] dark:hover:border-[#324d67]'
+                : 'border-slate-300 bg-slate-200 hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:hover:border-[#324d67]'
             }`}
           >
             <div className='mb-2 flex items-center justify-between'>
