@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { IconArrowLeft } from '@tabler/icons-react';
+import { FaArrowCircleLeft } from 'react-icons/fa';
 import { ReactNode } from 'react';
 import { AuthLogo } from './shared/auth-logo';
 
@@ -27,7 +27,7 @@ export function AuthLayout({
             href='/'
             className='flex items-center gap-2 transition-colors hover:text-blue-500'
           >
-            <IconArrowLeft className='h-6 w-6' />
+            <FaArrowCircleLeft className='h-6 w-6' />
             <span className='text-xl font-bold'>Kembali ke Halaman Utama</span>
           </Link>
         </div>
@@ -58,7 +58,7 @@ export function AuthLayout({
               href='/'
               className='flex items-center gap-2 text-gray-900 transition-colors hover:text-blue-500 dark:text-white'
             >
-              <IconArrowLeft className='h-5 w-5' /> Kembali ke Halaman Utama
+              <FaArrowCircleLeft className='h-5 w-5' /> Kembali ke Halaman Utama
             </Link>
           </div>
           {children}
