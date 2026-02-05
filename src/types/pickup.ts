@@ -20,6 +20,8 @@ export interface CreatePickupPayload {
   schedulledPickupAt: string;
   notes?: string;
   outletId?: string;
+  items?: { laundryItemId: string; qty: number }[];
+  manualItems?: { name: string; quantity: number }[];
 }
 
 export interface OutletInfo {

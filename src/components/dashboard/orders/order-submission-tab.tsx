@@ -27,6 +27,7 @@ export function OrderSubmissionTab() {
     isOutletLoading,
     items,
     manualItems,
+    laundryItems,
     handleUpdateItem,
     handleAddManualItem,
     handleUpdateManualItemQuantity,
@@ -62,6 +63,7 @@ export function OrderSubmissionTab() {
             onAddManualItem={handleAddManualItem}
             onUpdateManualItem={handleUpdateManualItemQuantity}
             onRemoveManualItem={handleRemoveManualItem}
+            laundryItems={laundryItems}
           />
           <PickupOutletStep selectedAddress={selectedAddress} />
         </div>
@@ -78,6 +80,7 @@ export function OrderSubmissionTab() {
             isLoading={isLoading}
             items={items}
             manualItems={manualItems}
+            laundryItems={laundryItems}
           />
         </div>
       </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import { Package } from 'lucide-react';
-import { LAUNDRY_ITEMS } from './pickup-constants';
+import { LaundryItem, getItemIcon } from './pickup-constants';
 import { LaundryItemRow, ManualItemRow } from './pickup-item-rows';
 import { ManualItemForm } from './pickup-manual-form';
 
@@ -27,6 +27,7 @@ interface PickupItemsStepProps {
   onAddManualItem: (item: { name: string; quantity: number }) => void;
   onUpdateManualItem: (index: number, delta: number) => void;
   onRemoveManualItem: (index: number) => void;
+  laundryItems: LaundryItem[];
 }
 
 export function PickupItemsStep({
@@ -36,16 +37,17 @@ export function PickupItemsStep({
   onAddManualItem,
   onUpdateManualItem,
   onRemoveManualItem,
+  laundryItems,
 }: PickupItemsStepProps) {
   return (
     <section>
       <SectionHeader />
       <div className='overflow-hidden rounded-xl border border-slate-300 bg-white dark:border-slate-700 dark:bg-slate-900'>
         <div className='grid grid-cols-1 gap-px bg-slate-200 md:grid-cols-2 dark:bg-slate-700'>
-          {LAUNDRY_ITEMS.map((item) => (
+          {laundryItems.map((item) => (
             <LaundryItemRow
               key={item.id}
-              item={item}
+              item={{ ...item, icon: getItemIcon(item.name) }}
               quantity={items[item.id] || 0}
               onUpdate={onUpdateItem}
             />

@@ -1,9 +1,20 @@
 import React from 'react';
-import { PiPantsDuotone, PiShirtFolded } from 'react-icons/pi';
-import { GiShorts } from 'react-icons/gi';
+import {
+  PiPantsDuotone,
+  PiShirtFolded,
+  PiNotePencilBold,
+} from 'react-icons/pi';
+import {
+  GiShorts,
+  GiMonclerJacket,
+  GiSkirt,
+  GiTravelDress,
+  GiTowel,
+} from 'react-icons/gi';
 import { RiShirtFill } from 'react-icons/ri';
 import { IoShirtSharp } from 'react-icons/io5';
 import { LuShirt } from 'react-icons/lu';
+import { BiSolidBlanket, BiBed } from 'react-icons/bi';
 import { NearestOutletResult } from '@/src/types/pickup';
 
 // Constants
@@ -52,6 +63,28 @@ export const LAUNDRY_ITEMS: LaundryItem[] = [
     icon: <LuShirt className='h-6 w-6' />,
   },
 ];
+
+// Helper to get icon based on item name
+export function getItemIcon(name: string): React.ReactNode {
+  const n = name.toLowerCase();
+  if (n.includes('baju') || n.includes('kaos'))
+    return <IoShirtSharp className='h-6 w-6' />;
+  if (n.includes('jas')) return <RiShirtFill className='h-6 w-6' />;
+  if (n.includes('celana') && n.includes('panjang'))
+    return <PiPantsDuotone className='h-6 w-6' />;
+  if (n.includes('celana') && n.includes('pendek'))
+    return <GiShorts className='h-6 w-6' />;
+  if (n.includes('celana')) return <PiPantsDuotone className='h-6 w-6' />;
+  if (n.includes('kemeja')) return <PiShirtFolded className='h-6 w-6' />;
+  if (n.includes('dalam')) return <LuShirt className='h-6 w-6' />;
+  if (n.includes('jaket')) return <GiMonclerJacket className='h-6 w-6' />;
+  if (n.includes('rok')) return <GiSkirt className='h-6 w-6' />;
+  if (n.includes('dress')) return <GiTravelDress className='h-6 w-6' />;
+  if (n.includes('selimut')) return <BiSolidBlanket className='h-6 w-6' />;
+  if (n.includes('sprei')) return <BiBed className='h-6 w-6' />;
+  if (n.includes('handuk')) return <GiTowel className='h-6 w-6' />;
+  return <PiNotePencilBold className='h-6 w-6' />;
+}
 
 // Utils
 export function formatDateDisplay(date: string): string {

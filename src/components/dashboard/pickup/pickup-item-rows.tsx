@@ -51,7 +51,7 @@ export function LaundryItemRow({
       <div className='flex items-center gap-3 rounded-lg border border-slate-200 bg-slate-50 p-1 dark:border-slate-700 dark:bg-slate-800'>
         <button
           onClick={() => onUpdate(item.id, -1)}
-          className='size-8 rounded text-gray-400 transition-colors hover:bg-slate-200 dark:hover:bg-slate-700'
+          className='size-8 cursor-pointer rounded text-gray-400 transition-colors hover:bg-slate-200 dark:hover:bg-slate-700'
         >
           <Minus className='mx-auto h-4 w-4' />
         </button>
@@ -63,7 +63,7 @@ export function LaundryItemRow({
         />
         <button
           onClick={() => onUpdate(item.id, 1)}
-          className='size-8 rounded bg-blue-500 text-white transition-colors hover:bg-blue-600'
+          className='size-8 cursor-pointer rounded bg-blue-500 text-white transition-colors hover:bg-blue-600'
         >
           <Plus className='mx-auto h-4 w-4' />
         </button>

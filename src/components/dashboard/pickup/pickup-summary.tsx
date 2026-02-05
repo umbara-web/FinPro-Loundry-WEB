@@ -4,7 +4,11 @@ import { Address } from '@/src/types/address';
 import { NearestOutletResult } from '@/src/types/pickup';
 import { PickupSummaryItem } from './pickup-summary-item';
 import { Calendar, Store, MapPin, ClipboardList } from 'lucide-react';
-import { formatDateDisplay, getOutletDisplay } from './pickup-constants';
+import {
+  formatDateDisplay,
+  getOutletDisplay,
+  LaundryItem,
+} from './pickup-constants';
 import {
   SummaryHeader,
   InfoNotice,
@@ -26,6 +30,7 @@ interface PickupSummaryProps {
   isLoading: boolean;
   items: Record<string, number>;
   manualItems: { name: string; quantity: number }[];
+  laundryItems: LaundryItem[];
 }
 
 export function PickupSummary({
@@ -40,6 +45,7 @@ export function PickupSummary({
   isLoading,
   items = {},
   manualItems = [],
+  laundryItems = [],
 }: PickupSummaryProps) {
   const outletDisplay = getOutletDisplay(nearestOutlet, isOutletLoading);
   const itemsCount = Object.values(items).reduce((a, b) => a + b, 0);
@@ -73,7 +79,13 @@ export function PickupSummary({
         <PickupSummaryItem
           icon={<ClipboardList className='h-4 w-4' />}
           title='Daftar Item'
-          subtitle={<PickupItemsList items={items} manualItems={manualItems} />}
+          subtitle={
+            <PickupItemsList
+              items={items}
+              manualItems={manualItems}
+              laundryItems={laundryItems}
+            />
+          }
           isCompleted={hasItems}
         />
         <PickupSummaryItem

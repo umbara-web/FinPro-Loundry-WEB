@@ -1,6 +1,6 @@
 import { Receipt, Info, Loader2, ArrowRight } from 'lucide-react';
 import { Button } from '@/src/components/ui/button';
-import { LAUNDRY_ITEMS } from './pickup-constants';
+import { LaundryItem } from './pickup-constants';
 
 export function SummaryHeader() {
   return (
@@ -50,7 +50,11 @@ interface SubmitButtonProps {
 
 export function SubmitButton({ isLoading, disabled }: SubmitButtonProps) {
   return (
-    <Button className='w-full' type='button' disabled={disabled}>
+    <Button
+      className='w-full cursor-pointer bg-blue-500 hover:bg-blue-900'
+      type='button'
+      disabled={disabled}
+    >
       {isLoading ? (
         <>
           <Loader2 className='mr-2 h-4 w-4 animate-spin' />
@@ -69,9 +73,14 @@ export function SubmitButton({ isLoading, disabled }: SubmitButtonProps) {
 interface PickupItemsListProps {
   items: Record<string, number>;
   manualItems: { name: string; quantity: number }[];
+  laundryItems: LaundryItem[];
 }
 
-export function PickupItemsList({ items, manualItems }: PickupItemsListProps) {
+export function PickupItemsList({
+  items,
+  manualItems,
+  laundryItems,
+}: PickupItemsListProps) {
   const itemsCount = Object.values(items).reduce((a, b) => a + b, 0);
   const hasItems = itemsCount > 0 || manualItems.length > 0;
 
@@ -81,7 +90,7 @@ export function PickupItemsList({ items, manualItems }: PickupItemsListProps) {
   const selectedItems = Object.entries(items)
     .filter(([_, qty]) => qty > 0)
     .map(([id, qty]) => {
-      const item = LAUNDRY_ITEMS.find((i) => i.id === id);
+      const item = laundryItems.find((i) => i.id === id);
       return { name: item?.name || id, qty };
     });
 

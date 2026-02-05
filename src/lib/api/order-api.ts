@@ -20,8 +20,8 @@ export const getOrderDetail = async (orderId: string) => {
     pickup_request_id: pickup.id,
     outlet_id: pickup.outlet?.id || '',
     outlet_admin_id: '',
-    total_weight: 0,
-    price_total: 0,
+    total_weight: pickup.order?.[0]?.total_weight || 0,
+    price_total: pickup.order?.[0]?.price_total || 0,
     status: mapPickupStatusToOrderStatus(pickup.status),
     paid_at: null,
     created_at: pickup.createdAt,
@@ -30,7 +30,7 @@ export const getOrderDetail = async (orderId: string) => {
       id: pickup.id,
       customer_address: pickup.customer_address,
     },
-    order_item: [],
+    order_item: pickup.order?.[0]?.order_item || [],
     driver_task: pickup.driver ? [{ driver: pickup.driver }] : [],
     payment: [], // Empty for now
   };
