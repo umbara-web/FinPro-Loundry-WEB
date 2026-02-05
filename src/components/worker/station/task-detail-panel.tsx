@@ -1,19 +1,18 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Hand } from 'lucide-react';
 import {
   StationTask,
   StationType,
-  LAUNDRY_ITEMS,
   ItemCountData,
   getStationConfig,
+  getLaundryItemConfig,
 } from '@/src/types/station';
 import { ItemCounter } from './item-counter';
-import { ValidationAlert } from './validation-alert';
 import { ActionBar } from './action-bar';
 import { useCompleteTask, useBypassRequest } from '@/src/hooks/use-station-tasks';
-import clsx from 'clsx';
+import { useLaundryItems } from '@/src/hooks/use-master-data';
 
 interface TaskDetailPanelProps {
   task: StationTask | null;
@@ -27,32 +26,79 @@ export function TaskDetailPanel({ task, stationType }: TaskDetailPanelProps) {
 
   const completeTask = useCompleteTask();
   const bypassRequest = useBypassRequest();
+  const { data: laundryItems = [] } = useLaundryItems();
 
   // Reset counts when task changes
   useEffect(() => {
-    if (task) {
+    if (task && laundryItems.length > 0) {
       const initialCounts: ItemCountData = {};
-      LAUNDRY_ITEMS.forEach((item) => {
+      laundryItems.forEach((item) => {
         initialCounts[item.id] = 0;
       });
       setItemCounts(initialCounts);
       setShowMismatchAlert(false);
     }
-  }, [task?.id]);
+  }, [task?.id, laundryItems]);
 
-  // Calculate total items and progress
+  // Build expected counts map from task.items using useMemo for stability
+  const expectedCountsMap = useMemo(() => {
+    const map: Record<string, number> = {};
+    task?.items?.forEach((item) => {
+      map[item.id] = item.qty;
+    });
+    return map;
+  }, [task?.items]);
+
+  // Sort items: those with target > 0 first, then alphabetically
+  const sortedLaundryItems = useMemo(() => {
+    return [...laundryItems].sort((a, b) => {
+      const aHasTarget = (expectedCountsMap[a.id] || 0) > 0;
+      const bHasTarget = (expectedCountsMap[b.id] || 0) > 0;
+      if (aHasTarget && !bHasTarget) return -1;
+      if (!aHasTarget && bHasTarget) return 1;
+      return a.name.localeCompare(b.name);
+    });
+  }, [laundryItems, expectedCountsMap]);
+
+  // Calculate total items and expected total
   const totalItems = Object.values(itemCounts).reduce((sum, count) => sum + count, 0);
-  const expectedItems = task ? Math.round(task.weight * 3) : 0; // Estimated 3 items per kg
-  const progress = expectedItems > 0 ? Math.round((totalItems / expectedItems) * 100) : 0;
+  const expectedTotal = task?.items?.reduce((sum, item) => sum + item.qty, 0) || 0;
+  const progress = expectedTotal > 0 ? Math.round((totalItems / expectedTotal) * 100) : 0;
 
-  // Check for mismatch based on estimated items
+  // Check if user has entered any input
+  const isInputEmpty = totalItems === 0;
+
+  // Check for mismatch based on exact item counts
   useEffect(() => {
-    if (totalItems > 0 && Math.abs(totalItems - expectedItems) > 5) {
-      setShowMismatchAlert(true);
-    } else {
+    if (!task || totalItems === 0) {
       setShowMismatchAlert(false);
+      return;
     }
-  }, [totalItems, expectedItems]);
+
+    // Check if any item count doesn't match expected
+    let hasMismatch = false;
+    
+    // Check items from order
+    for (const item of task.items || []) {
+      const inputCount = itemCounts[item.id] || 0;
+      if (inputCount !== item.qty) {
+        hasMismatch = true;
+        break;
+      }
+    }
+
+    // Check if user input items not in order
+    if (!hasMismatch) {
+      for (const [itemId, count] of Object.entries(itemCounts)) {
+        if (count > 0 && !expectedCountsMap[itemId]) {
+          hasMismatch = true;
+          break;
+        }
+      }
+    }
+
+    setShowMismatchAlert(hasMismatch);
+  }, [itemCounts, task, expectedCountsMap, totalItems]);
 
   const handleIncrement = (itemId: string) => {
     setItemCounts((prev) => ({
@@ -66,6 +112,28 @@ export function TaskDetailPanel({ task, stationType }: TaskDetailPanelProps) {
       ...prev,
       [itemId]: Math.max((prev[itemId] || 0) - 1, 0),
     }));
+  };
+
+  const handleChange = (itemId: string, value: number) => {
+    setItemCounts((prev) => ({
+      ...prev,
+      [itemId]: value,
+    }));
+  };
+
+  const handleReset = (itemId: string) => {
+    setItemCounts((prev) => ({
+      ...prev,
+      [itemId]: 0,
+    }));
+  };
+
+  const handleResetAll = () => {
+    const resetCounts: ItemCountData = {};
+    laundryItems.forEach((item) => {
+      resetCounts[item.id] = 0;
+    });
+    setItemCounts(resetCounts);
   };
 
   const handleComplete = () => {
@@ -82,19 +150,19 @@ export function TaskDetailPanel({ task, stationType }: TaskDetailPanelProps) {
     bypassRequest.mutate({
       taskId: task.id,
       stationType,
-      reason: 'Weight mismatch',
+      reason: 'Item count mismatch',
     });
   };
 
   // Mobile placeholder when no task selected
   if (!task) {
     return (
-      <div className="hidden flex-1 flex-col items-center justify-center bg-[--color-station-bg] p-8 text-center md:flex">
-        <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[--color-station-surface] text-[--color-station-text-muted]">
+      <div className="hidden flex-1 flex-col items-center justify-center bg-[var(--color-station-bg)] p-8 text-center md:flex">
+        <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-station-surface)] text-[var(--color-station-text-muted)]">
           <Hand className="h-8 w-8" />
         </div>
         <h3 className="text-lg font-bold text-white">Pilih task</h3>
-        <p className="mt-2 text-sm text-[--color-station-text-muted]">
+        <p className="mt-2 text-sm text-[var(--color-station-text-muted)]">
           Klik pada card di daftar antrian untuk melihat detail.
           <br />
           Gunakan mode landscape untuk tampilan lebih baik.
@@ -123,18 +191,18 @@ export function TaskDetailPanel({ task, stationType }: TaskDetailPanelProps) {
                 {task.serviceType} Wash
               </span>
             </div>
-            <p className="text-base text-[--color-station-text-muted]">
-              Input detail item cucian untuk verifikasi berat sebelum mencuci.
+            <p className="text-base text-[var(--color-station-text-muted)]">
+              Input detail item cucian untuk verifikasi sebelum proses.
             </p>
           </div>
           <div className="hidden text-right xl:block">
-            <p className="mb-1 text-sm text-[--color-station-text-muted]">
-              Total Berat
+            <p className="mb-1 text-sm text-[var(--color-station-text-muted)]">
+              Total Item
             </p>
             <p className="font-mono text-2xl font-bold text-white">
-              {task.weight}{' '}
-              <span className="text-base text-[--color-station-text-muted]">
-                kg
+              {expectedTotal}{' '}
+              <span className="text-base text-[var(--color-station-text-muted)]">
+                pcs
               </span>
             </p>
           </div>
@@ -142,41 +210,45 @@ export function TaskDetailPanel({ task, stationType }: TaskDetailPanelProps) {
       </div>
 
       {/* Scrollable Form Area */}
-      <div className="flex-1 overflow-y-auto px-6 pb-24 md:px-8">
-        {/* Validation Alert */}
-        {showMismatchAlert && (
-          <div className="mb-8">
-            <ValidationAlert
-              title="Data tidak sesuai!"
-              message={`Jumlah item yang diinput (${totalItems}) tidak sesuai dengan estimasi berat ${task.weight}kg.`}
-              onBypassRequest={handleBypassRequest}
-              isLoading={bypassRequest.isPending}
-            />
-          </div>
-        )}
-
+      <div className={`flex-1 overflow-y-auto px-6 md:px-8 ${showMismatchAlert ? 'pb-56' : 'pb-44'}`}>
         {/* Item Input Grid */}
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-          {LAUNDRY_ITEMS.map((item) => (
-            <ItemCounter
-              key={item.id}
-              icon={item.icon}
-              name={item.name}
-              subtitle={item.subtitle}
-              count={itemCounts[item.id] || 0}
-              onIncrement={() => handleIncrement(item.id)}
-              onDecrement={() => handleDecrement(item.id)}
-            />
-          ))}
+          {sortedLaundryItems.map((item) => {
+            const itemConfig = getLaundryItemConfig(item.name);
+            return (
+              <ItemCounter
+                key={item.id}
+                icon={itemConfig.icon}
+                name={item.name}
+                subtitle={itemConfig.subtitle}
+                count={itemCounts[item.id] || 0}
+                expectedCount={expectedCountsMap[item.id]}
+                onIncrement={() => handleIncrement(item.id)}
+                onDecrement={() => handleDecrement(item.id)}
+                onChange={(value) => handleChange(item.id, value)}
+                onReset={() => handleReset(item.id)}
+              />
+            );
+          })}
         </div>
       </div>
 
       {/* Bottom Action Bar */}
       <ActionBar
-        progress={progress}
-        progressLabel={progress >= 100 ? 'Complete!' : 'Checking...'}
-        onComplete={handleComplete}
-        isLoading={completeTask.isPending}
+        currentCount={totalItems}
+        targetCount={expectedTotal}
+        hasMismatch={showMismatchAlert}
+        onComplete={showMismatchAlert ? handleBypassRequest : handleComplete}
+        onResetAll={handleResetAll}
+        isLoading={showMismatchAlert ? bypassRequest.isPending : completeTask.isPending}
+        isDisabled={isInputEmpty}
+        variant={showMismatchAlert && !isInputEmpty ? 'warning' : 'primary'}
+        actionLabel={showMismatchAlert && !isInputEmpty ? 'Request Bypass' : 'Selesai'}
+        message={
+          showMismatchAlert && !isInputEmpty
+            ? 'Data tidak sesuai! Jumlah item tidak cocok dengan order.'
+            : undefined
+        }
       />
     </main>
   );

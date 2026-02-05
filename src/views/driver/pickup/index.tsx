@@ -11,6 +11,7 @@ import {
   RefreshCw,
 } from 'lucide-react';
 import { AvailablePickupRequest } from '@/src/types/driver';
+import { api } from '@/src/lib/api/axios-instance';
 
 export function DriverPickupListView() {
   const [pickups, setPickups] = useState<AvailablePickupRequest[]>([]);
@@ -19,14 +20,8 @@ export function DriverPickupListView() {
   const fetchPickups = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/driver/pickups`,
-        { credentials: 'include' }
-      );
-      if (res.ok) {
-        const data = await res.json();
-        setPickups(data.data || []);
-      }
+      const { data } = await api.get('/driver/pickups');
+      setPickups(data.data || []);
     } catch (error) {
       console.error('Error fetching pickups:', error);
     } finally {
@@ -40,19 +35,11 @@ export function DriverPickupListView() {
 
   const handleAccept = async (requestId: string) => {
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/driver/pickups/${requestId}/accept`,
-        { method: 'POST', credentials: 'include' }
-      );
-      if (res.ok) {
-        window.location.href = `/driver-pickup/${requestId}`;
-      } else {
-        const err = await res.json();
-        alert(err.message || 'Gagal menerima request');
-      }
-    } catch (error) {
+      await api.post(`/driver/pickups/${requestId}/accept`);
+      window.location.href = `/driver-pickup/${requestId}`;
+    } catch (error: any) {
       console.error('Error accepting pickup:', error);
-      alert('Terjadi kesalahan');
+      alert(error.response?.data?.message || 'Gagal menerima request');
     }
   };
 

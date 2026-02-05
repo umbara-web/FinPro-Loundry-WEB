@@ -19,6 +19,7 @@ import {
   AvailableDeliveryRequest,
   ActiveJob,
 } from '@/src/types/driver';
+import { api } from '@/src/lib/api/axios-instance';
 
 type TabType = 'requests' | 'active' | 'history';
 
@@ -37,57 +38,39 @@ export function DriverDashboardView() {
     }
     try {
       // Fetch available pickups
-      const pickupRes = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/driver/pickups`,
-        { credentials: 'include' }
-      );
-      if (pickupRes.ok) {
-        const pickupData = await pickupRes.json();
-        setPickups(pickupData.data || []);
-      }
+      const { data: pickupData } = await api.get('/driver/pickups');
+      setPickups(pickupData.data || []);
 
       // Fetch available deliveries
-      const deliveryRes = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/driver/deliveries`,
-        { credentials: 'include' }
-      );
-      if (deliveryRes.ok) {
-        const deliveryData = await deliveryRes.json();
-        setDeliveries(deliveryData.data || []);
-      }
+      const { data: deliveryData } = await api.get('/driver/deliveries');
+      setDeliveries(deliveryData.data || []);
 
       // Fetch active job
-      const activeRes = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/driver/active-job`,
-        { credentials: 'include' }
-      );
-      if (activeRes.ok) {
-        const activeData = await activeRes.json();
-        if (activeData.data) {
-          // Transform the response to match ActiveJob interface
-          const jobData = activeData.data;
-          setActiveJob({
-            id: jobData.type === 'PICKUP' ? jobData.data.id : jobData.data.id,
-            type: jobData.type,
-            status: jobData.data.status,
-            orderNumber: jobData.type === 'PICKUP' 
-              ? jobData.data.id.slice(-4).toUpperCase()
-              : jobData.data.order_id?.slice(-4).toUpperCase() || '',
-            customer: {
-              name: jobData.type === 'PICKUP'
-                ? jobData.data.customer?.name || 'Pelanggan'
-                : jobData.data.order?.pickup_request?.customer?.name || 'Pelanggan',
-              phone: jobData.type === 'PICKUP'
-                ? jobData.data.customer?.phone
-                : jobData.data.order?.pickup_request?.customer?.phone,
-            },
-            address: jobData.type === 'PICKUP'
-              ? jobData.data.customer_address || {}
-              : jobData.data.order?.pickup_request?.customer_address || {},
-          });
-        } else {
-          setActiveJob(null);
-        }
+      const { data: activeData } = await api.get('/driver/active-job');
+      if (activeData.data) {
+        // Transform the response to match ActiveJob interface
+        const jobData = activeData.data;
+        setActiveJob({
+          id: jobData.type === 'PICKUP' ? jobData.data.id : jobData.data.id,
+          type: jobData.type,
+          status: jobData.data.status,
+          orderNumber: jobData.type === 'PICKUP' 
+            ? jobData.data.id.slice(-4).toUpperCase()
+            : jobData.data.order_id?.slice(-4).toUpperCase() || '',
+          customer: {
+            name: jobData.type === 'PICKUP'
+              ? jobData.data.customer?.name || 'Pelanggan'
+              : jobData.data.order?.pickup_request?.customer?.name || 'Pelanggan',
+            phone: jobData.type === 'PICKUP'
+              ? jobData.data.customer?.phone
+              : jobData.data.order?.pickup_request?.customer?.phone,
+          },
+          address: jobData.type === 'PICKUP'
+            ? jobData.data.customer_address || {}
+            : jobData.data.order?.pickup_request?.customer_address || {},
+        });
+      } else {
+        setActiveJob(null);
       }
     } catch (error) {
       console.error('Error fetching driver data:', error);
@@ -114,40 +97,22 @@ export function DriverDashboardView() {
 
   const handleAcceptPickup = async (requestId: string) => {
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/driver/pickups/${requestId}/accept`,
-        { method: 'POST', credentials: 'include' }
-      );
-      if (res.ok) {
-        // Redirect to active job page
-        window.location.href = `/driver-pickup/${requestId}`;
-      } else {
-        const err = await res.json();
-        alert(err.message || 'Gagal menerima request');
-      }
-    } catch (error) {
+      await api.post(`/driver/pickups/${requestId}/accept`);
+      window.location.href = `/driver-pickup/${requestId}`;
+    } catch (error: any) {
       console.error('Error accepting pickup:', error);
-      alert('Terjadi kesalahan');
+      alert(error.response?.data?.message || 'Gagal menerima request');
     }
   };
 
   const handleAcceptDelivery = async (orderId: string) => {
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/driver/deliveries/${orderId}/accept`,
-        { method: 'POST', credentials: 'include' }
-      );
-      if (res.ok) {
-        const data = await res.json();
-        const taskId = data.data.id;
-        window.location.href = `/driver-delivery/${taskId}`;
-      } else {
-        const err = await res.json();
-        alert(err.message || 'Gagal menerima delivery');
-      }
-    } catch (error) {
+      const { data } = await api.post(`/driver/deliveries/${orderId}/accept`);
+      const taskId = data.data.id;
+      window.location.href = `/driver-delivery/${taskId}`;
+    } catch (error: any) {
       console.error('Error accepting delivery:', error);
-      alert('Terjadi kesalahan');
+      alert(error.response?.data?.message || 'Gagal menerima delivery');
     }
   };
 
