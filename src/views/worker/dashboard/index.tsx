@@ -15,7 +15,7 @@ const STATION_TABS: { id: StationType; label: string; color: string }[] = [
 export function WorkerDashboardView() {
   const [activeStation, setActiveStation] = useState<StationType>('WASHING');
   const [selectedTask, setSelectedTask] = useState<StationTask | null>(null);
-  const { data: tasks, isLoading } = useStationTasks(activeStation);
+  const { data, isLoading, isError, error } = useStationTasks(activeStation);
 
   // Reset selected task when station changes
   useEffect(() => {
@@ -24,18 +24,18 @@ export function WorkerDashboardView() {
 
   // Auto-select first in-progress task if none selected
   useEffect(() => {
-    if (!selectedTask && tasks && tasks.length > 0) {
-      const inProgressTask = tasks.find((t) => t.status === 'IN_PROGRESS');
+    if (!selectedTask && data?.mine && data.mine.length > 0) {
+      const inProgressTask = data.mine.find((t) => t.status === 'IN_PROGRESS');
       if (inProgressTask) {
         setSelectedTask(inProgressTask);
       }
     }
-  }, [tasks, selectedTask]);
+  }, [data, selectedTask]);
 
   return (
     <>
       {/* Station Selector Tabs */}
-      <div className="flex border-b border-[--color-station-border] bg-[--color-station-surface] md:hidden">
+      <div className="flex border-b border-[var(--color-station-border)] bg-[var(--color-station-surface)] md:hidden">
         {STATION_TABS.map((tab) => (
           <button
             key={tab.id}
@@ -44,7 +44,7 @@ export function WorkerDashboardView() {
               'flex-1 py-3 text-center text-sm font-semibold transition-colors',
               activeStation === tab.id
                 ? 'border-b-2 text-white'
-                : 'text-[--color-station-text-muted] hover:text-white'
+                : 'text-[var(--color-station-text-muted)] hover:text-white'
             )}
             style={{
               borderColor: activeStation === tab.id ? tab.color : 'transparent',
@@ -55,8 +55,28 @@ export function WorkerDashboardView() {
         ))}
       </div>
 
+      {isError ? (
+        <div className="flex h-full w-full flex-col items-center justify-center bg-[var(--color-station-bg)] p-6 text-center text-white">
+            <div className="mb-4 rounded-full bg-red-500/20 p-4 text-red-500">
+                <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+            </div>
+            <h3 className="text-lg font-bold">Gagal memuat data</h3>
+            <p className="mt-2 text-sm text-[var(--color-station-text-muted)]">
+                {(error as Error)?.message || 'Terjadi kesalahan saat mengambil data antrian.'}
+            </p>
+            <button 
+                onClick={() => window.location.reload()}
+                className="mt-6 rounded-lg bg-[var(--color-station-primary)] px-6 py-2 text-sm font-bold text-white hover:bg-blue-600 transition-colors"
+            >
+                Coba Lagi
+            </button>
+        </div>
+      ) : (
       <TaskQueueSidebar
-        tasks={tasks || []}
+        mineTasks={data?.mine || []}
+        poolTasks={data?.pool || []}
         activeTaskId={selectedTask?.id}
         onTaskSelect={setSelectedTask}
         stationType={activeStation}
@@ -64,11 +84,12 @@ export function WorkerDashboardView() {
         stationTabs={STATION_TABS}
         onStationChange={setActiveStation}
       />
-      <TaskDetailPanel task={selectedTask} stationType={activeStation} />
+      )}
+      {!isError && <TaskDetailPanel task={selectedTask} stationType={activeStation} />}
 
       {/* Mobile placeholder - shows instead of TaskDetailPanel on small screens */}
-      <div className="flex flex-1 flex-col items-center justify-center bg-[--color-station-bg] p-8 text-center md:hidden">
-        <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[--color-station-surface] text-[--color-station-text-muted]">
+      <div className="flex flex-1 flex-col items-center justify-center bg-[var(--color-station-bg)] p-8 text-center md:hidden">
+        <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-station-surface)] text-[var(--color-station-text-muted)]">
           <svg
             className="h-8 w-8"
             fill="none"
@@ -84,7 +105,7 @@ export function WorkerDashboardView() {
           </svg>
         </div>
         <h3 className="text-lg font-bold text-white">Pilih task</h3>
-        <p className="mt-2 text-sm text-[--color-station-text-muted]">
+        <p className="mt-2 text-sm text-[var(--color-station-text-muted)]">
           Ketuk card di daftar untuk melihat detail.
           <br />
           Gunakan mode landscape untuk tampilan lebih baik.

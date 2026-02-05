@@ -16,6 +16,8 @@ import {
   Package,
 } from 'lucide-react';
 import clsx from 'clsx';
+import { toast } from 'sonner';
+import { api } from '@/src/lib/api/axios-instance';
 
 interface DeliveryDetail {
   id: string;
@@ -33,70 +35,83 @@ interface DeliveryDetail {
   };
   total_weight?: number;
   notes?: string;
-  status: string;
+  status: string; // This will now reflect the new statuses like DRIVER_ASSIGNED, ON_DELIVERY, etc.
 }
 
-type DeliveryStep = 'ACCEPTED' | 'ON_THE_WAY' | 'ARRIVED' | 'DELIVERED';
+type DeliveryStep =
+  | 'DRIVER_ASSIGNED'
+  | 'ON_THE_WAY_TO_OUTLET'
+  | 'ON_THE_WAY_TO_CUSTOMER'
+  | 'ARRIVED_CUSTOMER'
+  | 'COMPLETED';
 
 const steps: { key: DeliveryStep; label: string; icon: React.ReactNode }[] = [
-  { key: 'ACCEPTED', label: 'Order Diterima', icon: <Package className="h-4 w-4" /> },
-  { key: 'ON_THE_WAY', label: 'Sedang Menuju Lokasi', icon: <Navigation className="h-4 w-4" /> },
-  { key: 'ARRIVED', label: 'Sampai di Lokasi', icon: <MapPin className="h-4 w-4" /> },
-  { key: 'DELIVERED', label: 'Terkirim', icon: <CheckCircle className="h-4 w-4" /> },
+  {
+    key: 'DRIVER_ASSIGNED',
+    label: 'Driver Ditugaskan',
+    icon: <Package className="h-4 w-4" />,
+  },
+  {
+    key: 'ON_THE_WAY_TO_OUTLET',
+    label: 'Menuju Outlet',
+    icon: <Truck className="h-4 w-4" />,
+  },
+  {
+    key: 'ON_THE_WAY_TO_CUSTOMER',
+    label: 'Menuju Pelanggan',
+    icon: <Navigation className="h-4 w-4" />,
+  },
+  {
+    key: 'ARRIVED_CUSTOMER',
+    label: 'Sampai di Lokasi Pelanggan',
+    icon: <MapPin className="h-4 w-4" />,
+  },
+  {
+    key: 'COMPLETED',
+    label: 'Terkirim',
+    icon: <CheckCircle className="h-4 w-4" />,
+  },
 ];
 
 export function DriverDeliveryDetailView() {
   const params = useParams();
   const router = useRouter();
-  const deliveryId = params.id as string;
+  const taskId = params.id as string; // Renamed deliveryId to taskId for consistency with the provided edit
 
   const [delivery, setDelivery] = useState<DeliveryDetail | null>(null);
-  const [currentStep, setCurrentStep] = useState<DeliveryStep>('ACCEPTED');
+  const [currentStep, setCurrentStep] = useState<DeliveryStep>('DRIVER_ASSIGNED');
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
 
   useEffect(() => {
     const fetchDelivery = async () => {
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/driver/deliveries/${deliveryId}`,
-          { credentials: 'include' }
-        );
-        if (res.ok) {
-          const data = await res.json();
-          if (data.data) {
-            // Transform the data to match the expected interface
-            const task = data.data;
-            setDelivery({
-              id: task.id,
-              order_number: `ORD-${task.order_id?.slice(-4).toUpperCase()}`,
-              pickup_request: task.order?.pickup_request || {
-                customer: { name: 'N/A' },
-                customer_address: { address: 'N/A' },
-              },
-              total_weight: task.order?.total_weight,
-              notes: '',
-              status: task.status,
-            });
-            // Set current step based on status
-            if (task.status === 'ACCEPTED') {
-              setCurrentStep('ACCEPTED');
-            } else if (task.status === 'IN_PROGRESS') {
-              setCurrentStep('ON_THE_WAY');
-            } else if (task.status === 'DONE') {
-              setCurrentStep('DELIVERED');
-            }
+        const { data } = await api.get(`/driver/deliveries/${taskId}`);
+        if (data.data) {
+          setDelivery(data.data);
+          // Set current step based on status
+          if (data.data.status === 'DRIVER_ASSIGNED') {
+            setCurrentStep('DRIVER_ASSIGNED');
+          } else if (data.data.status === 'ON_THE_WAY_TO_OUTLET') {
+            setCurrentStep('ON_THE_WAY_TO_OUTLET');
+          } else if (data.data.status === 'ON_THE_WAY_TO_CUSTOMER') {
+            setCurrentStep('ON_THE_WAY_TO_CUSTOMER');
+          } else if (data.data.status === 'ARRIVED_CUSTOMER') {
+            setCurrentStep('ARRIVED_CUSTOMER');
+          } else if (data.data.status === 'COMPLETED') {
+            setCurrentStep('COMPLETED');
           }
         }
       } catch (error) {
         console.error('Error fetching delivery:', error);
+        toast.error('Gagal memuat detail delivery');
       } finally {
         setLoading(false);
       }
     };
 
     fetchDelivery();
-  }, [deliveryId]);
+  }, [taskId]);
 
   const getCurrentStepIndex = () => {
     return steps.findIndex((s) => s.key === currentStep);
@@ -105,21 +120,17 @@ export function DriverDeliveryDetailView() {
   const handleUpdateStatus = async () => {
     const currentIndex = getCurrentStepIndex();
     if (currentIndex >= steps.length - 1) {
-      // Final step - complete
+      // Final step - complete and go back
       setUpdating(true);
       try {
-        await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/driver/deliveries/${deliveryId}/status`,
-          {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
-            body: JSON.stringify({ status: 'DONE' }),
-          }
-        );
+        await api.patch(`/driver/deliveries/${taskId}/status`, {
+          status: 'COMPLETED',
+        });
+        toast.success('Pengiriman selesai');
         router.push('/driver-dashboard');
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error updating status:', error);
+        toast.error(error.response?.data?.message || 'Gagal update status');
       } finally {
         setUpdating(false);
       }
@@ -129,18 +140,14 @@ export function DriverDeliveryDetailView() {
     const nextStep = steps[currentIndex + 1].key;
     setUpdating(true);
     try {
-      await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/driver/deliveries/${deliveryId}/status`,
-        {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify({ status: nextStep }),
-        }
-      );
+      await api.patch(`/driver/deliveries/${taskId}/status`, {
+        status: nextStep,
+      });
       setCurrentStep(nextStep);
-    } catch (error) {
+      toast.success('Status berhasil diperbarui');
+    } catch (error: any) {
       console.error('Error updating status:', error);
+      toast.error(error.response?.data?.message || 'Gagal update status');
     } finally {
       setUpdating(false);
     }
@@ -184,7 +191,7 @@ export function DriverDeliveryDetailView() {
           </Link>
           <div className="mx-2 h-4 w-px bg-[#223649]" />
           <h2 className="text-lg font-bold text-white">
-            Delivery #{delivery.order_number || deliveryId.slice(-4).toUpperCase()}
+            Delivery #{delivery.order_number || taskId.slice(-4).toUpperCase()}
           </h2>
         </div>
       </header>

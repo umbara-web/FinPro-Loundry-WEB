@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import clsx from 'clsx';
 import { DriverJobHistory } from '@/src/types/driver';
+import { api } from '@/src/lib/api/axios-instance';
 
 export function DriverHistoryView() {
   const [jobs, setJobs] = useState<DriverJobHistory[]>([]);
@@ -25,14 +26,10 @@ export function DriverHistoryView() {
     const fetchHistory = async () => {
       setLoading(true);
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/driver/history?page=${page}&limit=10`,
-          { credentials: 'include' }
-        );
-        if (res.ok) {
-          const result = await res.json();
-          setJobs(result.data || []);
-          setTotalPages(result.meta?.totalPages || 1);
+        const { data } = await api.get(`/driver/history?page=${page}&limit=10`);
+        if (data.data) {
+          setJobs(data.data || []);
+          setTotalPages(data.meta?.totalPages || 1);
         }
       } catch (error) {
         console.error('Error fetching history:', error);

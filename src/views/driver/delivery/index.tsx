@@ -11,6 +11,7 @@ import {
   RefreshCw,
 } from 'lucide-react';
 import { AvailableDeliveryRequest } from '@/src/types/driver';
+import { api } from '@/src/lib/api/axios-instance';
 
 export function DriverDeliveryListView() {
   const [deliveries, setDeliveries] = useState<AvailableDeliveryRequest[]>([]);
@@ -19,14 +20,8 @@ export function DriverDeliveryListView() {
   const fetchDeliveries = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/driver/deliveries`,
-        { credentials: 'include' }
-      );
-      if (res.ok) {
-        const data = await res.json();
-        setDeliveries(data.data || []);
-      }
+      const { data } = await api.get('/driver/deliveries');
+      setDeliveries(data.data || []);
     } catch (error) {
       console.error('Error fetching deliveries:', error);
     } finally {
@@ -40,21 +35,12 @@ export function DriverDeliveryListView() {
 
   const handleAccept = async (orderId: string) => {
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/driver/deliveries/${orderId}/accept`,
-        { method: 'POST', credentials: 'include' }
-      );
-      if (res.ok) {
-        const data = await res.json();
-        const taskId = data.data.id;
-        window.location.href = `/driver-delivery/${taskId}`;
-      } else {
-        const err = await res.json();
-        alert(err.message || 'Gagal menerima delivery');
-      }
-    } catch (error) {
+      const { data } = await api.post(`/driver/deliveries/${orderId}/accept`);
+      const taskId = data.data.id;
+      window.location.href = `/driver-delivery/${taskId}`;
+    } catch (error: any) {
       console.error('Error accepting delivery:', error);
-      alert('Terjadi kesalahan');
+      alert(error.response?.data?.message || 'Gagal menerima delivery');
     }
   };
 

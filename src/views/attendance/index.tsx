@@ -1,5 +1,7 @@
 'use client';
 
+import { ArrowLeft } from 'lucide-react';
+
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/src/context/AuthContext';
 import { useAttendanceHistory } from '@/src/hooks/use-attendance';
@@ -13,9 +15,10 @@ import {
 
 interface AttendanceViewProps {
   basePath?: string;
+  backPath?: string;
 }
 
-export function AttendanceView({ basePath = '/worker-attendance' }: AttendanceViewProps) {
+export function AttendanceView({ basePath = '/worker-attendance', backPath }: AttendanceViewProps) {
   const router = useRouter();
   const { user } = useAuth();
 
@@ -81,6 +84,14 @@ export function AttendanceView({ basePath = '/worker-attendance' }: AttendanceVi
       <header className="sticky top-0 z-40 w-full border-b border-slate-200 dark:border-[#233648] bg-[#f6f7f8]/80 dark:bg-[#101922]/80 backdrop-blur-md px-4 md:px-10 lg:px-40 py-3">
         <div className="flex items-center justify-between max-w-[960px] mx-auto">
           <div className="flex items-center gap-4 text-[#137fec]">
+            {backPath && (
+               <button 
+                 onClick={() => router.push(backPath)} 
+                 className="flex items-center justify-center p-2 -ml-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors text-slate-600 dark:text-slate-300"
+               >
+                 <ArrowLeft className="size-5" />
+               </button>
+            )}
             <div className="size-6">
               <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
                 <path

@@ -15,6 +15,8 @@ import {
   Map,
 } from 'lucide-react';
 import clsx from 'clsx';
+import { toast } from 'sonner';
+import { api } from '@/src/lib/api/axios-instance';
 
 interface PickupDetail {
   id: string;
@@ -54,26 +56,21 @@ export function DriverPickupDetailView() {
   useEffect(() => {
     const fetchPickup = async () => {
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/driver/pickups/${pickupId}`,
-          { credentials: 'include' }
-        );
-        if (res.ok) {
-          const data = await res.json();
-          if (data.data) {
-            setPickup(data.data);
-            // Set current step based on status
-            if (data.data.status === 'DRIVER_ASSIGNED') {
-              setCurrentStep('ON_THE_WAY');
-            } else if (data.data.status === 'PICKED_UP') {
-              setCurrentStep('PICKED_UP');
-            } else if (data.data.status === 'ARRIVED_OUTLET') {
-              setCurrentStep('ARRIVED_OUTLET');
-            }
+        const { data } = await api.get(`/driver/pickups/${pickupId}`);
+        if (data.data) {
+          setPickup(data.data);
+          // Set current step based on status
+          if (data.data.status === 'DRIVER_ASSIGNED') {
+            setCurrentStep('ON_THE_WAY');
+          } else if (data.data.status === 'PICKED_UP') {
+            setCurrentStep('PICKED_UP');
+          } else if (data.data.status === 'ARRIVED_OUTLET') {
+            setCurrentStep('ARRIVED_OUTLET');
           }
         }
       } catch (error) {
         console.error('Error fetching pickup:', error);
+        toast.error('Gagal memuat detail request');
       } finally {
         setLoading(false);
       }
@@ -92,18 +89,14 @@ export function DriverPickupDetailView() {
       // Final step - complete and go back
       setUpdating(true);
       try {
-        await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/driver/pickups/${pickupId}/status`,
-          {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
-            body: JSON.stringify({ status: 'ARRIVED_OUTLET' }),
-          }
-        );
+        await api.patch(`/driver/pickups/${pickupId}/status`, {
+          status: 'ARRIVED_OUTLET',
+        });
+        toast.success('Status berhasil diperbarui');
         router.push('/driver-dashboard');
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error updating status:', error);
+        toast.error(error.response?.data?.message || 'Gagal update status');
       } finally {
         setUpdating(false);
       }
@@ -113,18 +106,14 @@ export function DriverPickupDetailView() {
     const nextStep = steps[currentIndex + 1].key;
     setUpdating(true);
     try {
-      await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/driver/pickups/${pickupId}/status`,
-        {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify({ status: nextStep }),
-        }
-      );
+      await api.patch(`/driver/pickups/${pickupId}/status`, {
+        status: nextStep,
+      });
       setCurrentStep(nextStep);
-    } catch (error) {
+      toast.success('Status berhasil diperbarui');
+    } catch (error: any) {
       console.error('Error updating status:', error);
+      toast.error(error.response?.data?.message || 'Gagal update status');
     } finally {
       setUpdating(false);
     }

@@ -53,18 +53,6 @@
   --color-surface-light: #ffffff;
   --color-surface-dark: #1e293b;
   --font-primary: 'Poppins', sans-serif;
-
-  /* Station Dashboard Colors */
-  --color-station-primary: #0a7ff5;
-  --color-station-bg: #101922;
-  --color-station-surface: #1e293b;
-  --color-station-border: #223649;
-  --color-station-border-hover: #2d465e;
-  --color-station-text-muted: #8fadcc;
-  --color-station-yellow: #eab308;
-  --color-station-blue: #137fec;
-  --color-station-red: #ef4444;
-  --color-station-green: #22c55e;
 }
 
 :root {
@@ -100,6 +88,18 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* Station Dashboard Colors */
+  --color-station-primary: #0a7ff5;
+  --color-station-bg: #101922;
+  --color-station-surface: #1e293b;
+  --color-station-border: #223649;
+  --color-station-border-hover: #2d465e;
+  --color-station-text-muted: #8fadcc;
+  --color-station-yellow: #eab308;
+  --color-station-blue: #137fec;
+  --color-station-red: #ef4444;
+  --color-station-green: #22c55e;
 }
 
 .dark {
