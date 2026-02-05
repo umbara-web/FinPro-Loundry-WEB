@@ -84,7 +84,7 @@ export function ManualItemForm({ onAdd }: ManualItemFormProps) {
       <button
         onClick={handleAdd}
         disabled={!name.trim() || quantity === 0}
-        className='flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-blue-500/50 py-3 font-medium text-blue-500 transition-colors hover:bg-blue-50 disabled:cursor-not-allowed disabled:opacity-50 dark:hover:bg-blue-500/10'
+        className='flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border-2 border-dashed border-blue-500/50 py-3 font-medium text-blue-500 transition-colors hover:bg-blue-50 disabled:cursor-not-allowed disabled:opacity-50 dark:hover:bg-blue-500/10'
       >
         <div className='flex size-5 items-center justify-center rounded-full bg-blue-500 text-white'>
           <Plus className='h-3 w-3' />

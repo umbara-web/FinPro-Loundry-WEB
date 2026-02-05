@@ -1,6 +1,7 @@
 'use client';
 
 import { pickupApi } from '@/src/lib/api/pickup-api';
+import { laundryItemApi } from '@/src/lib/api/laundry-item-api';
 import { Address } from '@/src/types/address';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
@@ -101,6 +102,11 @@ export function useCreatePickup() {
     queryFn: userApi.getAddresses,
   });
 
+  const { data: laundryItems } = useQuery({
+    queryKey: ['laundry-items'],
+    queryFn: laundryItemApi.getAll,
+  });
+
   // Set default address
   useEffect(() => {
     if (addresses && addresses.length > 0 && !selectedAddress) {
@@ -157,6 +163,14 @@ export function useCreatePickup() {
       schedulledPickupAt: scheduledPickupAt,
       notes: notes.trim() || undefined,
       outletId: nearestOutlet.outlet.id,
+      items:
+        Object.keys(items).length > 0
+          ? Object.entries(items).map(([id, qty]) => ({
+              laundryItemId: id,
+              qty,
+            }))
+          : undefined,
+      manualItems: manualItems.length > 0 ? manualItems : undefined,
     });
   };
 
@@ -202,5 +216,6 @@ export function useCreatePickup() {
     handleAddManualItem,
     handleUpdateManualItemQuantity,
     handleRemoveManualItem,
+    laundryItems: laundryItems || [],
   };
 }
