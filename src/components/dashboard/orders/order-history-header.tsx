@@ -98,7 +98,7 @@ export function OrderHistoryHeader() {
     : undefined;
 
   return (
-    <div className='dark:bg-station-bg sticky top-0 z-10 space-y-4 bg-white backdrop-blur-md'>
+    <div className='dark:bg-station-bg sticky top-0 z-10 space-y-4 rounded-2xl border border-slate-300 backdrop-blur-md dark:border-slate-700'>
       <OrderHistoryFilter
         currentSearch={currentSearch}
         currentStatus={currentStatus}

@@ -17,22 +17,28 @@ export const getOrderDetail = async (orderId: string) => {
   // Map to order format
   return {
     id: pickup.id,
+    order_id: pickup.order_id || pickup.order?.[0]?.id || '',
     pickup_request_id: pickup.id,
     outlet_id: pickup.outlet?.id || '',
     outlet_admin_id: '',
     total_weight: pickup.order?.[0]?.total_weight || 0,
     price_total: pickup.order?.[0]?.price_total || 0,
-    status: mapPickupStatusToOrderStatus(pickup.status),
+    status:
+      (pickup.order?.[0]?.status as string) ||
+      mapPickupStatusToOrderStatus(pickup.status),
     paid_at: null,
-    created_at: pickup.createdAt,
-    updated_at: pickup.updatedAt,
+    created_at:
+      pickup.createdAt || pickup.created_at || pickup.order?.[0]?.created_at,
+    updated_at:
+      pickup.updatedAt || pickup.updated_at || pickup.order?.[0]?.updated_at,
     pickup_request: {
       id: pickup.id,
       customer_address: pickup.customer_address,
+      created_at: pickup.createdAt || pickup.created_at,
     },
     order_item: pickup.order?.[0]?.order_item || [],
     driver_task: pickup.driver ? [{ driver: pickup.driver }] : [],
-    payment: [], // Empty for now
+    payment: pickup.order?.[0]?.payment || [],
   };
 };
 

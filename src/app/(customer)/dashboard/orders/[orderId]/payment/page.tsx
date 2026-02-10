@@ -1,13 +1,12 @@
 'use client';
 
-import { use, useState, useEffect } from 'react';
+import { use, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { payOrder, getOrderDetail } from '@/src/lib/api/order-api';
 import Link from 'next/link';
 import {
-  CountdownTimer,
   PaymentMethodOption,
   OrderSummaryCard,
 } from '@/src/components/dashboard/payment';
@@ -17,6 +16,7 @@ import {
   PaymentMethodsSectionProps,
   RightColumnProps,
 } from '@/src/types/payment';
+import { FaArrowLeft } from 'react-icons/fa';
 
 export default function PaymentPage({
   params,
@@ -26,20 +26,6 @@ export default function PaymentPage({
   const { orderId } = use(params);
   const router = useRouter();
   const [selectedMethod, setSelectedMethod] = useState('GOPAY');
-  const [timeLeft, setTimeLeft] = useState(15 * 60);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
-
-  const formatTime = (seconds: number) => {
-    const m = Math.floor(seconds / 60);
-    const s = seconds % 60;
-    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-  };
 
   const { data: order, isLoading } = useQuery({
     queryKey: ['order', orderId],
@@ -47,12 +33,17 @@ export default function PaymentPage({
   });
 
   const { mutate: processPayment, isPending } = useMutation({
-    mutationFn: () => payOrder(orderId, selectedMethod),
+    mutationFn: () => {
+      if (!order?.order_id) {
+        throw new Error('Order ID not found');
+      }
+      return payOrder(order.order_id, selectedMethod);
+    },
     onSuccess: (data) => {
       toast.success('Pembayaran berhasil diinisiasi');
       const redirectUrl =
         data?.data?.redirectUrl ||
-        `/customer/orders/${orderId}/payment/success`;
+        `/dashboard/orders/${orderId}/payment/success`;
       router.push(redirectUrl);
     },
     onError: (error: any) => {
@@ -74,11 +65,10 @@ export default function PaymentPage({
     <div className='bg-background-light dark:bg-background-dark min-h-screen p-4 font-sans md:p-8'>
       <div className='mx-auto max-w-7xl'>
         <BackLink orderId={orderId} />
+        <PageHeading orderId={order.id} />
         <div className='grid grid-cols-1 gap-8 lg:grid-cols-12'>
           <LeftColumn
             order={order}
-            timeLeft={timeLeft}
-            formatTime={formatTime}
             selectedMethod={selectedMethod}
             onMethodSelect={setSelectedMethod}
           />
@@ -95,12 +85,12 @@ export default function PaymentPage({
 
 function BackLink({ orderId }: { orderId: string }) {
   return (
-    <div className='mb-6'>
+    <div className='mb-10 text-lg'>
       <Link
-        href={`/customer/orders/${orderId}`}
-        className='text-primary flex w-fit items-center gap-2 font-medium hover:underline'
+        href={`/dashboard/orders/${orderId}`}
+        className='text-primary flex w-fit items-center gap-2 font-medium hover:text-blue-500 hover:underline dark:text-white dark:hover:text-blue-500'
       >
-        <span className='material-symbols-outlined text-sm'>arrow_back</span>
+        <FaArrowLeft />
         Kembali ke Ringkasan
       </Link>
     </div>
@@ -109,15 +99,11 @@ function BackLink({ orderId }: { orderId: string }) {
 
 function LeftColumn({
   order,
-  timeLeft,
-  formatTime,
   selectedMethod,
   onMethodSelect,
 }: LeftColumnProps) {
   return (
     <div className='flex flex-col gap-6 lg:col-span-8'>
-      <PageHeading orderId={order.id} />
-      <CountdownTimer timeLeft={timeLeft} formatTime={formatTime} />
       <PaymentMethodsSection
         selectedMethod={selectedMethod}
         onMethodSelect={onMethodSelect}
@@ -128,13 +114,13 @@ function LeftColumn({
 
 function PageHeading({ orderId }: { orderId: string }) {
   return (
-    <div className='flex flex-col gap-2'>
+    <div className='mb-10 flex flex-col gap-2'>
       <h1 className='text-3xl font-black tracking-tight md:text-4xl'>
         Pembayaran Pesanan
       </h1>
       <p className='text-slate-500 dark:text-slate-400'>
         Selesaikan pembayaran untuk pesanan{' '}
-        <span className='text-primary font-medium'>#{orderId.slice(0, 8)}</span>
+        <span className='font-bold text-red-600'>#{orderId.slice(0, 8)}</span>
       </p>
     </div>
   );

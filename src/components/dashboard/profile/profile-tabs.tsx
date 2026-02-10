@@ -23,7 +23,6 @@ const tabs: Tab[] = [
   { id: 'personal-info', label: 'Info Pribadi', icon: User },
   { id: 'address', label: 'Alamat', icon: MapPin },
   { id: 'security', label: 'Keamanan', icon: Lock },
-  { id: 'payment-history', label: 'Pembayaran', icon: FileText },
 ];
 
 export function ProfileTabs({ activeTab, onTabChange }: ProfileTabsProps) {

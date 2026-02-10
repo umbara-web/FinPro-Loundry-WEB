@@ -8,8 +8,6 @@ export interface PaymentMethodConfig {
 
 export interface LeftColumnProps {
   order: any;
-  timeLeft: number;
-  formatTime: (seconds: number) => string;
   selectedMethod: string;
   onMethodSelect: (method: string) => void;
 }
@@ -28,22 +26,34 @@ export interface RightColumnProps {
 export const PAYMENT_METHODS: PaymentMethodConfig[] = [
   {
     value: 'GOPAY',
-    icon: 'account_balance_wallet',
+    icon: '/icons/gopay.svg',
     title: 'GoPay',
-    subtitle: 'Saldo: Rp 150.000',
+    subtitle: 'Saldo: Rp ???',
   },
   {
-    value: 'BNI_VA',
-    icon: 'domain',
+    value: 'DANA',
+    icon: '/icons/dana.svg',
+    title: 'DANA',
+    subtitle: 'Saldo: Rp ???',
+  },
+  {
+    value: 'OVO',
+    icon: '/icons/ovo.svg',
+    title: 'OVO',
+    subtitle: 'Saldo: Rp ???',
+  },
+  {
+    value: 'BCA_VA',
+    icon: '/icons/bca.svg',
     iconColor: 'text-blue-600',
-    title: 'Virtual Account (BCA/BNI)',
+    title: 'Virtual Account (BCA)',
     subtitle: 'Transfer otomatis',
   },
   {
-    value: 'CC',
-    icon: 'credit_card',
+    value: 'MANDIRI_VA',
+    icon: '/icons/mandiri.svg',
     iconColor: 'text-orange-500',
-    title: 'Kartu Kredit/Debit',
-    subtitle: 'Visa, Mastercard',
+    title: 'Virtual Account (Mandiri)',
+    subtitle: 'Transfer otomatis',
   },
 ];

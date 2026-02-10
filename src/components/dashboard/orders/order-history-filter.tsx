@@ -120,7 +120,7 @@ export function OrderHistoryFilter({
               <Button
                 variant='outline'
                 className={cn(
-                  'h-12 w-full justify-start rounded-xl border-gray-200 bg-gray-50 px-4 text-left font-normal hover:bg-gray-100 dark:border-slate-700 dark:bg-[#151e26] dark:text-white dark:hover:bg-[#1f2b36]',
+                  'h-12 w-full cursor-pointer justify-start rounded-xl border-gray-200 bg-gray-50 px-4 text-left font-normal hover:bg-gray-100 dark:border-slate-700 dark:bg-[#151e26] dark:text-white dark:hover:bg-[#1f2b36]',
                   !dateRange && 'text-muted-foreground'
                 )}
               >
@@ -162,12 +162,16 @@ export function OrderHistoryFilter({
               onStatusChange(val === 'all' ? '' : val)
             }
           >
-            <SelectTrigger className='h-12 w-full rounded-xl border-gray-200 bg-gray-50 dark:border-slate-700 dark:bg-[#151e26] dark:text-white'>
+            <SelectTrigger className='h-12 w-full cursor-pointer rounded-xl border-gray-200 bg-gray-50 dark:border-slate-700 dark:bg-[#151e26] dark:text-white'>
               <SelectValue placeholder='Semua Status' />
             </SelectTrigger>
             <SelectContent>
               {STATUS_OPTIONS.map((status) => (
-                <SelectItem key={status.value} value={status.value}>
+                <SelectItem
+                  key={status.value}
+                  value={status.value}
+                  className='cursor-pointer'
+                >
                   {status.label}
                 </SelectItem>
               ))}
@@ -195,12 +199,16 @@ export function OrderHistoryFilter({
               onSortChange(sortBy, sortOrder as 'asc' | 'desc');
             }}
           >
-            <SelectTrigger className='h-12 w-full rounded-xl border-gray-200 bg-gray-50 dark:border-slate-700 dark:bg-[#151e26] dark:text-white'>
-              <SelectValue placeholder='Urutkan: Terbaru' />
+            <SelectTrigger className='h-12 w-full cursor-pointer rounded-xl border-gray-200 bg-gray-50 dark:border-slate-700 dark:bg-[#151e26] dark:text-white'>
+              <SelectValue placeholder='Urutkan' />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value='created_at-desc'>Urutkan: Terbaru</SelectItem>
-              <SelectItem value='created_at-asc'>Urutkan: Terlama</SelectItem>
+              <SelectItem value='created_at-desc' className='cursor-pointer'>
+                Terbaru
+              </SelectItem>
+              <SelectItem value='created_at-asc' className='cursor-pointer'>
+                Terlama
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>

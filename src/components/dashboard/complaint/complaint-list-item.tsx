@@ -59,13 +59,13 @@ export function ComplaintListItem({ complaint }: ComplaintListItemProps) {
         </div>
         <div className='flex gap-2'>
           <Link
-            href={`/customer/complaints/${complaint.id}`}
+            href={`/dashboard/complaints/${complaint.id}`}
             className='text-primary text-xs font-medium hover:text-blue-400 hover:underline'
           >
             Detail & Chat
           </Link>
           <Link
-            href={`/customer/orders/${complaint.order_id}`}
+            href={`/dashboard/orders/${complaint.order_id}`}
             className='text-primary text-xs font-medium hover:text-blue-400 hover:underline'
           >
             Lihat Pesanan

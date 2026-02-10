@@ -32,7 +32,7 @@ export function ComplaintForm({ orderId, orderNumber }: ComplaintFormProps) {
     },
     onSuccess: () => {
       toast.success('Komplain berhasil dikirim!');
-      router.push(`/customer/orders/${orderId}/complaint/success`);
+      router.push(`/dashboard/orders/${orderId}/complaint/success`);
     },
     onError: (error: any) => {
       toast.error(error?.response?.data?.message || 'Gagal mengirim komplain');
@@ -61,7 +61,7 @@ export function ComplaintForm({ orderId, orderNumber }: ComplaintFormProps) {
     <form onSubmit={handleSubmit} className='flex flex-col gap-6'>
       {/* Back Link */}
       <Link
-        href={`/customer/orders/${orderId}`}
+        href={`/dashboard/orders/${orderId}`}
         className='text-primary flex items-center gap-2 text-sm hover:underline'
       >
         <ArrowLeft className='h-4 w-4' />

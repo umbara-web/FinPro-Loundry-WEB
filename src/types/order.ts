@@ -16,6 +16,7 @@ export enum OrderStatus {
 export interface LaundryItem {
   id: string;
   name: string;
+  price?: number;
 }
 
 export interface OrderItem {
@@ -23,6 +24,7 @@ export interface OrderItem {
   order_id: string;
   laundry_item_id: string;
   qty: number;
+  price?: number;
   laundry_item: LaundryItem;
 }
 
@@ -36,6 +38,7 @@ export interface CustomerAddress {
 export interface PickupRequest {
   id: string;
   customer_address: CustomerAddress;
+  created_at?: string;
 }
 
 export interface Driver {
@@ -51,6 +54,7 @@ export interface DriverTask {
 
 export interface Order {
   id: string;
+  order_id?: string; // Real Order ID from DB
   pickup_request_id: string;
   outlet_id: string;
   outlet_admin_id: string;
@@ -63,6 +67,7 @@ export interface Order {
   pickup_request: PickupRequest;
   order_item: OrderItem[];
   driver_task: DriverTask[];
+  payment?: any[];
 }
 
 export interface OrderListResponse {
