@@ -25,15 +25,15 @@ import clsx from 'clsx';
 const sidebarLinks = [
   { href: '/', label: 'Home', icon: Home },
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/dashboard/profile', label: 'Profil Saya', icon: User },
+  { href: '/dashboard/addresses', label: 'Kelola Alamat', icon: MapPin },
   { href: '/dashboard/orders', label: 'Pesanan', icon: ShoppingBag },
   {
     href: '/dashboard/payment-history',
-    label: 'Pembayaran',
+    label: 'Riwayat Pembayaran',
     icon: Wallet,
   },
   { href: '/dashboard/complaints', label: 'Komplain', icon: AlertCircle },
-  { href: '/dashboard/profile', label: 'Profil Saya', icon: User },
-  { href: '/dashboard/addresses', label: 'Kelola Alamat', icon: MapPin },
   { href: '/dashboard/notifications', label: 'Notifikasi', icon: Bell },
 ];
 
@@ -62,7 +62,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       {/* Sidebar */}
       <div
         className={clsx(
-          'dark:border-card-border dark:bg-station-bg fixed inset-y-0 left-0 z-50 flex h-full w-[85vw] max-w-75 shrink-0 flex-col border-r border-gray-200 bg-white transition-transform duration-300 lg:static lg:flex lg:w-72 dark:border-slate-700',
+          'dark:border-card-border dark:bg-station-bg fixed inset-y-0 left-0 z-50 flex h-full w-[85vw] max-w-75 shrink-0 flex-col border-r border-gray-200 bg-white transition-transform duration-300 lg:static lg:flex lg:w-72 dark:border-slate-700 dark:bg-slate-900',
           isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         )}
       >

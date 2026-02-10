@@ -1,6 +1,7 @@
 'use client';
 
 import { formatCurrency } from '@/src/lib/utils/format';
+import { MdLock, MdVerifiedUser } from 'react-icons/md';
 
 interface Order {
   id: string;
@@ -20,7 +21,7 @@ export function OrderSummaryCard({
   onPayment,
 }: OrderSummaryCardProps) {
   return (
-    <div className='dark:bg-surface-dark overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg dark:border-transparent'>
+    <div className='dark:bg-surface-dark mt-11 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg dark:border-transparent'>
       <SummaryHeader orderId={order.id} />
       <CostBreakdown
         totalWeight={order.total_weight}
@@ -35,7 +36,7 @@ function SummaryHeader({ orderId }: { orderId: string }) {
   return (
     <div className='border-b border-slate-100 p-5 dark:border-slate-700'>
       <h3 className='text-lg font-bold'>Ringkasan Pesanan</h3>
-      <p className='mt-1 text-xs text-slate-400'>ID: {orderId}</p>
+      <p className='mt-1 text-xs text-red-600'>ID: #{orderId.slice(0, 8)}</p>
     </div>
   );
 }
@@ -55,7 +56,7 @@ function CostBreakdown({ totalWeight, priceTotal }: CostBreakdownProps) {
       <div className='my-2 h-px bg-slate-100 dark:bg-slate-700'></div>
       <div className='flex items-center justify-between'>
         <span className='text-base font-bold'>Total Tagihan</span>
-        <span className='text-primary text-xl font-black'>
+        <span className='text-primary text-xl font-black dark:text-white'>
           {formatCurrency(priceTotal)}
         </span>
       </div>
@@ -74,15 +75,13 @@ function ActionButton({ isPending, onPayment }: ActionButtonProps) {
       <button
         onClick={onPayment}
         disabled={isPending}
-        className='bg-primary shadow-primary/25 hover:bg-primary/90 flex h-12 w-full items-center justify-center gap-2 rounded-lg text-base font-bold text-white shadow-lg transition-all disabled:opacity-50'
+        className='shadow-primary/25 flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-blue-500 text-base font-bold text-white shadow-lg transition-all hover:bg-blue-800 disabled:opacity-50'
       >
-        <span className='material-symbols-outlined text-[20px]'>lock</span>
+        <MdLock />
         <span>{isPending ? 'Memproses...' : 'Bayar Sekarang'}</span>
       </button>
-      <p className='mt-3 flex items-center justify-center gap-1 text-center text-[10px] text-slate-400'>
-        <span className='material-symbols-outlined text-[12px]'>
-          verified_user
-        </span>
+      <p className='mt-3 flex items-center justify-center gap-1 text-center text-xs text-slate-400'>
+        <MdVerifiedUser className='text-xs' />
         Transaksi Anda aman & terenkripsi
       </p>
     </div>

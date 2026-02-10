@@ -138,7 +138,15 @@ export function useCreatePickup() {
     onSuccess: () => {
       addToCart();
       toast.success('Permintaan penjemputan berhasil dibuat!');
-      router.push('/dashboard/orders');
+      // Reset form state
+      setDate('');
+      setTimeSlot('');
+      setNotes('');
+      setItems({});
+      setManualItems([]);
+      setSelectedAddress(undefined);
+
+      router.push('/dashboard/orders?tab=submission');
     },
     onError: (error: any) => {
       toast.error(

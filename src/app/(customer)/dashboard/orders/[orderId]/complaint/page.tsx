@@ -62,7 +62,7 @@ export default function ComplaintPage({
           selesai. Status pesanan saat ini: <strong>{order.status}</strong>
         </p>
         <Link
-          href={`/customer/orders/${orderId}`}
+          href={`/dashboard/orders/${orderId}`}
           className='text-primary hover:underline'
         >
           Kembali ke Detail Pesanan
@@ -95,7 +95,7 @@ export default function ComplaintPage({
           </p>
         </div>
         <Link
-          href={`/customer/orders/${orderId}`}
+          href={`/dashboard/orders/${orderId}`}
           className='text-primary hover:underline'
         >
           Kembali ke Detail Pesanan

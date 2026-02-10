@@ -44,7 +44,7 @@ export function OrderListItem({ order }: OrderListItemProps) {
   };
 
   return (
-    <div className='group hover:border-primary/60 flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all dark:border-slate-700 dark:bg-[#1c2732]'>
+    <div className='group hover:border-primary/60 flex cursor-pointer flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all dark:border-slate-700 dark:bg-[#1c2732] dark:hover:border-blue-500/60'>
       <div className='grid grid-cols-1 items-center gap-6 p-6 lg:grid-cols-12'>
         {/* Order ID & Date */}
         <div className='flex flex-col lg:col-span-3'>
@@ -120,7 +120,7 @@ export function OrderListItem({ order }: OrderListItemProps) {
             asChild
             className='group/btn w-full max-w-sm gap-2 rounded-xl bg-orange-500 text-white shadow-lg shadow-orange-500/20 hover:bg-orange-600'
           >
-            <Link href={`/customer/orders/${order.id}/payment`}>
+            <Link href={`/dashboard/orders/${order.id}/payment`}>
               <span className='text-sm font-bold whitespace-nowrap'>
                 Bayar Sekarang
               </span>

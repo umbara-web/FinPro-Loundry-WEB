@@ -9,7 +9,6 @@ import { ProfileTabs } from '@/src/components/dashboard/profile/profile-tabs';
 import { PersonalInfoTab } from '@/src/components/dashboard/profile/personal-info-tab';
 import { AddressTab } from '@/src/components/dashboard/address/address-tab';
 import { SecurityTab } from '@/src/components/dashboard/profile/security-tab';
-import { PaymentHistoryTab } from '@/src/components/dashboard/payment/payment-history/payment-history-tab';
 
 export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState('personal-info');
@@ -71,8 +70,6 @@ export default function ProfilePage() {
             onSecurityDataChange={setSecurityData}
           />
         )}
-
-        {activeTab === 'payment-history' && <PaymentHistoryTab />}
 
         {activeTab !== 'payment-history' &&
           activeTab !== 'complaint-history' && (

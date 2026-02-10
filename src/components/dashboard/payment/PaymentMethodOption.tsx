@@ -20,9 +20,9 @@ export function PaymentMethodOption({
   subtitle,
 }: PaymentMethodOptionProps) {
   const baseClasses =
-    'group hover:border-primary/50 flex cursor-pointer items-center gap-4 rounded-xl border p-4 shadow-sm transition-all';
+    'group hover:border-blue-500 dark:hover:border-blue-500 flex cursor-pointer items-center gap-4 rounded-xl border p-4 shadow-sm transition-all';
   const selectedClasses = selected
-    ? 'border-primary bg-primary/5 dark:bg-primary/10'
+    ? 'border-blue-500 bg-primary/5 dark:bg-primary/10'
     : 'dark:bg-surface-dark border-slate-200 bg-white dark:border-slate-700';
 
   return (
@@ -35,8 +35,8 @@ export function PaymentMethodOption({
         checked={selected}
         onChange={onSelect}
       />
-      <div className='flex size-10 items-center justify-center rounded-lg bg-slate-100 dark:bg-black/20'>
-        <span className={`material-symbols-outlined ${iconColor}`}>{icon}</span>
+      <div className='flex h-10 w-24 items-center justify-center rounded-lg bg-white'>
+        <img src={icon} alt={title} className='h-10 w-20 object-contain' />
       </div>
       <div className='flex grow flex-col'>
         <p className='text-sm font-bold'>{title}</p>
