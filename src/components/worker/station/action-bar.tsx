@@ -72,14 +72,14 @@ export function ActionBar({
       )}
 
       {/* Main Row: Progress + Buttons */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         {/* Progress Indicator */}
-        <div className="flex flex-col">
+        <div className="flex w-full flex-col md:w-auto">
           <span className="text-sm text-[var(--color-station-text-muted)]">
             Progress
           </span>
           <div className="mt-1 flex items-center gap-2">
-            <div className="flex h-2 w-32 overflow-hidden rounded-full bg-[var(--color-station-bg)]">
+            <div className="flex h-2 flex-1 overflow-hidden rounded-full bg-[var(--color-station-bg)] md:w-32">
               {/* Valid segment */}
               <div
                 className={clsx(
@@ -100,7 +100,7 @@ export function ActionBar({
             </div>
             <span
               className={clsx(
-                'text-xs font-bold',
+                'text-xs font-bold whitespace-nowrap',
                 isExcess ? 'text-red-400' : 'text-white'
               )}
             >
@@ -110,14 +110,14 @@ export function ActionBar({
         </div>
 
         {/* Action Buttons */}
-        <div className="flex gap-3">
+        <div className="flex w-full gap-3 md:w-auto">
           {/* Reset All Button */}
           {onResetAll && (
             <button
               onClick={onResetAll}
               disabled={isLoading || currentCount === 0}
               className={clsx(
-                'flex h-12 items-center justify-center gap-2 rounded-lg border px-4 font-medium transition-colors',
+                'flex h-12 flex-1 items-center justify-center gap-2 rounded-lg border px-4 font-medium transition-colors md:flex-none',
                 'border-[var(--color-station-border)] bg-transparent',
                 currentCount === 0
                   ? 'cursor-not-allowed text-white/30'
@@ -153,7 +153,7 @@ export function ActionBar({
             onClick={onComplete}
             disabled={isLoading || isDisabled}
             className={clsx(
-              'flex h-12 min-w-[160px] items-center justify-center gap-2 rounded-lg px-8 text-base font-bold transition-all',
+              'flex h-12 flex-[2] min-w-0 items-center justify-center gap-2 rounded-lg px-6 text-base font-bold transition-all md:min-w-[160px] md:flex-none',
               isWarning
                 ? 'bg-yellow-500 text-black shadow-lg shadow-yellow-500/25 hover:bg-yellow-400'
                 : 'bg-[var(--color-station-primary)] text-white shadow-lg shadow-blue-500/25 hover:bg-blue-600',
@@ -173,7 +173,7 @@ export function ActionBar({
                 ) : (
                   <CheckCircle className="h-5 w-5" />
                 )}
-                {buttonLabel}
+                <span className="truncate">{buttonLabel}</span>
               </>
             )}
           </button>

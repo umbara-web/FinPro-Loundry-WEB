@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import {
   ArrowLeft,
   MapPin,
@@ -19,56 +20,53 @@ import clsx from 'clsx';
 import { toast } from 'sonner';
 import { api } from '@/src/lib/api/axios-instance';
 
+const MapView = dynamic(
+  () => import('@/src/components/dashboard/address/map/map-view'),
+  { ssr: false, loading: () => <div className="flex h-full items-center justify-center bg-[#1a2634]"><Map className="h-16 w-16 text-[#304d69]" /></div> }
+);
+
 interface DeliveryDetail {
   id: string;
-  order_number?: string;
-  pickup_request: {
-    customer: {
-      name: string;
-      phone?: string;
-    };
-    customer_address: {
-      address: string;
-      city?: string;
-      postal_code?: string;
+  order_id: string;
+  order: {
+    id: string;
+    order_number?: string;
+    pickup_request?: {
+      customer: {
+        name: string;
+        phone?: string;
+      };
+      customer_address: {
+        address: string;
+        city?: string;
+        postal_code?: string;
+        lat?: string;
+        long?: string;
+      };
+      outlet?: {
+        name: string;
+        address: string;
+        lat: string;
+        long: string;
+      };
     };
   };
   total_weight?: number;
   notes?: string;
-  status: string; // This will now reflect the new statuses like DRIVER_ASSIGNED, ON_DELIVERY, etc.
+  status: string;
 }
 
-type DeliveryStep =
-  | 'DRIVER_ASSIGNED'
-  | 'ON_THE_WAY_TO_OUTLET'
-  | 'ON_THE_WAY_TO_CUSTOMER'
-  | 'ARRIVED_CUSTOMER'
-  | 'COMPLETED';
+type DeliveryStep = 'IN_PROGRESS' | 'DONE';
 
 const steps: { key: DeliveryStep; label: string; icon: React.ReactNode }[] = [
   {
-    key: 'DRIVER_ASSIGNED',
-    label: 'Driver Ditugaskan',
-    icon: <Package className="h-4 w-4" />,
-  },
-  {
-    key: 'ON_THE_WAY_TO_OUTLET',
-    label: 'Menuju Outlet',
+    key: 'IN_PROGRESS',
+    label: 'Memuat Barang & Menuju Pelanggan',
     icon: <Truck className="h-4 w-4" />,
   },
   {
-    key: 'ON_THE_WAY_TO_CUSTOMER',
-    label: 'Menuju Pelanggan',
-    icon: <Navigation className="h-4 w-4" />,
-  },
-  {
-    key: 'ARRIVED_CUSTOMER',
-    label: 'Sampai di Lokasi Pelanggan',
-    icon: <MapPin className="h-4 w-4" />,
-  },
-  {
-    key: 'COMPLETED',
-    label: 'Terkirim',
+    key: 'DONE',
+    label: 'Drop Off Selesai',
     icon: <CheckCircle className="h-4 w-4" />,
   },
 ];
@@ -79,7 +77,7 @@ export function DriverDeliveryDetailView() {
   const taskId = params.id as string; // Renamed deliveryId to taskId for consistency with the provided edit
 
   const [delivery, setDelivery] = useState<DeliveryDetail | null>(null);
-  const [currentStep, setCurrentStep] = useState<DeliveryStep>('DRIVER_ASSIGNED');
+  const [currentStep, setCurrentStep] = useState<DeliveryStep>('IN_PROGRESS');
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
 
@@ -90,16 +88,10 @@ export function DriverDeliveryDetailView() {
         if (data.data) {
           setDelivery(data.data);
           // Set current step based on status
-          if (data.data.status === 'DRIVER_ASSIGNED') {
-            setCurrentStep('DRIVER_ASSIGNED');
-          } else if (data.data.status === 'ON_THE_WAY_TO_OUTLET') {
-            setCurrentStep('ON_THE_WAY_TO_OUTLET');
-          } else if (data.data.status === 'ON_THE_WAY_TO_CUSTOMER') {
-            setCurrentStep('ON_THE_WAY_TO_CUSTOMER');
-          } else if (data.data.status === 'ARRIVED_CUSTOMER') {
-            setCurrentStep('ARRIVED_CUSTOMER');
-          } else if (data.data.status === 'COMPLETED') {
-            setCurrentStep('COMPLETED');
+          if (data.data.status === 'ACCEPTED' || data.data.status === 'IN_PROGRESS') {
+            setCurrentStep('IN_PROGRESS');
+          } else if (data.data.status === 'DONE') {
+            setCurrentStep('DONE');
           }
         }
       } catch (error) {
@@ -124,7 +116,7 @@ export function DriverDeliveryDetailView() {
       setUpdating(true);
       try {
         await api.patch(`/driver/deliveries/${taskId}/status`, {
-          status: 'COMPLETED',
+          status: 'DONE',
         });
         toast.success('Pengiriman selesai');
         router.push('/driver-dashboard');
@@ -154,11 +146,7 @@ export function DriverDeliveryDetailView() {
   };
 
   const getButtonLabel = () => {
-    const currentIndex = getCurrentStepIndex();
-    if (currentIndex === 0) return 'Mulai Pengantaran';
-    if (currentIndex === 1) return 'Saya Sudah Sampai di Lokasi';
-    if (currentIndex === 2) return 'Konfirmasi Terkirim';
-    return 'Selesai';
+    return 'Drop Off Selesai';
   };
 
   if (loading) {
@@ -191,7 +179,7 @@ export function DriverDeliveryDetailView() {
           </Link>
           <div className="mx-2 h-4 w-px bg-[#223649]" />
           <h2 className="text-lg font-bold text-white">
-            Delivery #{delivery.order_number || taskId.slice(-4).toUpperCase()}
+            Delivery #{delivery.order?.order_number || `ORD-${delivery.order_id.slice(-4).toUpperCase()}`}
           </h2>
         </div>
       </header>
@@ -199,26 +187,20 @@ export function DriverDeliveryDetailView() {
       {/* Main Content */}
       <main className="flex-1 px-4 py-6 md:px-10">
         <div className="mx-auto max-w-[960px]">
-          {/* Map Placeholder */}
+          {/* Map */}
           <div className="mb-6 overflow-hidden rounded-xl border border-[#223649] bg-[#182634]">
-            <div
-              className="relative aspect-video w-full bg-cover bg-center bg-no-repeat"
-              style={{ backgroundColor: '#1a2634' }}
-            >
-              <div className="absolute inset-0 flex items-center justify-center bg-[#1a2634]/80">
-                <Map className="h-16 w-16 text-[#304d69]" />
-              </div>
-              <div className="absolute bottom-4 left-4 flex items-center gap-3 rounded-lg border border-[#223649] bg-[#101922]/90 p-3 backdrop-blur-sm">
-                <div className="rounded-lg bg-[#0a7ff5] p-2">
-                  <Navigation className="h-5 w-5 text-white" />
+            <div className="aspect-video w-full">
+              {delivery.order?.pickup_request?.customer_address?.lat && delivery.order?.pickup_request?.customer_address?.long ? (
+                <MapView
+                  center={[parseFloat(delivery.order.pickup_request.customer_address.lat), parseFloat(delivery.order.pickup_request.customer_address.long)]}
+                  onLocationSelect={() => {}}
+                  zoom={15}
+                />
+              ) : (
+                <div className="flex h-full items-center justify-center bg-[#1a2634]">
+                  <Map className="h-16 w-16 text-[#304d69]" />
                 </div>
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-wider text-[#8fadcc]">
-                    Estimated Arrival
-                  </p>
-                  <p className="font-bold text-white">12 Mins (3.1 km)</p>
-                </div>
-              </div>
+              )}
             </div>
           </div>
 
@@ -297,16 +279,16 @@ export function DriverDeliveryDetailView() {
                   <div className="flex items-start justify-between">
                     <div className="flex flex-col gap-1">
                       <p className="text-xl font-bold text-white">
-                        {delivery.pickup_request.customer.name}
+                        {delivery.order?.pickup_request?.customer?.name || 'N/A'}
                       </p>
                       <p className="flex items-center gap-1 text-sm text-[#8fadcc]">
                         <Phone className="h-4 w-4" />
-                        {delivery.pickup_request.customer.phone || 'N/A'}
+                        {delivery.order?.pickup_request?.customer?.phone || 'N/A'}
                       </p>
                     </div>
                     <div className="flex gap-2">
                       <a
-                        href={`tel:${delivery.pickup_request.customer.phone}`}
+                        href={`tel:${delivery.order?.pickup_request?.customer?.phone || ''}`}
                         className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#0a7ff5]/20 text-[#0a7ff5] transition-all hover:bg-[#0a7ff5] hover:text-white"
                       >
                         <Phone className="h-5 w-5" />
@@ -322,16 +304,21 @@ export function DriverDeliveryDetailView() {
                       <MapPin className="mt-1 h-5 w-5 text-[#0a7ff5]" />
                       <div className="flex flex-col gap-3">
                         <p className="text-sm leading-relaxed text-[#8fadcc]">
-                          {delivery.pickup_request.customer_address.address}
-                          {delivery.pickup_request.customer_address.city &&
-                            `, ${delivery.pickup_request.customer_address.city}`}
-                          {delivery.pickup_request.customer_address.postal_code &&
-                            ` ${delivery.pickup_request.customer_address.postal_code}`}
+                          {delivery.order?.pickup_request?.customer_address?.address || 'N/A'}
+                          {delivery.order?.pickup_request?.customer_address?.city &&
+                            `, ${delivery.order.pickup_request.customer_address.city}`}
+                          {delivery.order?.pickup_request?.customer_address?.postal_code &&
+                            ` ${delivery.order.pickup_request.customer_address.postal_code}`}
                         </p>
-                        <button className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#223649] px-4 py-2.5 text-sm font-bold text-white transition-all hover:bg-[#304d69]">
+                        <a
+                          href={delivery.order?.pickup_request?.customer_address?.lat && delivery.order?.pickup_request?.customer_address?.long ? `https://www.google.com/maps/dir/?api=1&destination=${delivery.order.pickup_request.customer_address.lat},${delivery.order.pickup_request.customer_address.long}` : '#'}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#223649] px-4 py-2.5 text-sm font-bold text-white transition-all hover:bg-[#304d69]"
+                        >
                           <Map className="h-5 w-5" />
                           Buka Google Maps
-                        </button>
+                        </a>
                       </div>
                     </div>
                   </div>
@@ -346,7 +333,7 @@ export function DriverDeliveryDetailView() {
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-[#8fadcc]">Order ID</span>
                   <span className="text-sm font-medium text-white">
-                    {delivery.order_number}
+                    {delivery.order?.order_number || `ORD-${delivery.order_id.slice(-4).toUpperCase()}`}
                   </span>
                 </div>
                 {delivery.total_weight && (
@@ -374,14 +361,45 @@ export function DriverDeliveryDetailView() {
       {/* Bottom Action Bar */}
       <div className="sticky bottom-0 border-t border-[#223649] bg-[#101922]/95 px-4 py-5 backdrop-blur-md md:px-10">
         <div className="mx-auto max-w-[960px]">
-          <button
-            onClick={handleUpdateStatus}
-            disabled={updating}
-            className="flex w-full transform items-center justify-center gap-3 rounded-xl bg-[#0a7ff5] py-4 text-lg font-bold text-white shadow-[0_8px_30px_rgb(10,127,245,0.3)] transition-all active:scale-[0.98] hover:bg-[#0a7ff5]/90 disabled:opacity-50"
-          >
-            <CheckCircle className="h-6 w-6" />
-            {updating ? 'Memproses...' : getButtonLabel()}
-          </button>
+          {currentStep === 'DONE' ? (
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center justify-center gap-2 rounded-xl bg-green-500/10 border border-green-500/20 p-3">
+                <CheckCircle className="h-5 w-5 text-green-400" />
+                <span className="text-sm font-bold text-green-400">Pengiriman Berhasil!</span>
+              </div>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => router.push('/driver-dashboard')}
+                  className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#0a7ff5] py-3.5 text-sm font-bold text-white transition-all hover:bg-[#0a7ff5]/90 active:scale-[0.98]"
+                >
+                  <Package className="h-5 w-5" />
+                  Ambil Tugas Baru
+                </button>
+                <a
+                  href={
+                    delivery?.order?.pickup_request?.outlet
+                      ? `https://www.google.com/maps/dir/?api=1&destination=${delivery.order.pickup_request.outlet.lat},${delivery.order.pickup_request.outlet.long}`
+                      : '/driver-dashboard'
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-[#223649] bg-[#182634] py-3.5 text-sm font-bold text-white transition-all hover:bg-[#223649] active:scale-[0.98]"
+                >
+                  <Navigation className="h-5 w-5" />
+                  Kembali ke Outlet
+                </a>
+              </div>
+            </div>
+          ) : (
+            <button
+              onClick={handleUpdateStatus}
+              disabled={updating}
+              className="flex w-full transform items-center justify-center gap-3 rounded-xl bg-[#0a7ff5] py-4 text-lg font-bold text-white shadow-[0_8px_30px_rgb(10,127,245,0.3)] transition-all active:scale-[0.98] hover:bg-[#0a7ff5]/90 disabled:opacity-50"
+            >
+              <CheckCircle className="h-6 w-6" />
+              {updating ? 'Memproses...' : getButtonLabel()}
+            </button>
+          )}
         </div>
       </div>
     </div>

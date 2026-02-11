@@ -58,10 +58,10 @@ export function TaskQueueSidebar({
   };
 
   return (
-    <aside className="flex h-full w-full shrink-0 flex-col border-r border-[var(--color-station-border)] bg-[var(--color-station-bg)] md:w-[380px]">
+    <aside className="flex h-full w-full shrink-0 flex-col border-r border-[var(--color-station-border)] bg-[var(--color-station-bg)] lg:w-[380px]">
       {/* Station Tabs (Desktop) */}
       {stationTabs && onStationChange && (
-        <div className="hidden border-b border-[var(--color-station-border)] md:flex">
+        <div className="hidden border-b border-[var(--color-station-border)] lg:flex">
           {stationTabs.map((tab) => (
             <button
               key={tab.id}
@@ -94,11 +94,11 @@ export function TaskQueueSidebar({
             </p>
           </div>
         </div>
-        
+
         <div className="relative">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-[var(--color-station-text-muted)]" />
-          <Input 
-            placeholder="Cari Invoice / Customer..." 
+          <Input
+            placeholder="Cari Invoice / Customer..."
             className="w-full border-[var(--color-station-border)] bg-[var(--color-station-surface)] pl-9 text-white placeholder:text-[var(--color-station-text-muted)] focus-visible:ring-[var(--color-station-primary)]"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -180,7 +180,7 @@ export function TaskQueueSidebar({
                       <TaskQueueCard
                         task={task}
                         isActive={false}
-                        onClick={() => {}}
+                        onClick={() => { }}
                         isPoolTask
                       />
                       <button

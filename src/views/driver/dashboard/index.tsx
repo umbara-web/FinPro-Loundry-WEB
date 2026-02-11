@@ -1,17 +1,14 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/src/context/AuthContext';
 import {
-  MapPin,
-  User,
-  ChevronRight,
-  Package,
   Truck,
   Bell,
   Clock,
-  Navigation,
+  CheckCircle2,
+  Package,
 } from 'lucide-react';
 import clsx from 'clsx';
 import {
@@ -20,8 +17,25 @@ import {
   ActiveJob,
 } from '@/src/types/driver';
 import { api } from '@/src/lib/api/axios-instance';
+import { toast } from 'sonner';
+
+// Components
+import { DashboardHeader } from '@/src/components/driver/dashboard/dashboard-header';
+import { PickupRequestCard } from '@/src/components/driver/dashboard/pickup-request-card';
+import { DeliveryRequestCard } from '@/src/components/driver/dashboard/delivery-request-card';
+import { ActiveJobCard } from '@/src/components/driver/dashboard/active-job-card';
 
 type TabType = 'requests' | 'active' | 'history';
+
+interface HistoryItem {
+  id: string;
+  type: 'PICKUP' | 'DELIVERY';
+  order_number: string;
+  customer_name: string;
+  address: string;
+  completed_at: string;
+  status: string;
+}
 
 export function DriverDashboardView() {
   const { user } = useAuth();
@@ -30,7 +44,9 @@ export function DriverDashboardView() {
   const [pickups, setPickups] = useState<AvailablePickupRequest[]>([]);
   const [deliveries, setDeliveries] = useState<AvailableDeliveryRequest[]>([]);
   const [activeJob, setActiveJob] = useState<ActiveJob | null>(null);
+  const [todayHistory, setTodayHistory] = useState<HistoryItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const hasAutoSwitched = useRef(false);
 
   const fetchData = useCallback(async (isBackground = false) => {
     if (!isBackground) {
@@ -54,7 +70,7 @@ export function DriverDashboardView() {
           id: jobData.type === 'PICKUP' ? jobData.data.id : jobData.data.id,
           type: jobData.type,
           status: jobData.data.status,
-          orderNumber: jobData.type === 'PICKUP' 
+          orderNumber: jobData.type === 'PICKUP'
             ? jobData.data.id.slice(-4).toUpperCase()
             : jobData.data.order_id?.slice(-4).toUpperCase() || '',
           customer: {
@@ -72,6 +88,10 @@ export function DriverDashboardView() {
       } else {
         setActiveJob(null);
       }
+
+      // Fetch today's history
+      const { data: historyData } = await api.get('/driver/history?date=today&limit=50');
+      setTodayHistory(historyData.data || []);
     } catch (error) {
       console.error('Error fetching driver data:', error);
     } finally {
@@ -86,6 +106,14 @@ export function DriverDashboardView() {
     fetchData();
   }, [fetchData]);
 
+  // Auto-switch to 'active' tab if there's an active job on first load
+  useEffect(() => {
+    if (activeJob && !hasAutoSwitched.current) {
+      setActiveTab('active');
+      hasAutoSwitched.current = true;
+    }
+  }, [activeJob]);
+
   // Auto-polling every 30 seconds
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -96,23 +124,31 @@ export function DriverDashboardView() {
   }, [fetchData]);
 
   const handleAcceptPickup = async (requestId: string) => {
+    if (activeJob) {
+      toast.error('Anda masih memiliki tugas aktif. Selesaikan tugas saat ini sebelum menerima request baru.');
+      return;
+    }
     try {
       await api.post(`/driver/pickups/${requestId}/accept`);
       window.location.href = `/driver-pickup/${requestId}`;
     } catch (error: any) {
       console.error('Error accepting pickup:', error);
-      alert(error.response?.data?.message || 'Gagal menerima request');
+      toast.error(error.response?.data?.message || 'Gagal menerima request');
     }
   };
 
   const handleAcceptDelivery = async (orderId: string) => {
+    if (activeJob) {
+      toast.error('Anda masih memiliki tugas aktif. Selesaikan tugas saat ini sebelum menerima request baru.');
+      return;
+    }
     try {
       const { data } = await api.post(`/driver/deliveries/${orderId}/accept`);
       const taskId = data.data.id;
       window.location.href = `/driver-delivery/${taskId}`;
     } catch (error: any) {
       console.error('Error accepting delivery:', error);
-      alert(error.response?.data?.message || 'Gagal menerima delivery');
+      toast.error(error.response?.data?.message || 'Gagal menerima delivery');
     }
   };
 
@@ -122,104 +158,11 @@ export function DriverDashboardView() {
     <div className="min-h-full bg-[#101922] px-4 py-6 md:px-10">
       <div className="mx-auto max-w-[960px]">
         {/* Profile Header & Status Toggle */}
-        <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div className="flex items-center gap-4">
-            <div
-              className="size-20 rounded-full border-2 border-[#0a7ff5]/20 bg-cover bg-center bg-no-repeat md:size-28"
-              style={{
-                backgroundImage: user?.profile_picture_url
-                  ? `url(${user.profile_picture_url})`
-                  : 'none',
-                backgroundColor: !user?.profile_picture_url
-                  ? '#223649'
-                  : undefined,
-              }}
-            >
-              {!user?.profile_picture_url && (
-                <div className="flex h-full w-full items-center justify-center text-3xl font-bold text-[#0a7ff5]">
-                  {user?.name?.charAt(0).toUpperCase() || 'D'}
-                </div>
-              )}
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-white md:text-3xl">
-                Halo, {user?.name || 'Driver'}
-              </p>
-              <div className="mt-1 flex items-center gap-2">
-                <span
-                  className={clsx(
-                    'h-2 w-2 rounded-full',
-                    isOnline ? 'animate-pulse bg-green-500' : 'bg-slate-500'
-                  )}
-                />
-                <p className="text-sm text-[#8fadcc]">
-                  Driver ID: #{user?.id?.slice(-4).toUpperCase() || 'N/A'}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Status Toggle */}
-          <div className="flex min-w-[280px] flex-1 flex-col items-start justify-between gap-4 rounded-xl border border-[#304d69] bg-[#101a23] p-4 md:flex-row md:items-center">
-            <div className="flex flex-col gap-1">
-              <p className="text-sm font-bold uppercase tracking-wider text-white">
-                Status Driver
-              </p>
-              <p className="text-xs text-[#8fadcc]">
-                {isOnline ? 'Online & Siap Menerima' : 'Offline'}
-              </p>
-            </div>
-            <label className="relative flex h-[31px] w-[51px] cursor-pointer items-center rounded-full border-none bg-[#223649] p-0.5 transition-all has-[:checked]:justify-end has-[:checked]:bg-[#0a7ff5]">
-              <div className="h-full w-[27px] rounded-full bg-white shadow-md"></div>
-              <input
-                type="checkbox"
-                checked={isOnline}
-                onChange={() => setIsOnline(!isOnline)}
-                className="invisible absolute"
-              />
-            </label>
-          </div>
-        </div>
-
-        {/* Active Job Snippet */}
-        {activeJob && (
-          <div className="mb-6">
-            <h2 className="mb-3 text-lg font-bold text-white">
-              Tugas Saat Ini
-            </h2>
-            <Link
-              href={
-                activeJob.type === 'PICKUP'
-                  ? `/driver-pickup/${activeJob.id}`
-                  : `/driver-delivery/${activeJob.id}`
-              }
-              className="flex items-stretch justify-between gap-4 rounded-xl border-l-4 border-[#0a7ff5] bg-[#182634] p-5 shadow-lg transition-all hover:bg-[#1d2d3d]"
-            >
-              <div className="flex flex-col gap-3">
-                <div className="flex items-center gap-2">
-                  <span className="rounded-full bg-[#0a7ff5]/20 px-2 py-0.5 text-[10px] font-bold uppercase text-[#0a7ff5]">
-                    Sedang Berjalan
-                  </span>
-                  <span className="text-xs text-[#8fadcc]">
-                    #{activeJob.orderNumber || activeJob.id.slice(-4)}
-                  </span>
-                </div>
-                <p className="text-lg font-bold text-white">
-                  {activeJob.type === 'PICKUP' ? 'Jemput' : 'Antar'} -{' '}
-                  {activeJob.customer.name}
-                </p>
-                <div className="flex items-center gap-1 text-[#8fadcc]">
-                  <MapPin className="h-4 w-4" />
-                  <p className="text-sm">{activeJob.address.address}</p>
-                </div>
-                <div className="mt-1 flex items-center gap-2 text-sm font-bold text-[#0a7ff5]">
-                  Lanjutkan Tugas
-                  <ChevronRight className="h-5 w-5" />
-                </div>
-              </div>
-            </Link>
-          </div>
-        )}
+        <DashboardHeader
+          user={user}
+          isOnline={isOnline}
+          onStatusChange={setIsOnline}
+        />
 
         {/* Tabbed Navigation */}
         <div className="mb-4 flex overflow-x-auto border-b border-[#223649]">
@@ -251,6 +194,9 @@ export function DriverDashboardView() {
           >
             <Truck className="h-5 w-5" />
             Sedang Berjalan
+            {activeJob && (
+              <span className="h-2 w-2 animate-pulse rounded-full bg-green-500" />
+            )}
           </button>
           <button
             onClick={() => setActiveTab('history')}
@@ -281,112 +227,20 @@ export function DriverDashboardView() {
               <>
                 {/* Pickup Cards */}
                 {pickups.map((pickup) => (
-                  <div
+                  <PickupRequestCard
                     key={pickup.id}
-                    className="flex flex-col gap-4 rounded-xl border border-transparent bg-[#182634] p-5 shadow-sm transition-all hover:border-[#0a7ff5]/50"
-                  >
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="rounded-lg bg-orange-500/10 p-2">
-                          <Package className="h-5 w-5 text-orange-500" />
-                        </div>
-                        <div>
-                          <p className="font-bold text-white">
-                            Jemput - {pickup.notes || 'Laundry'}
-                          </p>
-                          <p className="text-xs text-[#8fadcc]">
-                            #{pickup.id.slice(-8).toUpperCase()}
-                          </p>
-                        </div>
-                      </div>
-                      {pickup.distance && (
-                        <div className="flex items-center gap-1 text-sm font-bold text-[#0a7ff5]">
-                          <Navigation className="h-4 w-4" />
-                          {pickup.distance} km
-                        </div>
-                      )}
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2 text-sm text-[#8fadcc]">
-                        <User className="h-4 w-4" />
-                        <span>{pickup.customer?.name || 'Pelanggan'}</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-sm text-[#8fadcc]">
-                        <MapPin className="h-4 w-4" />
-                        <span className="truncate">
-                          {pickup.customer_address?.address || 'Alamat'}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="flex gap-2 pt-2">
-                      <button
-                        onClick={() => handleAcceptPickup(pickup.id)}
-                        className="flex-1 rounded-lg bg-[#0a7ff5] py-2 text-sm font-bold text-white transition-colors hover:bg-[#0a7ff5]/90"
-                      >
-                        Terima Request
-                      </button>
-                      <button className="rounded-lg bg-[#223649] px-3 py-2 text-sm font-bold text-white">
-                        Detail
-                      </button>
-                    </div>
-                  </div>
+                    pickup={pickup}
+                    onAccept={handleAcceptPickup}
+                  />
                 ))}
 
                 {/* Delivery Cards */}
                 {deliveries.map((delivery) => (
-                  <div
+                  <DeliveryRequestCard
                     key={delivery.id}
-                    className="flex flex-col gap-4 rounded-xl border border-transparent bg-[#182634] p-5 shadow-sm transition-all hover:border-[#0a7ff5]/50"
-                  >
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="rounded-lg bg-blue-500/10 p-2">
-                          <Truck className="h-5 w-5 text-blue-500" />
-                        </div>
-                        <div>
-                          <p className="font-bold text-white">
-                            Antar - Order #{delivery.order_number || delivery.id.slice(-4)}
-                          </p>
-                          <p className="text-xs text-[#8fadcc]">
-                            #{delivery.id.slice(-8).toUpperCase()}
-                          </p>
-                        </div>
-                      </div>
-                      {delivery.distance && (
-                        <div className="flex items-center gap-1 text-sm font-bold text-[#0a7ff5]">
-                          <Navigation className="h-4 w-4" />
-                          {delivery.distance} km
-                        </div>
-                      )}
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2 text-sm text-[#8fadcc]">
-                        <User className="h-4 w-4" />
-                        <span>
-                          {delivery.pickup_request?.customer?.name ||
-                            'Pelanggan'}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2 text-sm text-[#8fadcc]">
-                        <MapPin className="h-4 w-4" />
-                        <span className="truncate">
-                          {delivery.pickup_request?.customer_address?.address ||
-                            'Alamat'}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="flex gap-2 pt-2">
-                      <button
-                        onClick={() => handleAcceptDelivery(delivery.id)}
-                        className="flex-1 rounded-lg bg-[#0a7ff5] py-2 text-sm font-bold text-white transition-colors hover:bg-[#0a7ff5]/90"
-                      >
-                        Terima Request
-                      </button>
-                      <button className="rounded-lg bg-[#223649] px-3 py-2 text-sm font-bold text-white">
-                        Detail
-                      </button>
-                    </div>
-                  </div>
+                    delivery={delivery}
+                    onAccept={handleAcceptDelivery}
+                  />
                 ))}
               </>
             )}
@@ -394,29 +248,83 @@ export function DriverDashboardView() {
         )}
 
         {activeTab === 'active' && (
-          <div className="py-12 text-center text-[#8fadcc]">
+          <div>
             {activeJob ? (
-              <Link
-                href={
-                  activeJob.type === 'PICKUP'
-                    ? `/driver-pickup/${activeJob.id}`
-                    : `/driver-delivery/${activeJob.id}`
-                }
-                className="text-[#0a7ff5] underline"
-              >
-                Lihat tugas aktif
-              </Link>
+              <ActiveJobCard activeJob={activeJob} />
             ) : (
-              'Tidak ada tugas yang sedang berjalan.'
+              <div className="py-12 text-center text-[#8fadcc]">
+                Tidak ada tugas yang sedang berjalan.
+              </div>
             )}
           </div>
         )}
 
         {activeTab === 'history' && (
-          <div className="py-12 text-center text-[#8fadcc]">
-            <Link href="/driver-history" className="text-[#0a7ff5] underline">
-              Lihat semua riwayat
-            </Link>
+          <div>
+            {todayHistory.length > 0 ? (
+              <>
+                {/* Summary Bar */}
+                <div className="mb-4 flex items-center gap-4 rounded-xl bg-[#182634] p-4">
+                  <CheckCircle2 className="h-5 w-5 text-green-500" />
+                  <p className="text-sm font-bold text-white">
+                    {todayHistory.filter(h => h.type === 'PICKUP').length} Jemput
+                    {' · '}
+                    {todayHistory.filter(h => h.type === 'DELIVERY').length} Antar
+                  </p>
+                  <span className="text-xs text-[#8fadcc]">Hari ini</span>
+                </div>
+
+                {/* Compact History List */}
+                <div className="space-y-3">
+                  {todayHistory.map((item) => (
+                    <div
+                      key={item.id}
+                      className="flex items-center gap-4 rounded-xl bg-[#182634] p-4"
+                    >
+                      <div className={clsx(
+                        'rounded-lg p-2',
+                        item.type === 'PICKUP' ? 'bg-orange-500/10' : 'bg-blue-500/10'
+                      )}>
+                        {item.type === 'PICKUP' ? (
+                          <Package className="h-4 w-4 text-orange-500" />
+                        ) : (
+                          <Truck className="h-4 w-4 text-blue-500" />
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <p className="text-sm font-bold text-white truncate">
+                            {item.type === 'PICKUP' ? 'Jemput' : 'Antar'} - {item.customer_name}
+                          </p>
+                          <span className="rounded-full bg-green-500/10 px-2 py-0.5 text-[10px] font-bold text-green-500 whitespace-nowrap">
+                            Selesai
+                          </span>
+                        </div>
+                        <p className="text-xs text-[#8fadcc] truncate">
+                          {item.order_number} · {item.address}
+                        </p>
+                      </div>
+                      <p className="text-xs text-[#8fadcc] whitespace-nowrap">
+                        {item.completed_at
+                          ? new Date(item.completed_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
+                          : '-'}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <div className="py-12 text-center text-[#8fadcc]">
+                Belum ada tugas selesai hari ini.
+              </div>
+            )}
+
+            {/* Link to full history */}
+            <div className="mt-4 text-center">
+              <Link href="/driver-history" className="text-sm font-bold text-[#0a7ff5] hover:underline">
+                Lihat Semua Riwayat →
+              </Link>
+            </div>
           </div>
         )}
       </div>

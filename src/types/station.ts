@@ -19,30 +19,6 @@ export interface StationTask {
 export interface LaundryItemType {
   id: string;
   name: string;
-  subtitle: string;
-  icon: string; // Lucide icon name
-}
-
-// Icon and subtitle config based on item name (case-insensitive match)
-const LAUNDRY_ITEM_CONFIG: Record<string, { icon: string; subtitle: string }> = {
-  'kemeja': { icon: 'Shirt', subtitle: 'Shirts / Formal' },
-  'celana panjang': { icon: 'Briefcase', subtitle: 'Pants / Trousers' },
-  'kaos': { icon: 'Shirt', subtitle: 'T-Shirts / Tops' },
-  'jaket': { icon: 'Shirt', subtitle: 'Jackets / Hoodies' },
-  'jas': { icon: 'Briefcase', subtitle: 'Suits / Blazers' },
-  'rok': { icon: 'Package', subtitle: 'Skirts' },
-  'dress': { icon: 'Package', subtitle: 'Dresses' },
-  'selimut': { icon: 'Package', subtitle: 'Blankets' },
-  'sprei': { icon: 'Package', subtitle: 'Bed Sheets' },
-  'handuk': { icon: 'Package', subtitle: 'Towels' },
-};
-
-const DEFAULT_CONFIG = { icon: 'Package', subtitle: 'Other Items' };
-
-// Helper to get icon/subtitle config by item name
-export function getLaundryItemConfig(name: string): { icon: string; subtitle: string } {
-  const key = name.toLowerCase();
-  return LAUNDRY_ITEM_CONFIG[key] || DEFAULT_CONFIG;
 }
 
 export interface ItemCountData {

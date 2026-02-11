@@ -72,6 +72,5 @@ export interface DriverJobHistory {
   customer_name: string;
   address: string;
   completed_at: string;
-  incentive?: number;
   status: 'SELESAI' | 'DIBATALKAN';
 }

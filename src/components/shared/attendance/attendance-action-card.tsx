@@ -5,24 +5,12 @@ import { useAttendanceStatus, useClockIn, useClockOut } from '@/src/hooks/use-at
 import { AttendanceStatusBadge } from './attendance-status-badge';
 import clsx from 'clsx';
 
-interface ShiftInfo {
-  startTime: string;
-  endTime: string;
-  location: string;
-}
-
 interface AttendanceActionCardProps {
   userName: string;
-  shiftInfo?: ShiftInfo;
 }
 
 export function AttendanceActionCard({
   userName,
-  shiftInfo = {
-    startTime: '08:00',
-    endTime: '16:00',
-    location: 'Outlet Utama',
-  },
 }: AttendanceActionCardProps) {
   const { data: statusData, isLoading } = useAttendanceStatus();
   const clockIn = useClockIn();
@@ -62,10 +50,10 @@ export function AttendanceActionCard({
               Status Shift
             </h3>
             <p className="text-slate-600 dark:text-[#92adc9] text-sm">
-              Shift: {shiftInfo.startTime} - {shiftInfo.endTime}
+              Shift: {status?.shiftStart || '--:--'} - {status?.shiftEnd || '--:--'}
             </p>
             <p className="text-slate-600 dark:text-[#92adc9] text-sm">
-              Lokasi: {shiftInfo.location}
+              Lokasi: {status?.station || 'Unknown'}
             </p>
           </div>
 

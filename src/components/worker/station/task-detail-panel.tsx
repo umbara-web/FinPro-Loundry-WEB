@@ -1,13 +1,12 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { Hand } from 'lucide-react';
+import { Hand, ArrowLeft } from 'lucide-react';
 import {
   StationTask,
   StationType,
   ItemCountData,
   getStationConfig,
-  getLaundryItemConfig,
 } from '@/src/types/station';
 import { ItemCounter } from './item-counter';
 import { ActionBar } from './action-bar';
@@ -17,9 +16,10 @@ import { useLaundryItems } from '@/src/hooks/use-master-data';
 interface TaskDetailPanelProps {
   task: StationTask | null;
   stationType: StationType;
+  onBack?: () => void;
 }
 
-export function TaskDetailPanel({ task, stationType }: TaskDetailPanelProps) {
+export function TaskDetailPanel({ task, stationType, onBack }: TaskDetailPanelProps) {
   const config = getStationConfig(stationType);
   const [itemCounts, setItemCounts] = useState<ItemCountData>({});
   const [showMismatchAlert, setShowMismatchAlert] = useState(false);
@@ -77,7 +77,7 @@ export function TaskDetailPanel({ task, stationType }: TaskDetailPanelProps) {
 
     // Check if any item count doesn't match expected
     let hasMismatch = false;
-    
+
     // Check items from order
     for (const item of task.items || []) {
       const inputCount = itemCounts[item.id] || 0;
@@ -154,7 +154,7 @@ export function TaskDetailPanel({ task, stationType }: TaskDetailPanelProps) {
     });
   };
 
-  // Mobile placeholder when no task selected
+  // Mobile placeholder when no task selected (Should be handled by parent, but kept for safety)
   if (!task) {
     return (
       <div className="hidden flex-1 flex-col items-center justify-center bg-[var(--color-station-bg)] p-8 text-center md:flex">
@@ -172,17 +172,28 @@ export function TaskDetailPanel({ task, stationType }: TaskDetailPanelProps) {
   }
 
   return (
-    <main className="relative hidden flex-1 flex-col overflow-hidden md:flex">
+    <main className="relative flex flex-1 flex-col overflow-hidden">
       {/* Content Header */}
-      <div className="p-6 pb-4 md:p-8">
-        <div className="flex items-start justify-between">
-          <div>
-            <div className="mb-2 flex items-center gap-3">
-              <h2 className="text-3xl font-bold tracking-tight text-white">
+      <div className="p-4 lg:p-8 lg:pb-4">
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex-1">
+            {/* Back Button (Mobile & Tablet Portrait) */}
+            {onBack && (
+              <button
+                onClick={onBack}
+                className="mb-4 flex items-center gap-2 text-sm font-medium text-[var(--color-station-text-muted)] hover:text-white lg:hidden"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Kembali ke Antrean
+              </button>
+            )}
+
+            <div className="mb-2 flex flex-wrap items-center gap-3">
+              <h2 className="text-xl font-bold tracking-tight text-white md:text-3xl">
                 Proses Cucian #{task.invoiceNumber}
               </h2>
               <span
-                className="rounded-md px-3 py-1 text-sm font-semibold"
+                className="rounded-md px-3 py-1 text-xs font-semibold md:text-sm"
                 style={{
                   backgroundColor: `${config.color}20`,
                   color: config.color,
@@ -191,7 +202,7 @@ export function TaskDetailPanel({ task, stationType }: TaskDetailPanelProps) {
                 {task.serviceType} Wash
               </span>
             </div>
-            <p className="text-base text-[var(--color-station-text-muted)]">
+            <p className="text-sm text-[var(--color-station-text-muted)] md:text-base">
               Input detail item cucian untuk verifikasi sebelum proses.
             </p>
           </div>
@@ -212,15 +223,13 @@ export function TaskDetailPanel({ task, stationType }: TaskDetailPanelProps) {
       {/* Scrollable Form Area */}
       <div className={`flex-1 overflow-y-auto px-6 md:px-8 ${showMismatchAlert ? 'pb-56' : 'pb-44'}`}>
         {/* Item Input Grid */}
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-          {sortedLaundryItems.map((item) => {
-            const itemConfig = getLaundryItemConfig(item.name);
+        <div className="grid grid-cols-1 gap-4 2xl:grid-cols-2">
+          {sortedLaundryItems.map((item, index) => {
             return (
               <ItemCounter
                 key={item.id}
-                icon={itemConfig.icon}
+                index={index + 1}
                 name={item.name}
-                subtitle={itemConfig.subtitle}
                 count={itemCounts[item.id] || 0}
                 expectedCount={expectedCountsMap[item.id]}
                 onIncrement={() => handleIncrement(item.id)}
