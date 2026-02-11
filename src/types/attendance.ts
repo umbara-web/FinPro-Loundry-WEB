@@ -7,6 +7,9 @@ export interface AttendanceStatus {
   station: string;
   staffName: string;
   lastShiftEnd: string | null;
+  shiftName: string;
+  shiftStart: string;
+  shiftEnd: string;
 }
 
 export interface AttendanceRecord {

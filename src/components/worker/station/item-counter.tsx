@@ -1,28 +1,13 @@
-'use client';
-
 import {
-  Shirt,
-  Briefcase,
-  Package,
   Minus,
   Plus,
   RotateCcw,
-  LucideIcon,
 } from 'lucide-react';
 import clsx from 'clsx';
 
-// Icon mapping for laundry items
-const iconMap: Record<string, LucideIcon> = {
-  Shirt: Shirt,
-  Briefcase: Briefcase,
-  Package: Package,
-  Jacket: Shirt,
-};
-
 interface ItemCounterProps {
-  icon: string;
+  index: number;
   name: string;
-  subtitle: string;
   count: number;
   expectedCount?: number;
   onIncrement: () => void;
@@ -32,9 +17,8 @@ interface ItemCounterProps {
 }
 
 export function ItemCounter({
-  icon,
+  index,
   name,
-  subtitle,
   count,
   expectedCount,
   onIncrement,
@@ -42,7 +26,6 @@ export function ItemCounter({
   onChange,
   onReset,
 }: ItemCounterProps) {
-  const IconComponent = iconMap[icon] || Package;
   const isZero = count === 0;
   const isMatch = expectedCount !== undefined && count === expectedCount;
   const hasExpected = expectedCount !== undefined && expectedCount > 0;
@@ -64,7 +47,7 @@ export function ItemCounter({
   return (
     <div
       className={clsx(
-        'flex items-center justify-between rounded-xl border p-5 transition-colors',
+        'flex flex-col gap-4 rounded-xl border p-4 transition-colors flex-wrap sm:flex-row sm:items-center sm:justify-between sm:p-5',
         'bg-[var(--color-station-surface)]',
         'group hover:border-[var(--color-station-primary)]/50',
         // Items with target > 0: green if match, default border otherwise
@@ -75,13 +58,12 @@ export function ItemCounter({
       )}
     >
       {/* Item Info */}
-      <div className="flex items-center gap-4">
-        <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-[var(--color-station-border)] text-white">
-          <IconComponent className="h-7 w-7" />
+      <div className="flex min-w-0 flex-1 items-center gap-4">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-[var(--color-station-border)] text-white sm:h-14 sm:w-14">
+          <span className="text-xl font-bold sm:text-2xl">{index}</span>
         </div>
-        <div>
-          <h3 className="text-lg font-bold text-white">{name}</h3>
-          <p className="text-sm text-[var(--color-station-text-muted)]">{subtitle}</p>
+        <div className="min-w-0 flex-1">
+          <h3 className="truncate text-base font-bold text-white sm:text-lg">{name}</h3>
           {hasExpected && (
             <p className={clsx(
               'mt-1 text-xs font-semibold',
@@ -94,13 +76,13 @@ export function ItemCounter({
       </div>
 
       {/* Counter Controls */}
-      <div className="flex items-center gap-1 rounded-lg border border-[var(--color-station-border)] bg-[var(--color-station-bg)] p-1">
+      <div className="flex shrink-0 items-center self-end gap-1 rounded-lg border border-[var(--color-station-border)] bg-[var(--color-station-bg)] p-1 sm:self-auto">
         {/* Reset Button */}
         <button
           onClick={onReset}
           disabled={isZero}
           className={clsx(
-            'flex h-12 w-12 items-center justify-center rounded-md transition-all',
+            'flex h-10 w-10 items-center justify-center rounded-md transition-all sm:h-12 sm:w-12',
             isZero
               ? 'cursor-not-allowed text-white/30'
               : 'text-red-400 hover:bg-red-500/20 active:scale-95'
@@ -115,14 +97,14 @@ export function ItemCounter({
           onClick={onDecrement}
           disabled={isZero}
           className={clsx(
-            'flex h-12 w-12 items-center justify-center rounded-md text-2xl font-medium transition-all',
+            'flex h-10 w-10 items-center justify-center rounded-md text-xl font-medium transition-all sm:h-12 sm:w-12 sm:text-2xl',
             'bg-[var(--color-station-border)]',
             isZero
               ? 'cursor-not-allowed text-white/50'
               : 'text-white hover:bg-[var(--color-station-border-hover)] active:scale-95'
           )}
         >
-          <Minus className="h-5 w-5" />
+          <Minus className="h-4 w-4 sm:h-5 sm:w-5" />
         </button>
 
         {/* Count Input */}
@@ -134,7 +116,7 @@ export function ItemCounter({
           onChange={handleInputChange}
           onFocus={(e) => e.target.select()}
           className={clsx(
-            'h-12 w-16 border-none bg-transparent p-0 text-center font-mono text-xl font-bold',
+            'h-10 w-12 border-none bg-transparent p-0 text-center font-mono text-lg font-bold sm:h-12 sm:w-16 sm:text-xl',
             'focus:ring-0 focus:outline-none',
             isZero ? 'text-white/50' : 'text-white'
           )}
@@ -144,13 +126,13 @@ export function ItemCounter({
         <button
           onClick={onIncrement}
           className={clsx(
-            'flex h-12 w-12 items-center justify-center rounded-md text-2xl font-medium transition-all active:scale-95',
+            'flex h-10 w-10 items-center justify-center rounded-md text-xl font-medium transition-all active:scale-95 sm:h-12 sm:w-12 sm:text-2xl',
             isZero
               ? 'bg-[var(--color-station-border)] text-[var(--color-station-primary)] hover:bg-[var(--color-station-primary)] hover:text-white'
               : 'bg-[var(--color-station-primary)] text-white shadow-lg shadow-blue-500/20 hover:bg-blue-600'
           )}
         >
-          <Plus className="h-5 w-5" />
+          <Plus className="h-4 w-4 sm:h-5 sm:w-5" />
         </button>
       </div>
     </div>

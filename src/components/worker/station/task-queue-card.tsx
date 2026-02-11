@@ -18,11 +18,11 @@ export function TaskQueueCard({ task, isActive, onClick, isPoolTask = false }: T
     <div
       onClick={onClick}
       className={clsx(
-        'cursor-pointer rounded-xl border p-4 transition-all',
+        'group cursor-pointer rounded-xl border p-4 transition-all duration-300',
         'bg-[var(--color-station-surface)]',
         isActive
-          ? 'border-[var(--color-station-primary)]/50 shadow-[0_0_15px_rgba(10,127,245,0.15)]'
-          : 'border-transparent opacity-80 hover:border-[var(--color-station-border-hover)] hover:opacity-100'
+          ? 'md:border-[var(--color-station-primary)] md:shadow-[0_0_20px_rgba(10,127,245,0.2)] md:scale-[1.02] border-transparent'
+          : 'border-transparent opacity-100 md:opacity-70 md:hover:opacity-100 md:hover:border-[var(--color-station-border-hover)] md:hover:translate-x-1'
       )}
     >
       {/* Header: Status Badge & Estimated Time */}
@@ -77,24 +77,18 @@ export function TaskQueueCard({ task, isActive, onClick, isPoolTask = false }: T
       </div>
 
       {/* Details: Weight & Service Type */}
-      <div className="mt-4 flex items-center gap-4 text-sm text-[var(--color-station-text-muted)]">
-        <div
-          className={clsx(
-            'flex items-center gap-1.5',
-            isActive && 'rounded-lg bg-[var(--color-station-bg)] px-3 py-1.5'
-          )}
-        >
-          <Scale className="h-4 w-4" />
-          <span className={clsx(isActive && 'font-medium text-white')}>
+      <div className="mt-4 flex items-center gap-3 text-sm">
+        <div className="flex items-center gap-1.5 rounded-lg bg-[var(--color-station-bg)] px-3 py-1.5">
+          <Scale className="h-4 w-4 text-[var(--color-station-text-muted)]" />
+          <span className="font-medium text-white">
             {task.weight} kg
           </span>
         </div>
-        {isActive && (
-          <div className="flex items-center gap-1.5 rounded-lg bg-[var(--color-station-bg)] px-3 py-1.5">
-            <Shirt className="h-4 w-4" />
-            <span className="font-medium text-white">{task.serviceType}</span>
-          </div>
-        )}
+
+        <div className="flex items-center gap-1.5 rounded-lg bg-[var(--color-station-bg)] px-3 py-1.5">
+          <Shirt className="h-4 w-4 text-[var(--color-station-text-muted)]" />
+          <span className="font-medium text-white">{task.serviceType}</span>
+        </div>
       </div>
     </div>
   );

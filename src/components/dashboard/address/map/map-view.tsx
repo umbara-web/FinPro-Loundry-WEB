@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   MapContainer,
   Marker,
@@ -59,6 +59,21 @@ export default function MapView({
   onLocationSelect,
   zoom = 13,
 }: MapViewProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Validate coordinates
+  if (!mounted || !center || isNaN(center[0]) || isNaN(center[1])) {
+    return (
+      <div className="flex h-full w-full items-center justify-center bg-[#1a2634]">
+        <span className="text-sm text-[#304d69]">Memuat peta...</span>
+      </div>
+    );
+  }
+
   return (
     <MapContainer
       center={center}
