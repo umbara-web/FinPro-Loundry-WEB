@@ -1,8 +1,9 @@
 'use client';
 
-import { Bell, ClipboardCheck, Waves, Flame, Package, LogOut } from 'lucide-react';
+import { Bell, ClipboardCheck, Waves, Flame, Package, LogOut, User } from 'lucide-react';
 import { useAuth } from '@/src/context/AuthContext';
 import { StationType, getStationConfig } from '@/src/types/station';
+import Link from 'next/link';
 import clsx from 'clsx';
 
 interface StationHeaderProps {
@@ -20,7 +21,7 @@ export function StationHeader({
   stationType = 'WASHING',
   onAttendanceClick,
 }: StationHeaderProps) {
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
   const config = getStationConfig(stationType);
   const StationIcon = stationIcons[stationType];
 
@@ -63,31 +64,33 @@ export function StationHeader({
           <span className="hidden sm:inline">Log Absensi</span>
         </button>
 
-        {/* Notification Bell */}
-        <button
-          className={clsx(
-            'relative flex h-10 w-10 items-center justify-center rounded-lg',
-            'bg-[var(--color-station-border)] hover:bg-[var(--color-station-border-hover)]',
-            'text-white transition-colors'
-          )}
+        {/* Profile Link */}
+        <Link
+          href="/worker-profile"
+          className="flex items-center gap-3 rounded-lg border border-[var(--color-station-border)] bg-[var(--color-station-bg)] p-1.5 pr-3 transition-colors hover:bg-[var(--color-station-border)]"
         >
-          <Bell className="h-5 w-5" />
-          {/* Notification Badge */}
-          <span className="absolute right-2.5 top-2 h-2 w-2 rounded-full border border-[var(--color-station-border)] bg-red-500" />
-        </button>
-
-        {/* Logout Button */}
-        <button
-          onClick={logout}
-          className={clsx(
-            'flex h-10 w-10 items-center justify-center rounded-lg',
-            'bg-[var(--color-station-border)] hover:bg-red-600',
-            'text-white transition-colors'
-          )}
-          title="Logout"
-        >
-          <LogOut className="h-5 w-5" />
-        </button>
+          <div className="relative h-8 w-8 overflow-hidden rounded-md bg-slate-700">
+            {user?.profile_picture_url ? (
+              <img
+                src={user.profile_picture_url}
+                alt={user.name}
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center bg-slate-800 text-xs font-bold text-white">
+                {user?.name?.charAt(0).toUpperCase() || 'U'}
+              </div>
+            )}
+          </div>
+          <div className="hidden flex-col text-right sm:flex">
+            <span className="text-xs font-bold leading-none text-white">
+              {user?.name || 'Worker'}
+            </span>
+            <span className="text-[10px] uppercase leading-none text-[var(--color-station-text-muted)]">
+              {user?.role || 'Worker'}
+            </span>
+          </div>
+        </Link>
       </div>
     </header>
   );
