@@ -18,7 +18,7 @@ export function WorkerMobileNav({
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 flex h-20 items-center justify-around border-t border-[var(--color-station-border)] bg-[var(--color-station-surface)]/95 px-6 pb-4 backdrop-blur-md lg:hidden">
+    <div className='fixed right-0 bottom-0 left-0 z-50 flex h-20 items-center justify-around border-t border-(--color-station-border) bg-(--color-station-surface)/95 px-6 pb-4 backdrop-blur-md lg:hidden'>
       {tabs.map((tab) => {
         const Icon = tab.icon;
         const isActive = activeStation === tab.id;
@@ -30,17 +30,21 @@ export function WorkerMobileNav({
             className={clsx(
               'flex flex-col items-center gap-1 transition-colors',
               isActive
-                ? 'text-[var(--color-station-primary)]'
-                : 'text-[var(--color-station-text-muted)] hover:text-white'
+                ? 'text-(--color-station-primary)'
+                : 'text-(--color-station-text-muted) hover:text-white'
             )}
           >
-            <div className={clsx(
-              "flex h-8 w-8 items-center justify-center rounded-lg transition-all",
-              isActive && "bg-[var(--color-station-primary)]/10"
-            )}>
-              <Icon className="h-5 w-5" />
+            <div
+              className={clsx(
+                'flex h-8 w-8 items-center justify-center rounded-lg transition-all',
+                isActive && 'bg-(--color-station-primary)/10'
+              )}
+            >
+              <Icon className='h-5 w-5' />
             </div>
-            <span className={clsx("text-xs font-medium", isActive && "font-bold")}>
+            <span
+              className={clsx('text-xs font-medium', isActive && 'font-bold')}
+            >
               {tab.label}
             </span>
           </button>

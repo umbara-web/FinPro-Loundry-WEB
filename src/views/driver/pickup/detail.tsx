@@ -17,11 +17,18 @@ import {
 } from 'lucide-react';
 import clsx from 'clsx';
 import { toast } from 'sonner';
-import { api } from '@/src/lib/api/axios-instance';
+import { driverService } from '@/src/services/driver.service';
 
 const MapView = dynamic(
   () => import('@/src/components/dashboard/address/map/map-view'),
-  { ssr: false, loading: () => <div className="flex h-full items-center justify-center bg-[#1a2634]"><Map className="h-16 w-16 text-[#304d69]" /></div> }
+  {
+    ssr: false,
+    loading: () => (
+      <div className='flex h-full items-center justify-center bg-[#1a2634]'>
+        <Map className='h-16 w-16 text-[#304d69]' />
+      </div>
+    ),
+  }
 );
 
 interface PickupDetail {
@@ -51,9 +58,21 @@ interface PickupDetail {
 type PickupStep = 'ON_THE_WAY' | 'PICKED_UP' | 'ARRIVED_OUTLET';
 
 const steps: { key: PickupStep; label: string; icon: React.ReactNode }[] = [
-  { key: 'ON_THE_WAY', label: 'Menuju Lokasi Pelanggan', icon: <Navigation className="h-4 w-4" /> },
-  { key: 'PICKED_UP', label: 'Pickup Selesai', icon: <Package className="h-4 w-4" /> },
-  { key: 'ARRIVED_OUTLET', label: 'Sampai di Outlet', icon: <CheckCircle className="h-4 w-4" /> },
+  {
+    key: 'ON_THE_WAY',
+    label: 'Menuju Lokasi Pelanggan',
+    icon: <Navigation className='h-4 w-4' />,
+  },
+  {
+    key: 'PICKED_UP',
+    label: 'Pickup Selesai',
+    icon: <Package className='h-4 w-4' />,
+  },
+  {
+    key: 'ARRIVED_OUTLET',
+    label: 'Sampai di Outlet',
+    icon: <CheckCircle className='h-4 w-4' />,
+  },
 ];
 
 export function DriverPickupDetailView() {
@@ -71,10 +90,10 @@ export function DriverPickupDetailView() {
   useEffect(() => {
     const fetchPickup = async () => {
       try {
-        const { data } = await api.get(`/driver/pickups/${pickupId}`);
+        const data = await driverService.getPickupById(pickupId);
         if (data.data) {
           setPickup(data.data);
-          // Set current step based on status
+
           if (data.data.status === 'DRIVER_ASSIGNED') {
             setCurrentStep('ON_THE_WAY');
           } else if (data.data.status === 'PICKED_UP') {
@@ -101,7 +120,7 @@ export function DriverPickupDetailView() {
   const handleAcceptPickup = async () => {
     setUpdating(true);
     try {
-      await api.post(`/driver/pickups/${pickupId}/accept`);
+      await driverService.acceptPickup(pickupId);
       toast.success('Request berhasil diterima');
       window.location.reload();
     } catch (error: any) {
@@ -117,9 +136,7 @@ export function DriverPickupDetailView() {
     if (currentIndex >= steps.length - 1) {
       setUpdating(true);
       try {
-        await api.patch(`/driver/pickups/${pickupId}/status`, {
-          status: 'ARRIVED_OUTLET',
-        });
+        await driverService.updatePickupStatus(pickupId, 'ARRIVED_OUTLET');
         toast.success('Status berhasil diperbarui');
         router.push('/driver-dashboard');
       } catch (error: any) {
@@ -134,9 +151,7 @@ export function DriverPickupDetailView() {
     const nextStep = steps[currentIndex + 1].key;
     setUpdating(true);
     try {
-      await api.patch(`/driver/pickups/${pickupId}/status`, {
-        status: nextStep,
-      });
+      await driverService.updatePickupStatus(pickupId, nextStep);
       setCurrentStep(nextStep);
       toast.success('Status berhasil diperbarui');
     } catch (error: any) {
@@ -156,7 +171,7 @@ export function DriverPickupDetailView() {
 
   if (loading) {
     return (
-      <div className="flex h-full items-center justify-center bg-[#101922] text-white">
+      <div className='flex h-full items-center justify-center bg-[#101922] text-white'>
         <p>Memuat...</p>
       </div>
     );
@@ -164,67 +179,74 @@ export function DriverPickupDetailView() {
 
   if (!pickup) {
     return (
-      <div className="flex h-full items-center justify-center bg-[#101922] text-white">
+      <div className='flex h-full items-center justify-center bg-[#101922] text-white'>
         <p>Pickup tidak ditemukan</p>
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-full flex-col bg-[#101922]">
+    <div className='flex min-h-full flex-col bg-[#101922]'>
       {/* Header */}
-      <header className="sticky top-0 z-10 flex items-center justify-between border-b border-[#223649] bg-[#101922] px-4 py-3 md:px-10">
-        <div className="flex items-center gap-4">
+      <header className='sticky top-0 z-10 flex items-center justify-between border-b border-[#223649] bg-[#101922] px-4 py-3 md:px-10'>
+        <div className='flex items-center gap-4'>
           <Link
-            href="/driver-dashboard"
-            className="flex items-center gap-2 text-[#8fadcc] transition-colors hover:text-white"
+            href='/driver-dashboard'
+            className='flex items-center gap-2 text-[#8fadcc] transition-colors hover:text-white'
           >
-            <ArrowLeft className="h-5 w-5" />
-            <span className="text-sm font-medium">Dashboard</span>
+            <ArrowLeft className='h-5 w-5' />
+            <span className='text-sm font-medium'>Dashboard</span>
           </Link>
-          <div className="mx-2 h-4 w-px bg-[#223649]" />
-          <h2 className="text-lg font-bold text-white">
+          <div className='mx-2 h-4 w-px bg-[#223649]' />
+          <h2 className='text-lg font-bold text-white'>
             Pickup #{pickupId.slice(-4).toUpperCase()}
           </h2>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 px-4 py-6 md:px-10">
-        <div className="mx-auto max-w-[960px]">
+      <main className='flex-1 px-4 py-6 md:px-10'>
+        <div className='mx-auto max-w-240'>
           {/* Map */}
-          <div className="mb-6 overflow-hidden rounded-xl border border-[#223649] bg-[#182634]">
-            <div className="aspect-video w-full">
+          <div className='mb-6 overflow-hidden rounded-xl border border-[#223649] bg-[#182634]'>
+            <div className='aspect-video w-full'>
               {getCurrentStepIndex() >= 1 && pickup.outlet ? (
-                 <MapView
-                    center={[parseFloat(pickup.outlet.lat), parseFloat(pickup.outlet.long)]}
-                    onLocationSelect={() => {}}
-                    zoom={15}
-                  />
-              ) : pickup.customer_address.lat && pickup.customer_address.long ? (
                 <MapView
-                  center={[parseFloat(pickup.customer_address.lat), parseFloat(pickup.customer_address.long)]}
+                  center={[
+                    parseFloat(pickup.outlet.lat),
+                    parseFloat(pickup.outlet.long),
+                  ]}
+                  onLocationSelect={() => {}}
+                  zoom={15}
+                />
+              ) : pickup.customer_address.lat &&
+                pickup.customer_address.long ? (
+                <MapView
+                  center={[
+                    parseFloat(pickup.customer_address.lat),
+                    parseFloat(pickup.customer_address.long),
+                  ]}
                   onLocationSelect={() => {}}
                   zoom={15}
                 />
               ) : (
-                <div className="flex h-full items-center justify-center bg-[#1a2634]">
-                  <Map className="h-16 w-16 text-[#304d69]" />
+                <div className='flex h-full items-center justify-center bg-[#1a2634]'>
+                  <Map className='h-16 w-16 text-[#304d69]' />
                 </div>
               )}
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
+          <div className='grid grid-cols-1 gap-6 lg:grid-cols-12'>
             {/* Progress Timeline - only show when assigned */}
             {!isWaitingDriver && (
-              <div className="lg:col-span-7">
-                <div className="rounded-xl border border-[#223649] bg-[#182634] p-6">
-                  <h3 className="mb-6 flex items-center gap-2 text-lg font-bold text-white">
-                    <Navigation className="h-5 w-5 text-[#0a7ff5]" />
+              <div className='lg:col-span-7'>
+                <div className='rounded-xl border border-[#223649] bg-[#182634] p-6'>
+                  <h3 className='mb-6 flex items-center gap-2 text-lg font-bold text-white'>
+                    <Navigation className='h-5 w-5 text-[#0a7ff5]' />
                     Progres Pekerjaan
                   </h3>
-                  <div className="grid grid-cols-[40px_1fr] gap-x-2">
+                  <div className='grid grid-cols-[40px_1fr] gap-x-2'>
                     {steps.map((step, index) => {
                       const currentIndex = getCurrentStepIndex();
                       const isActive = index === currentIndex;
@@ -232,22 +254,21 @@ export function DriverPickupDetailView() {
                       const isLast = index === steps.length - 1;
 
                       return (
-                        <div key={step.key} className="contents">
-                          <div className="flex flex-col items-center gap-1 pt-1">
+                        <div key={step.key} className='contents'>
+                          <div className='flex flex-col items-center gap-1 pt-1'>
                             <div
                               className={clsx(
                                 'flex h-8 w-8 items-center justify-center rounded-full',
                                 isActive &&
                                   'bg-[#0a7ff5] text-white shadow-[0_0_15px_rgba(10,127,245,0.4)]',
-                                isCompleted &&
-                                  'bg-green-500 text-white',
+                                isCompleted && 'bg-green-500 text-white',
                                 !isActive &&
                                   !isCompleted &&
                                   'bg-[#223649] text-[#8fadcc]'
                               )}
                             >
                               {isCompleted ? (
-                                <CheckCircle className="h-4 w-4" />
+                                <CheckCircle className='h-4 w-4' />
                               ) : (
                                 step.icon
                               )}
@@ -255,21 +276,25 @@ export function DriverPickupDetailView() {
                             {!isLast && (
                               <div
                                 className={clsx(
-                                  'h-12 w-[2px]',
-                                  isCompleted ? 'bg-green-500' : isActive ? 'bg-[#0a7ff5]' : 'bg-[#304d69]'
+                                  'h-12 w-0.5',
+                                  isCompleted
+                                    ? 'bg-green-500'
+                                    : isActive
+                                      ? 'bg-[#0a7ff5]'
+                                      : 'bg-[#304d69]'
                                 )}
                               />
                             )}
                           </div>
-                          <div className="flex flex-1 flex-col pb-8">
+                          <div className='flex flex-1 flex-col pb-8'>
                             <p
                               className={clsx(
                                 'text-base font-medium',
                                 isActive
                                   ? 'font-bold text-white'
                                   : isCompleted
-                                  ? 'text-green-400'
-                                  : 'text-[#8fadcc]'
+                                    ? 'text-green-400'
+                                    : 'text-[#8fadcc]'
                               )}
                             >
                               {step.label}
@@ -277,14 +302,16 @@ export function DriverPickupDetailView() {
                             <p
                               className={clsx(
                                 'mt-1 text-sm',
-                                isActive ? 'font-medium text-[#0a7ff5]' : 'text-[#52718f]'
+                                isActive
+                                  ? 'font-medium text-[#0a7ff5]'
+                                  : 'text-[#52718f]'
                               )}
                             >
                               {isActive
                                 ? 'Status Saat Ini'
                                 : isCompleted
-                                ? 'Selesai'
-                                : 'Menunggu'}
+                                  ? 'Selesai'
+                                  : 'Menunggu'}
                             </p>
                           </div>
                         </div>
@@ -296,60 +323,69 @@ export function DriverPickupDetailView() {
             )}
 
             {/* Customer Info */}
-            <div className={clsx('flex flex-col gap-6', isWaitingDriver ? 'lg:col-span-12' : 'lg:col-span-5')}>
+            <div
+              className={clsx(
+                'flex flex-col gap-6',
+                isWaitingDriver ? 'lg:col-span-12' : 'lg:col-span-5'
+              )}
+            >
               {/* Waiting Driver Banner */}
               {isWaitingDriver && (
-                <div className="flex items-center gap-3 rounded-xl border border-orange-500/20 bg-orange-500/10 p-4">
-                  <Package className="h-5 w-5 text-orange-500" />
+                <div className='flex items-center gap-3 rounded-xl border border-orange-500/20 bg-orange-500/10 p-4'>
+                  <Package className='h-5 w-5 text-orange-500' />
                   <div>
-                    <p className="text-sm font-bold text-orange-200">Request Menunggu Driver</p>
-                    <p className="text-xs text-orange-200/70">
+                    <p className='text-sm font-bold text-orange-200'>
+                      Request Menunggu Driver
+                    </p>
+                    <p className='text-xs text-orange-200/70'>
                       Terima request ini untuk mulai menjemput pelanggan.
                     </p>
                   </div>
                 </div>
               )}
 
-              <div className="overflow-hidden rounded-xl border border-[#223649] bg-[#182634]">
-                <div className="border-b border-[#223649] bg-[#1d2d3d] p-5">
-                  <h3 className="text-xs font-bold uppercase tracking-widest text-[#8fadcc]">
+              <div className='overflow-hidden rounded-xl border border-[#223649] bg-[#182634]'>
+                <div className='border-b border-[#223649] bg-[#1d2d3d] p-5'>
+                  <h3 className='text-xs font-bold tracking-widest text-[#8fadcc] uppercase'>
                     Informasi Pelanggan
                   </h3>
                 </div>
-                <div className="flex flex-col gap-5 p-5">
-                  <div className="flex items-start justify-between">
-                    <div className="flex flex-col gap-1">
-                      <p className="text-xl font-bold text-white">
+                <div className='flex flex-col gap-5 p-5'>
+                  <div className='flex items-start justify-between'>
+                    <div className='flex flex-col gap-1'>
+                      <p className='text-xl font-bold text-white'>
                         {pickup.customer.name}
                       </p>
-                      <p className="flex items-center gap-1 text-sm text-[#8fadcc]">
-                        <Phone className="h-4 w-4" />
+                      <p className='flex items-center gap-1 text-sm text-[#8fadcc]'>
+                        <Phone className='h-4 w-4' />
                         {pickup.customer.phone || 'N/A'}
                       </p>
                     </div>
                     {!isWaitingDriver && (
-                      <div className="flex gap-2">
+                      <div className='flex gap-2'>
                         <a
                           href={`tel:${pickup.customer.phone}`}
-                          className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#0a7ff5]/20 text-[#0a7ff5] transition-all hover:bg-[#0a7ff5] hover:text-white"
+                          className='flex h-10 w-10 items-center justify-center rounded-lg bg-[#0a7ff5]/20 text-[#0a7ff5] transition-all hover:bg-[#0a7ff5] hover:text-white'
                         >
-                          <Phone className="h-5 w-5" />
+                          <Phone className='h-5 w-5' />
                         </a>
-                        <button className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#223649] text-white transition-all hover:bg-[#304d69]">
-                          <MessageCircle className="h-5 w-5" />
+                        <button className='flex h-10 w-10 items-center justify-center rounded-lg bg-[#223649] text-white transition-all hover:bg-[#304d69]'>
+                          <MessageCircle className='h-5 w-5' />
                         </button>
                       </div>
                     )}
                   </div>
 
-                  <div className="rounded-lg border border-[#223649] bg-[#101922] p-4">
-                    <div className="flex items-start gap-3">
-                      <MapPin className="mt-1 h-5 w-5 text-[#0a7ff5]" />
-                      <div className="flex flex-col gap-3">
-                        <p className="text-sm leading-relaxed text-[#8fadcc]">
+                  <div className='rounded-lg border border-[#223649] bg-[#101922] p-4'>
+                    <div className='flex items-start gap-3'>
+                      <MapPin className='mt-1 h-5 w-5 text-[#0a7ff5]' />
+                      <div className='flex flex-col gap-3'>
+                        <p className='text-sm leading-relaxed text-[#8fadcc]'>
                           {getCurrentStepIndex() >= 1 && pickup.outlet ? (
                             <>
-                              <span className="block font-bold text-white mb-1">Menuju Outlet: {pickup.outlet.name}</span>
+                              <span className='mb-1 block font-bold text-white'>
+                                Menuju Outlet: {pickup.outlet.name}
+                              </span>
                               {pickup.outlet.address}
                             </>
                           ) : (
@@ -364,18 +400,21 @@ export function DriverPickupDetailView() {
                         </p>
                         <a
                           href={
-                              getCurrentStepIndex() >= 1 && pickup.outlet
+                            getCurrentStepIndex() >= 1 && pickup.outlet
                               ? `https://www.google.com/maps/dir/?api=1&destination=${pickup.outlet.lat},${pickup.outlet.long}`
-                              : pickup.customer_address.lat && pickup.customer_address.long 
-                                ? `https://www.google.com/maps/dir/?api=1&destination=${pickup.customer_address.lat},${pickup.customer_address.long}` 
+                              : pickup.customer_address.lat &&
+                                  pickup.customer_address.long
+                                ? `https://www.google.com/maps/dir/?api=1&destination=${pickup.customer_address.lat},${pickup.customer_address.long}`
                                 : '#'
                           }
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#223649] px-4 py-2.5 text-sm font-bold text-white transition-all hover:bg-[#304d69]"
+                          target='_blank'
+                          rel='noopener noreferrer'
+                          className='flex w-full items-center justify-center gap-2 rounded-lg bg-[#223649] px-4 py-2.5 text-sm font-bold text-white transition-all hover:bg-[#304d69]'
                         >
-                          <Map className="h-5 w-5" />
-                          {getCurrentStepIndex() >= 1 ? 'Navigasi ke Outlet' : 'Buka Google Maps'}
+                          <Map className='h-5 w-5' />
+                          {getCurrentStepIndex() >= 1
+                            ? 'Navigasi ke Outlet'
+                            : 'Buka Google Maps'}
                         </a>
                       </div>
                     </div>
@@ -385,19 +424,19 @@ export function DriverPickupDetailView() {
 
               {/* Notes */}
               {pickup.notes && (
-                <div className="flex flex-col gap-4 rounded-xl border border-[#223649] bg-[#182634] p-5">
-                  <h4 className="text-xs font-bold uppercase tracking-widest text-[#8fadcc]">
+                <div className='flex flex-col gap-4 rounded-xl border border-[#223649] bg-[#182634] p-5'>
+                  <h4 className='text-xs font-bold tracking-widest text-[#8fadcc] uppercase'>
                     Catatan
                   </h4>
-                  <p className="text-sm text-white">{pickup.notes}</p>
+                  <p className='text-sm text-white'>{pickup.notes}</p>
                 </div>
               )}
 
               {/* Constraint Message */}
               {!isWaitingDriver && (
-                <div className="flex items-center gap-3 rounded-xl border border-orange-500/20 bg-orange-500/10 p-4">
-                  <Info className="h-5 w-5 text-orange-500" />
-                  <p className="text-xs leading-tight text-orange-200/80">
+                <div className='flex items-center gap-3 rounded-xl border border-orange-500/20 bg-orange-500/10 p-4'>
+                  <Info className='h-5 w-5 text-orange-500' />
+                  <p className='text-xs leading-tight text-orange-200/80'>
                     Anda hanya dapat memproses 1 order dalam satu waktu untuk
                     menjaga kualitas layanan.
                   </p>
@@ -409,15 +448,15 @@ export function DriverPickupDetailView() {
       </main>
 
       {/* Bottom Action Bar */}
-      <div className="sticky bottom-0 border-t border-[#223649] bg-[#101922]/95 px-4 py-5 backdrop-blur-md md:px-10">
-        <div className="mx-auto max-w-[960px]">
+      <div className='sticky bottom-0 border-t border-[#223649] bg-[#101922]/95 px-4 py-5 backdrop-blur-md md:px-10'>
+        <div className='mx-auto max-w-240'>
           {isWaitingDriver ? (
             <button
               onClick={handleAcceptPickup}
               disabled={updating}
-              className="flex w-full transform items-center justify-center gap-3 rounded-xl bg-[#0a7ff5] py-4 text-lg font-bold text-white shadow-[0_8px_30px_rgb(10,127,245,0.3)] transition-all active:scale-[0.98] hover:bg-[#0a7ff5]/90 disabled:opacity-50"
+              className='flex w-full transform items-center justify-center gap-3 rounded-xl bg-[#0a7ff5] py-4 text-lg font-bold text-white shadow-[0_8px_30px_rgb(10,127,245,0.3)] transition-all hover:bg-[#0a7ff5]/90 active:scale-[0.98] disabled:opacity-50'
             >
-              <Package className="h-6 w-6" />
+              <Package className='h-6 w-6' />
               {updating ? 'Memproses...' : 'Terima Request'}
             </button>
           ) : (
@@ -425,13 +464,13 @@ export function DriverPickupDetailView() {
               onClick={handleUpdateStatus}
               disabled={updating || currentStep === 'ARRIVED_OUTLET'}
               className={clsx(
-                "flex w-full transform items-center justify-center gap-3 rounded-xl py-4 text-lg font-bold text-white shadow-[0_8px_30px_rgb(10,127,245,0.3)] transition-all active:scale-[0.98]",
-                currentStep === 'ARRIVED_OUTLET' 
-                  ? "bg-gray-600 opacity-50 cursor-not-allowed shadow-none" 
-                  : "bg-[#0a7ff5] hover:bg-[#0a7ff5]/90"
+                'flex w-full transform items-center justify-center gap-3 rounded-xl py-4 text-lg font-bold text-white shadow-[0_8px_30px_rgb(10,127,245,0.3)] transition-all active:scale-[0.98]',
+                currentStep === 'ARRIVED_OUTLET'
+                  ? 'cursor-not-allowed bg-gray-600 opacity-50 shadow-none'
+                  : 'bg-[#0a7ff5] hover:bg-[#0a7ff5]/90'
               )}
             >
-              <CheckCircle className="h-6 w-6" />
+              <CheckCircle className='h-6 w-6' />
               {updating ? 'Memproses...' : getButtonLabel()}
             </button>
           )}

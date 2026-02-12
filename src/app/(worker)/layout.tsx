@@ -21,12 +21,12 @@ export default function WorkerLayout({
 
   return (
     <ProtectedRoute roles={['WORKER']}>
-      <div className="flex h-screen flex-col overflow-hidden bg-[var(--color-station-bg)] font-sans text-white">
-        <StationHeader 
-          stationType={stationType} 
+      <div className='flex h-screen flex-col overflow-hidden bg-(--color-station-bg) font-sans text-white'>
+        <StationHeader
+          stationType={stationType}
           onAttendanceClick={() => router.push('/worker-attendance')}
         />
-        <div className="flex flex-1 overflow-hidden">{children}</div>
+        <div className='flex flex-1 overflow-hidden'>{children}</div>
       </div>
     </ProtectedRoute>
   );

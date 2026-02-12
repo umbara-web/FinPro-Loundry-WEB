@@ -11,7 +11,12 @@ interface TaskQueueCardProps {
   isPoolTask?: boolean;
 }
 
-export function TaskQueueCard({ task, isActive, onClick, isPoolTask = false }: TaskQueueCardProps) {
+export function TaskQueueCard({
+  task,
+  isActive,
+  onClick,
+  isPoolTask = false,
+}: TaskQueueCardProps) {
   const isInProgress = task.status === 'IN_PROGRESS';
 
   return (
@@ -19,45 +24,45 @@ export function TaskQueueCard({ task, isActive, onClick, isPoolTask = false }: T
       onClick={onClick}
       className={clsx(
         'group cursor-pointer rounded-xl border p-4 transition-all duration-300',
-        'bg-[var(--color-station-surface)]',
+        'bg-(--color-station-surface)',
         isActive
-          ? 'md:border-[var(--color-station-primary)] md:shadow-[0_0_20px_rgba(10,127,245,0.2)] md:scale-[1.02] border-transparent'
-          : 'border-transparent opacity-100 md:opacity-70 md:hover:opacity-100 md:hover:border-[var(--color-station-border-hover)] md:hover:translate-x-1'
+          ? 'border-transparent md:scale-[1.02] md:border-(--color-station-primary) md:shadow-[0_0_20px_rgba(10,127,245,0.2)]'
+          : 'border-transparent opacity-100 md:opacity-70 md:hover:translate-x-1 md:hover:border-(--color-station-border-hover) md:hover:opacity-100'
       )}
     >
       {/* Header: Status Badge & Estimated Time */}
-      <div className="mb-3 flex items-start justify-between">
+      <div className='mb-3 flex items-start justify-between'>
         <span
           className={clsx(
             'inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-bold',
             isInProgress
-              ? 'border-[var(--color-station-blue)]/20 bg-[var(--color-station-blue)]/20 text-[var(--color-station-blue)]'
-              : 'border-[var(--color-station-yellow)]/20 bg-[var(--color-station-yellow)]/10 text-[var(--color-station-yellow)]'
+              ? 'border-(--color-station-blue)/20 bg-(--color-station-blue)/20 text-(--color-station-blue)'
+              : 'border-(--color-station-yellow)/20 bg-(--color-station-yellow)/10 text-(--color-station-yellow)'
           )}
         >
           {isInProgress && (
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[var(--color-station-blue)]" />
+            <span className='h-1.5 w-1.5 animate-pulse rounded-full bg-(--color-station-blue)' />
           )}
           {isInProgress ? 'Sedang Diproses' : 'Menunggu'}
         </span>
-        <span className="text-xs text-[var(--color-station-text-muted)]">
+        <span className='text-xs text-(--color-station-text-muted)'>
           Est: {task.estimatedTime}
         </span>
       </div>
 
       {/* Customer Info */}
-      <div className="flex items-center gap-4">
+      <div className='flex items-center gap-4'>
         {/* Avatar */}
         {task.customerAvatar ? (
           <div
             className={clsx(
               'h-12 w-12 shrink-0 rounded-full bg-slate-700 bg-cover bg-center',
-              isActive && 'border-2 border-[var(--color-station-primary)]/30'
+              isActive && 'border-2 border-(--color-station-primary)/30'
             )}
             style={{ backgroundImage: `url('${task.customerAvatar}')` }}
           />
         ) : (
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-slate-700 text-lg font-bold text-white">
+          <div className='flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-slate-700 text-lg font-bold text-white'>
             {task.customerName
               .split(' ')
               .map((n) => n[0])
@@ -67,27 +72,25 @@ export function TaskQueueCard({ task, isActive, onClick, isPoolTask = false }: T
           </div>
         )}
         <div>
-          <h3 className="text-base font-bold text-white">
+          <h3 className='text-base font-bold text-white'>
             #{task.invoiceNumber}
           </h3>
-          <p className="text-sm text-[var(--color-station-text-muted)]">
+          <p className='text-sm text-(--color-station-text-muted)'>
             {task.customerName}
           </p>
         </div>
       </div>
 
       {/* Details: Weight & Service Type */}
-      <div className="mt-4 flex items-center gap-3 text-sm">
-        <div className="flex items-center gap-1.5 rounded-lg bg-[var(--color-station-bg)] px-3 py-1.5">
-          <Scale className="h-4 w-4 text-[var(--color-station-text-muted)]" />
-          <span className="font-medium text-white">
-            {task.weight} kg
-          </span>
+      <div className='mt-4 flex items-center gap-3 text-sm'>
+        <div className='flex items-center gap-1.5 rounded-lg bg-(--color-station-bg) px-3 py-1.5'>
+          <Scale className='h-4 w-4 text-(--color-station-text-muted)' />
+          <span className='font-medium text-white'>{task.weight} kg</span>
         </div>
 
-        <div className="flex items-center gap-1.5 rounded-lg bg-[var(--color-station-bg)] px-3 py-1.5">
-          <Shirt className="h-4 w-4 text-[var(--color-station-text-muted)]" />
-          <span className="font-medium text-white">{task.serviceType}</span>
+        <div className='flex items-center gap-1.5 rounded-lg bg-(--color-station-bg) px-3 py-1.5'>
+          <Shirt className='h-4 w-4 text-(--color-station-text-muted)' />
+          <span className='font-medium text-white'>{task.serviceType}</span>
         </div>
       </div>
     </div>
