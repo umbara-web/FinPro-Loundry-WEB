@@ -8,6 +8,7 @@ import {
   Package,
   LogOut,
   User,
+  Home,
 } from 'lucide-react';
 import { useAuth } from '@/src/context/AuthContext';
 import { StationType, getStationConfig } from '@/src/types/station';
@@ -55,6 +56,20 @@ export function StationHeader({
 
       {/* Actions */}
       <div className='flex items-center gap-3'>
+        {/* Home Button */}
+        <Link
+          href='/'
+          className={clsx(
+            'flex h-10 items-center gap-2 rounded-lg px-3',
+            'bg-white/10 hover:bg-white/20',
+            'text-sm font-bold text-white',
+            'transition-colors'
+          )}
+          title='Back to Home'
+        >
+          <Home className='h-5 w-5' />
+          <span className='hidden sm:inline'>Home</span>
+        </Link>
         {/* Attendance Button */}
         <button
           onClick={onAttendanceClick}

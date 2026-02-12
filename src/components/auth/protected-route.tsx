@@ -14,13 +14,15 @@ export default function ProtectedRoute({
   roles = [],
   requireVerified = false,
 }: ProtectedRouteProps) {
-  const { user, isAuthenticated, isLoading } = useAuth();
+  const { user, isAuthenticated, isLoading, isLoggingOut } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
     if (!isLoading) {
       if (!isAuthenticated) {
-        toast.error('Anda harus login terlebih dahulu');
+        if (!isLoggingOut) {
+          toast.error('Anda harus login terlebih dahulu');
+        }
         router.push('/auth/login');
       } else {
         if (roles.length > 0 && user && !roles.includes(user.role)) {
@@ -32,7 +34,15 @@ export default function ProtectedRoute({
         }
       }
     }
-  }, [isAuthenticated, isLoading, router, user, roles, requireVerified]);
+  }, [
+    isAuthenticated,
+    isLoading,
+    router,
+    user,
+    roles,
+    requireVerified,
+    isLoggingOut,
+  ]);
 
   if (isLoading) {
     return (
