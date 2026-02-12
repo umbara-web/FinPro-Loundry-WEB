@@ -10,7 +10,11 @@ import {
 } from '@/src/types/station';
 import { ItemCounter } from './item-counter';
 import { ActionBar } from './action-bar';
-import { useCompleteTask, useBypassRequest } from '@/src/hooks/use-station-tasks';
+import { TaskHeader } from '@/src/components/worker/detail/task-header';
+import {
+  useCompleteTask,
+  useBypassRequest,
+} from '@/src/hooks/use-station-tasks';
 import { useLaundryItems } from '@/src/hooks/use-master-data';
 
 interface TaskDetailPanelProps {
@@ -19,7 +23,11 @@ interface TaskDetailPanelProps {
   onBack?: () => void;
 }
 
-export function TaskDetailPanel({ task, stationType, onBack }: TaskDetailPanelProps) {
+export function TaskDetailPanel({
+  task,
+  stationType,
+  onBack,
+}: TaskDetailPanelProps) {
   const config = getStationConfig(stationType);
   const [itemCounts, setItemCounts] = useState<ItemCountData>({});
   const [showMismatchAlert, setShowMismatchAlert] = useState(false);
@@ -28,7 +36,6 @@ export function TaskDetailPanel({ task, stationType, onBack }: TaskDetailPanelPr
   const bypassRequest = useBypassRequest();
   const { data: laundryItems = [] } = useLaundryItems();
 
-  // Reset counts when task changes
   useEffect(() => {
     if (task && laundryItems.length > 0) {
       const initialCounts: ItemCountData = {};
@@ -40,7 +47,6 @@ export function TaskDetailPanel({ task, stationType, onBack }: TaskDetailPanelPr
     }
   }, [task?.id, laundryItems]);
 
-  // Build expected counts map from task.items using useMemo for stability
   const expectedCountsMap = useMemo(() => {
     const map: Record<string, number> = {};
     task?.items?.forEach((item) => {
@@ -49,7 +55,6 @@ export function TaskDetailPanel({ task, stationType, onBack }: TaskDetailPanelPr
     return map;
   }, [task?.items]);
 
-  // Sort items: those with target > 0 first, then alphabetically
   const sortedLaundryItems = useMemo(() => {
     return [...laundryItems].sort((a, b) => {
       const aHasTarget = (expectedCountsMap[a.id] || 0) > 0;
@@ -60,25 +65,25 @@ export function TaskDetailPanel({ task, stationType, onBack }: TaskDetailPanelPr
     });
   }, [laundryItems, expectedCountsMap]);
 
-  // Calculate total items and expected total
-  const totalItems = Object.values(itemCounts).reduce((sum, count) => sum + count, 0);
-  const expectedTotal = task?.items?.reduce((sum, item) => sum + item.qty, 0) || 0;
-  const progress = expectedTotal > 0 ? Math.round((totalItems / expectedTotal) * 100) : 0;
+  const totalItems = Object.values(itemCounts).reduce(
+    (sum, count) => sum + count,
+    0
+  );
+  const expectedTotal =
+    task?.items?.reduce((sum, item) => sum + item.qty, 0) || 0;
+  const progress =
+    expectedTotal > 0 ? Math.round((totalItems / expectedTotal) * 100) : 0;
 
-  // Check if user has entered any input
   const isInputEmpty = totalItems === 0;
 
-  // Check for mismatch based on exact item counts
   useEffect(() => {
     if (!task || totalItems === 0) {
       setShowMismatchAlert(false);
       return;
     }
 
-    // Check if any item count doesn't match expected
     let hasMismatch = false;
 
-    // Check items from order
     for (const item of task.items || []) {
       const inputCount = itemCounts[item.id] || 0;
       if (inputCount !== item.qty) {
@@ -87,7 +92,6 @@ export function TaskDetailPanel({ task, stationType, onBack }: TaskDetailPanelPr
       }
     }
 
-    // Check if user input items not in order
     if (!hasMismatch) {
       for (const [itemId, count] of Object.entries(itemCounts)) {
         if (count > 0 && !expectedCountsMap[itemId]) {
@@ -154,15 +158,14 @@ export function TaskDetailPanel({ task, stationType, onBack }: TaskDetailPanelPr
     });
   };
 
-  // Mobile placeholder when no task selected (Should be handled by parent, but kept for safety)
   if (!task) {
     return (
-      <div className="hidden flex-1 flex-col items-center justify-center bg-[var(--color-station-bg)] p-8 text-center md:flex">
-        <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-station-surface)] text-[var(--color-station-text-muted)]">
-          <Hand className="h-8 w-8" />
+      <div className='hidden flex-1 flex-col items-center justify-center bg-(--color-station-bg) p-8 text-center md:flex'>
+        <div className='mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-(--color-station-surface) text-(--color-station-text-muted)'>
+          <Hand className='h-8 w-8' />
         </div>
-        <h3 className="text-lg font-bold text-white">Pilih task</h3>
-        <p className="mt-2 text-sm text-[var(--color-station-text-muted)]">
+        <h3 className='text-lg font-bold text-white'>Pilih task</h3>
+        <p className='mt-2 text-sm text-(--color-station-text-muted)'>
           Klik pada card di daftar antrian untuk melihat detail.
           <br />
           Gunakan mode landscape untuk tampilan lebih baik.
@@ -172,58 +175,21 @@ export function TaskDetailPanel({ task, stationType, onBack }: TaskDetailPanelPr
   }
 
   return (
-    <main className="relative flex flex-1 flex-col overflow-hidden">
+    <main className='relative flex flex-1 flex-col overflow-hidden'>
       {/* Content Header */}
-      <div className="p-4 lg:p-8 lg:pb-4">
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex-1">
-            {/* Back Button (Mobile & Tablet Portrait) */}
-            {onBack && (
-              <button
-                onClick={onBack}
-                className="mb-4 flex items-center gap-2 text-sm font-medium text-[var(--color-station-text-muted)] hover:text-white lg:hidden"
-              >
-                <ArrowLeft className="h-4 w-4" />
-                Kembali ke Antrean
-              </button>
-            )}
-
-            <div className="mb-2 flex flex-wrap items-center gap-3">
-              <h2 className="text-xl font-bold tracking-tight text-white md:text-3xl">
-                Proses Cucian #{task.invoiceNumber}
-              </h2>
-              <span
-                className="rounded-md px-3 py-1 text-xs font-semibold md:text-sm"
-                style={{
-                  backgroundColor: `${config.color}20`,
-                  color: config.color,
-                }}
-              >
-                {task.serviceType} Wash
-              </span>
-            </div>
-            <p className="text-sm text-[var(--color-station-text-muted)] md:text-base">
-              Input detail item cucian untuk verifikasi sebelum proses.
-            </p>
-          </div>
-          <div className="hidden text-right xl:block">
-            <p className="mb-1 text-sm text-[var(--color-station-text-muted)]">
-              Total Item
-            </p>
-            <p className="font-mono text-2xl font-bold text-white">
-              {expectedTotal}{' '}
-              <span className="text-base text-[var(--color-station-text-muted)]">
-                pcs
-              </span>
-            </p>
-          </div>
-        </div>
-      </div>
+      <TaskHeader
+        task={task}
+        config={config}
+        expectedTotal={expectedTotal}
+        onBack={onBack}
+      />
 
       {/* Scrollable Form Area */}
-      <div className={`flex-1 overflow-y-auto px-6 md:px-8 ${showMismatchAlert ? 'pb-56' : 'pb-44'}`}>
+      <div
+        className={`flex-1 overflow-y-auto px-6 md:px-8 ${showMismatchAlert ? 'pb-56' : 'pb-44'}`}
+      >
         {/* Item Input Grid */}
-        <div className="grid grid-cols-1 gap-4 2xl:grid-cols-2">
+        <div className='grid grid-cols-1 gap-4 2xl:grid-cols-2'>
           {sortedLaundryItems.map((item, index) => {
             return (
               <ItemCounter
@@ -249,10 +215,14 @@ export function TaskDetailPanel({ task, stationType, onBack }: TaskDetailPanelPr
         hasMismatch={showMismatchAlert}
         onComplete={showMismatchAlert ? handleBypassRequest : handleComplete}
         onResetAll={handleResetAll}
-        isLoading={showMismatchAlert ? bypassRequest.isPending : completeTask.isPending}
+        isLoading={
+          showMismatchAlert ? bypassRequest.isPending : completeTask.isPending
+        }
         isDisabled={isInputEmpty}
         variant={showMismatchAlert && !isInputEmpty ? 'warning' : 'primary'}
-        actionLabel={showMismatchAlert && !isInputEmpty ? 'Request Bypass' : 'Selesai'}
+        actionLabel={
+          showMismatchAlert && !isInputEmpty ? 'Request Bypass' : 'Selesai'
+        }
         message={
           showMismatchAlert && !isInputEmpty
             ? 'Data tidak sesuai! Jumlah item tidak cocok dengan order.'

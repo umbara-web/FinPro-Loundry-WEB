@@ -1,11 +1,11 @@
-import { api as axiosInstance } from './axios-instance';
+import { api as axiosInstance } from '@/src/lib/api/axios-instance';
 import {
   AttendanceStatusResponse,
   AttendanceHistoryResponse,
   AttendanceActionResponse,
 } from '@/src/types/attendance';
 
-export const attendanceApi = {
+export const attendanceService = {
   getStatus: async (): Promise<AttendanceStatusResponse> => {
     const { data } = await axiosInstance.get('/attendance/status');
     return data;

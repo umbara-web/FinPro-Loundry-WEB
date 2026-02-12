@@ -9,7 +9,6 @@ import {
   Truck,
   Package,
   History,
-  LogOut,
   X,
 } from 'lucide-react';
 import clsx from 'clsx';
@@ -49,31 +48,31 @@ export function DriverSidebar({ isOpen, onClose }: DriverSidebarProps) {
           isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         )}
       >
-        <div className="flex h-full flex-col">
+        <div className='flex h-full flex-col'>
           {/* Logo Area */}
-          <div className="flex h-20 items-center justify-center border-b border-slate-800/50 px-0 lg:justify-start lg:px-6">
-            <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary text-white">
-              <Truck className="h-6 w-6" />
+          <div className='flex h-20 items-center justify-center border-b border-slate-800/50 px-0 lg:justify-start lg:px-6'>
+            <div className='bg-primary flex size-10 shrink-0 items-center justify-center rounded-xl text-white'>
+              <Truck className='h-6 w-6' />
             </div>
-            <div className="ml-3 hidden flex-col lg:flex">
-              <span className="text-lg font-bold leading-none tracking-tight text-white">
+            <div className='ml-3 hidden flex-col lg:flex'>
+              <span className='text-lg leading-none font-bold tracking-tight text-white'>
                 LaundryLogistics
               </span>
-              <span className="text-xs font-medium text-slate-400">
+              <span className='text-xs font-medium text-slate-400'>
                 Driver Portal
               </span>
             </div>
             {/* Close Button (Mobile Only) */}
             <button
               onClick={onClose}
-              className="ml-auto mr-4 hidden rounded-lg p-2 text-gray-400 hover:bg-slate-800 lg:!hidden"
+              className='mr-4 ml-auto hidden rounded-lg p-2 text-gray-400 hover:bg-slate-800 lg:hidden!'
             >
-              <X className="h-5 w-5" />
+              <X className='h-5 w-5' />
             </button>
           </div>
 
           {/* Navigation Links */}
-          <nav className="flex flex-1 flex-col gap-2 overflow-y-auto px-3 py-6">
+          <nav className='flex flex-1 flex-col gap-2 overflow-y-auto px-3 py-6'>
             {sidebarLinks.map((link) => {
               const Icon = link.icon;
               const isActive =
@@ -86,11 +85,11 @@ export function DriverSidebar({ isOpen, onClose }: DriverSidebarProps) {
                   className={clsx(
                     'group flex items-center gap-3 rounded-lg px-3 py-3 transition-colors',
                     isActive
-                      ? 'bg-primary text-white shadow-md shadow-primary/20'
+                      ? 'bg-primary shadow-primary/20 text-white shadow-md'
                       : 'text-slate-400 hover:bg-[#233648] hover:text-white'
                   )}
                 >
-                  <div className="relative">
+                  <div className='relative'>
                     <Icon
                       className={clsx(
                         'h-6 w-6 transition-transform group-hover:scale-110',
@@ -112,33 +111,33 @@ export function DriverSidebar({ isOpen, onClose }: DriverSidebarProps) {
           </nav>
 
           {/* User Profile */}
-          <div className="border-t border-slate-800 p-4">
-            <div className="flex items-center gap-3">
+          <div className='border-t border-slate-800 p-4'>
+            <div className='flex items-center gap-3'>
               <Link
-                href="/driver-profile"
-                className="flex flex-1 cursor-pointer items-center gap-3 rounded-lg p-2 transition-colors hover:bg-[#233648]"
+                href='/driver-profile'
+                className='flex flex-1 cursor-pointer items-center gap-3 rounded-lg p-2 transition-colors hover:bg-[#233648]'
                 onClick={() => {
                   if (window.innerWidth < 1024) onClose();
                 }}
               >
-                <div className="relative size-10 shrink-0 overflow-hidden rounded-full border-2 border-slate-700 bg-slate-700 shadow-sm">
+                <div className='relative size-10 shrink-0 overflow-hidden rounded-full border-2 border-slate-700 bg-slate-700 shadow-sm'>
                   {user?.profile_picture_url ? (
                     <img
                       src={user.profile_picture_url}
                       alt={user.name}
-                      className="h-full w-full object-cover"
+                      className='h-full w-full object-cover'
                     />
                   ) : (
-                    <div className="flex h-full w-full items-center justify-center bg-primary/20 text-sm font-bold text-primary">
+                    <div className='bg-primary/20 text-primary flex h-full w-full items-center justify-center text-sm font-bold'>
                       {user?.name?.charAt(0).toUpperCase() || 'D'}
                     </div>
                   )}
                 </div>
-                <div className="hidden flex-col overflow-hidden lg:flex">
-                  <span className="truncate text-sm font-bold text-white">
+                <div className='hidden flex-col overflow-hidden lg:flex'>
+                  <span className='truncate text-sm font-bold text-white'>
                     {user?.name || 'Driver'}
                   </span>
-                  <span className="truncate text-xs font-medium text-primary">
+                  <span className='text-primary truncate text-xs font-medium'>
                     Driver
                   </span>
                 </div>

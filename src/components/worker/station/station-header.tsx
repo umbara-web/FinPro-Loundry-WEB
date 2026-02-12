@@ -1,6 +1,14 @@
 'use client';
 
-import { Bell, ClipboardCheck, Waves, Flame, Package, LogOut, User } from 'lucide-react';
+import {
+  Bell,
+  ClipboardCheck,
+  Waves,
+  Flame,
+  Package,
+  LogOut,
+  User,
+} from 'lucide-react';
 import { useAuth } from '@/src/context/AuthContext';
 import { StationType, getStationConfig } from '@/src/types/station';
 import Link from 'next/link';
@@ -26,67 +34,64 @@ export function StationHeader({
   const StationIcon = stationIcons[stationType];
 
   return (
-    <header className="flex h-16 shrink-0 items-center justify-between border-b border-[var(--color-station-border)] bg-[var(--color-station-bg)] px-4 md:px-6">
+    <header className='flex h-16 shrink-0 items-center justify-between border-b border-(--color-station-border) bg-(--color-station-bg) px-4 md:px-6'>
       {/* Logo & Station Name */}
-      <div className="flex items-center gap-3">
+      <div className='flex items-center gap-3'>
         <div
-          className="flex h-10 w-10 items-center justify-center rounded-lg"
+          className='flex h-10 w-10 items-center justify-center rounded-lg'
           style={{ backgroundColor: `${config.color}20` }}
         >
-          <StationIcon
-            className="h-6 w-6"
-            style={{ color: config.color }}
-          />
+          <StationIcon className='h-6 w-6' style={{ color: config.color }} />
         </div>
         <div>
-          <h1 className="text-lg font-bold leading-tight tracking-tight text-white">
+          <h1 className='text-lg leading-tight font-bold tracking-tight text-white'>
             {config.name}
           </h1>
-          <p className="text-xs font-normal text-[var(--color-station-text-muted)]">
+          <p className='text-xs font-normal text-(--color-station-text-muted)'>
             Worker Dashboard
           </p>
         </div>
       </div>
 
       {/* Actions */}
-      <div className="flex items-center gap-3">
+      <div className='flex items-center gap-3'>
         {/* Attendance Button */}
         <button
           onClick={onAttendanceClick}
           className={clsx(
             'flex h-10 items-center gap-2 rounded-lg px-4',
-            'bg-[var(--color-station-primary)] hover:bg-blue-600',
+            'bg-(--color-station-primary) hover:bg-blue-600',
             'text-sm font-bold text-white shadow-lg shadow-blue-500/20',
             'transition-colors'
           )}
         >
-          <ClipboardCheck className="h-5 w-5" />
-          <span className="hidden sm:inline">Log Absensi</span>
+          <ClipboardCheck className='h-5 w-5' />
+          <span className='hidden sm:inline'>Log Absensi</span>
         </button>
 
         {/* Profile Link */}
         <Link
-          href="/worker-profile"
-          className="flex items-center gap-3 rounded-lg border border-[var(--color-station-border)] bg-[var(--color-station-bg)] p-1.5 pr-3 transition-colors hover:bg-[var(--color-station-border)]"
+          href='/worker-profile'
+          className='flex items-center gap-3 rounded-lg border border-(--color-station-border) bg-(--color-station-bg) p-1.5 pr-3 transition-colors hover:bg-(--color-station-border)'
         >
-          <div className="relative h-8 w-8 overflow-hidden rounded-md bg-slate-700">
+          <div className='relative h-8 w-8 overflow-hidden rounded-md bg-slate-700'>
             {user?.profile_picture_url ? (
               <img
                 src={user.profile_picture_url}
                 alt={user.name}
-                className="h-full w-full object-cover"
+                className='h-full w-full object-cover'
               />
             ) : (
-              <div className="flex h-full w-full items-center justify-center bg-slate-800 text-xs font-bold text-white">
+              <div className='flex h-full w-full items-center justify-center bg-slate-800 text-xs font-bold text-white'>
                 {user?.name?.charAt(0).toUpperCase() || 'U'}
               </div>
             )}
           </div>
-          <div className="hidden flex-col text-right sm:flex">
-            <span className="text-xs font-bold leading-none text-white">
+          <div className='hidden flex-col text-right sm:flex'>
+            <span className='text-xs leading-none font-bold text-white'>
               {user?.name || 'Worker'}
             </span>
-            <span className="text-[10px] uppercase leading-none text-[var(--color-station-text-muted)]">
+            <span className='text-[10px] leading-none text-(--color-station-text-muted) uppercase'>
               {user?.role || 'Worker'}
             </span>
           </div>

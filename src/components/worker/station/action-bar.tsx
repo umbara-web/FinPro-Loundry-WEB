@@ -34,13 +34,14 @@ export function ActionBar({
   const isWarning = variant === 'warning';
   const buttonLabel = actionLabel || (isWarning ? 'Request Bypass' : 'Selesai');
 
-  // Calculate progress segments
-  const totalScale = Math.max(currentCount, targetCount, 1); // avoid division by zero
-  const validPercentage = (Math.min(currentCount, targetCount) / totalScale) * 100;
-  const excessPercentage = (Math.max(0, currentCount - targetCount) / totalScale) * 100;
+  const totalScale = Math.max(currentCount, targetCount, 1);
+  const validPercentage =
+    (Math.min(currentCount, targetCount) / totalScale) * 100;
+  const excessPercentage =
+    (Math.max(0, currentCount - targetCount) / totalScale) * 100;
 
-  // Determine label
-  const isComplete = currentCount === targetCount && targetCount > 0 && !hasMismatch;
+  const isComplete =
+    currentCount === targetCount && targetCount > 0 && !hasMismatch;
   const isExcess = currentCount > targetCount;
   const progressLabel = isComplete
     ? 'Complete!'
@@ -52,7 +53,7 @@ export function ActionBar({
     <div
       className={clsx(
         'absolute bottom-0 z-20 flex w-full flex-col border-t p-4 md:p-6',
-        'border-[var(--color-station-border)] bg-[var(--color-station-surface)]',
+        'border-(--color-station-border) bg-(--color-station-surface)',
         'shadow-[0_-10px_40px_rgba(0,0,0,0.4)]'
       )}
     >
@@ -66,34 +67,34 @@ export function ActionBar({
               : 'bg-red-500/10 text-red-400'
           )}
         >
-          <AlertTriangle className="h-4 w-4 shrink-0" />
+          <AlertTriangle className='h-4 w-4 shrink-0' />
           <span>{message}</span>
         </div>
       )}
 
       {/* Main Row: Progress + Buttons */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div className='flex flex-col gap-4 md:flex-row md:items-center md:justify-between'>
         {/* Progress Indicator */}
-        <div className="flex w-full flex-col md:w-auto">
-          <span className="text-sm text-[var(--color-station-text-muted)]">
+        <div className='flex w-full flex-col md:w-auto'>
+          <span className='text-sm text-(--color-station-text-muted)'>
             Progress
           </span>
-          <div className="mt-1 flex items-center gap-2">
-            <div className="flex h-2 flex-1 overflow-hidden rounded-full bg-[var(--color-station-bg)] md:w-32">
+          <div className='mt-1 flex items-center gap-2'>
+            <div className='flex h-2 flex-1 overflow-hidden rounded-full bg-(--color-station-bg) md:w-32'>
               {/* Valid segment */}
               <div
                 className={clsx(
                   'h-full transition-all duration-300',
                   isComplete
-                    ? 'bg-[var(--color-station-green)]'
-                    : 'bg-[var(--color-station-primary)]'
+                    ? 'bg-(--color-station-green)'
+                    : 'bg-(--color-station-primary)'
                 )}
                 style={{ width: `${validPercentage}%` }}
               />
               {/* Excess segment */}
               {excessPercentage > 0 && (
                 <div
-                  className="h-full bg-red-500 transition-all duration-300"
+                  className='h-full bg-red-500 transition-all duration-300'
                   style={{ width: `${excessPercentage}%` }}
                 />
               )}
@@ -110,7 +111,7 @@ export function ActionBar({
         </div>
 
         {/* Action Buttons */}
-        <div className="flex w-full gap-3 md:w-auto">
+        <div className='flex w-full gap-3 md:w-auto'>
           {/* Reset All Button */}
           {onResetAll && (
             <button
@@ -118,16 +119,16 @@ export function ActionBar({
               disabled={isLoading || currentCount === 0}
               className={clsx(
                 'flex h-12 flex-1 items-center justify-center gap-2 rounded-lg border px-4 font-medium transition-colors md:flex-none',
-                'border-[var(--color-station-border)] bg-transparent',
+                'border-(--color-station-border) bg-transparent',
                 currentCount === 0
                   ? 'cursor-not-allowed text-white/30'
                   : 'text-red-400 hover:bg-red-500/20',
                 'disabled:cursor-not-allowed disabled:opacity-50'
               )}
-              title="Reset semua item ke 0"
+              title='Reset semua item ke 0'
             >
-              <RotateCcw className="h-4 w-4" />
-              <span className="hidden sm:inline">Reset</span>
+              <RotateCcw className='h-4 w-4' />
+              <span className='hidden sm:inline'>Reset</span>
             </button>
           )}
 
@@ -138,12 +139,12 @@ export function ActionBar({
               disabled={isLoading}
               className={clsx(
                 'hidden h-12 items-center justify-center gap-2 rounded-lg border px-6 font-medium transition-colors sm:flex',
-                'border-[var(--color-station-border)] bg-transparent text-white',
-                'hover:bg-[var(--color-station-border)]',
+                'border-(--color-station-border) bg-transparent text-white',
+                'hover:bg-(--color-station-border)',
                 'disabled:cursor-not-allowed disabled:opacity-50'
               )}
             >
-              <Save className="h-4 w-4" />
+              <Save className='h-4 w-4' />
               Simpan Draft
             </button>
           )}
@@ -153,27 +154,27 @@ export function ActionBar({
             onClick={onComplete}
             disabled={isLoading || isDisabled}
             className={clsx(
-              'flex h-12 flex-[2] min-w-0 items-center justify-center gap-2 rounded-lg px-6 text-base font-bold transition-all md:min-w-[160px] md:flex-none',
+              'flex h-12 min-w-0 flex-2 items-center justify-center gap-2 rounded-lg px-6 text-base font-bold transition-all md:min-w-40 md:flex-none',
               isWarning
                 ? 'bg-yellow-500 text-black shadow-lg shadow-yellow-500/25 hover:bg-yellow-400'
-                : 'bg-[var(--color-station-primary)] text-white shadow-lg shadow-blue-500/25 hover:bg-blue-600',
+                : 'bg-(--color-station-primary) text-white shadow-lg shadow-blue-500/25 hover:bg-blue-600',
               'hover:scale-[1.02] active:scale-95',
               'disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100'
             )}
           >
             {isLoading ? (
               <>
-                <div className="h-5 w-5 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                <div className='h-5 w-5 animate-spin rounded-full border-2 border-current border-t-transparent' />
                 Processing...
               </>
             ) : (
               <>
                 {isWarning ? (
-                  <AlertTriangle className="h-5 w-5" />
+                  <AlertTriangle className='h-5 w-5' />
                 ) : (
-                  <CheckCircle className="h-5 w-5" />
+                  <CheckCircle className='h-5 w-5' />
                 )}
-                <span className="truncate">{buttonLabel}</span>
+                <span className='truncate'>{buttonLabel}</span>
               </>
             )}
           </button>

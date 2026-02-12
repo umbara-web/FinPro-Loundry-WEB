@@ -7,9 +7,5 @@ export default function AttendanceLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <ProtectedRoute roles={['WORKER']}>
-      {children}
-    </ProtectedRoute>
-  );
+  return <ProtectedRoute roles={['WORKER']}>{children}</ProtectedRoute>;
 }

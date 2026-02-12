@@ -1,11 +1,10 @@
+'use client';
 
-"use client";
-
-import { RefreshCw } from "lucide-react";
-import { useAttendance } from "./use-attendance";
-import { SummaryCards } from "./components/summary-cards";
-import { FilterBar } from "./components/filter-bar";
-import { AttendanceTable } from "./components/attendance-table";
+import { RefreshCw, AlertCircle } from 'lucide-react';
+import { useAttendanceReport } from '@/src/hooks/use-staff-attendance-report';
+import { SummaryCards } from '@/src/components/staff-attendance/summary-cards';
+import { FilterBar } from '@/src/components/staff-attendance/filter-bar';
+import { AttendanceTable } from '@/src/components/staff-attendance/attendance-table';
 
 export default function StaffAttendanceView() {
   const {
@@ -17,27 +16,39 @@ export default function StaffAttendanceView() {
     setStaffType,
     refetch,
     stats,
-  } = useAttendance();
+    error,
+  } = useAttendanceReport();
 
   return (
-    <div className="min-h-full bg-[#101922] px-4 py-6 md:px-10">
-      <div className="mx-auto max-w-[1200px]">
+    <div className='min-h-full bg-[#101922] px-4 py-6 md:px-10'>
+      <div className='mx-auto max-w-300'>
         {/* Header */}
-        <div className="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div className='mb-6 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center'>
           <div>
-            <h1 className="text-2xl font-bold text-white tracking-tight">Laporan Kehadiran</h1>
-            <p className="text-sm text-[#8fadcc] mt-1">
+            <h1 className='text-2xl font-bold tracking-tight text-white'>
+              Laporan Kehadiran
+            </h1>
+            <p className='mt-1 text-sm text-[#8fadcc]'>
               Pantau kehadiran staff outlet Anda
             </p>
           </div>
           <button
             onClick={refetch}
-            className="flex items-center gap-2 rounded-lg bg-[#182634] border border-[#223649] px-4 py-2 text-sm font-medium text-[#8fadcc] hover:text-white hover:border-[#0a7ff5]/50 transition-colors"
+            className='flex items-center gap-2 rounded-lg border border-[#223649] bg-[#182634] px-4 py-2 text-sm font-medium text-[#8fadcc] transition-colors hover:border-[#0a7ff5]/50 hover:text-white'
           >
-            <RefreshCw className="h-4 w-4" />
+            <RefreshCw className='h-4 w-4' />
             Refresh
           </button>
         </div>
+
+        {error && (
+          <div className='mb-6 rounded-lg border border-red-500/20 bg-red-500/10 p-4 text-red-400'>
+            <div className='flex items-center gap-2'>
+              <AlertCircle className='h-5 w-5' />
+              <p className='text-sm font-medium'>{error}</p>
+            </div>
+          </div>
+        )}
 
         <SummaryCards
           total={stats.total}
