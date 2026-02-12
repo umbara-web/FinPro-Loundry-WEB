@@ -15,6 +15,7 @@ export interface User {
   birthDate?: string;
   profile_picture_url?: string;
   created_at?: string;
+  outlet_id?: string;
 }
 
 interface AuthContextType {

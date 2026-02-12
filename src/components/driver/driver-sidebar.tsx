@@ -113,34 +113,36 @@ export function DriverSidebar({ isOpen, onClose }: DriverSidebarProps) {
 
           {/* User Profile */}
           <div className="border-t border-slate-800 p-4">
-            <div className="flex cursor-pointer items-center gap-3 rounded-lg p-2 transition-colors hover:bg-[#233648]">
-              <div className="relative size-10 overflow-hidden rounded-full border-2 border-slate-700 bg-slate-700 shadow-sm">
-                {user?.profile_picture_url ? (
-                  <img
-                    src={user.profile_picture_url}
-                    alt={user.name}
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  <div className="flex h-full w-full items-center justify-center bg-primary/20 text-sm font-bold text-primary">
-                    {user?.name?.charAt(0).toUpperCase() || 'D'}
-                  </div>
-                )}
-              </div>
-              <div className="hidden flex-col overflow-hidden lg:flex">
-                <span className="truncate text-sm font-bold text-white">
-                  {user?.name || 'Driver'}
-                </span>
-                <span className="truncate text-xs font-medium text-primary">
-                  Driver
-                </span>
-              </div>
-              <button
-                onClick={logout}
-                className="ml-auto hidden text-slate-400 transition-colors hover:text-red-500 lg:block"
+            <div className="flex items-center gap-3">
+              <Link
+                href="/driver-profile"
+                className="flex flex-1 cursor-pointer items-center gap-3 rounded-lg p-2 transition-colors hover:bg-[#233648]"
+                onClick={() => {
+                  if (window.innerWidth < 1024) onClose();
+                }}
               >
-                <LogOut className="h-5 w-5" />
-              </button>
+                <div className="relative size-10 shrink-0 overflow-hidden rounded-full border-2 border-slate-700 bg-slate-700 shadow-sm">
+                  {user?.profile_picture_url ? (
+                    <img
+                      src={user.profile_picture_url}
+                      alt={user.name}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center bg-primary/20 text-sm font-bold text-primary">
+                      {user?.name?.charAt(0).toUpperCase() || 'D'}
+                    </div>
+                  )}
+                </div>
+                <div className="hidden flex-col overflow-hidden lg:flex">
+                  <span className="truncate text-sm font-bold text-white">
+                    {user?.name || 'Driver'}
+                  </span>
+                  <span className="truncate text-xs font-medium text-primary">
+                    Driver
+                  </span>
+                </div>
+              </Link>
             </div>
           </div>
         </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import { useAuth } from '@/src/context/AuthContext';
@@ -18,9 +19,15 @@ const ITEMS_PER_PAGE = 5;
 
 interface AttendanceHistoryViewProps {
   basePath?: string;
+  dashboardPath?: string;
+  profilePath?: string;
 }
 
-export function AttendanceHistoryView({ basePath = '/worker-attendance' }: AttendanceHistoryViewProps) {
+export function AttendanceHistoryView({
+  basePath = '/worker-attendance',
+  dashboardPath = '/worker-dashboard',
+  profilePath = '/worker-profile'
+}: AttendanceHistoryViewProps) {
   const router = useRouter();
   const { user } = useAuth();
   const { data: historyData, isLoading } = useAttendanceHistory();
@@ -53,10 +60,10 @@ export function AttendanceHistoryView({ basePath = '/worker-attendance' }: Atten
 
       const formattedCheckOut = checkOutDate
         ? checkOutDate.toLocaleTimeString('id-ID', {
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: false,
-          })
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false,
+        })
         : null;
 
       // Determine if late (after 08:00)
@@ -117,48 +124,27 @@ export function AttendanceHistoryView({ basePath = '/worker-attendance' }: Atten
   };
 
   return (
-    <div className="min-h-screen bg-[#f6f7f8] dark:bg-[#101922] pb-20 md:pb-0">
+    <div className="flex h-full flex-col bg-[#f6f7f8] dark:bg-[#101922] overflow-hidden">
       {/* Header */}
-      <header className="sticky top-0 z-40 w-full border-b border-slate-200 dark:border-[#233648] bg-[#f6f7f8]/80 dark:bg-[#101922]/80 backdrop-blur-md px-4 md:px-10 lg:px-40 py-3">
-        <div className="flex items-center justify-between max-w-[1200px] mx-auto">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={handleBack}
-              className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors flex items-center justify-center text-slate-600 dark:text-slate-300"
-            >
-              <ArrowLeft className="w-5 h-5" />
-            </button>
-            <h2 className="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-tight">
-              Riwayat Kehadiran Lengkap
-            </h2>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <div className="hidden sm:block text-right">
-              <p className="text-xs font-bold text-slate-900 dark:text-white leading-none">
-                {user?.name || 'User'}
-              </p>
-              <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-1 uppercase tracking-wider">
-                {user?.role || 'Worker'}
-              </p>
-            </div>
-            <div
-              className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-[#137fec]/20 bg-slate-200 dark:bg-slate-700"
-              style={{
-                backgroundImage: user?.profile_picture_url
-                  ? `url(${user.profile_picture_url})`
-                  : undefined,
-              }}
-            />
-          </div>
+      <header className="flex-none border-b border-slate-200 dark:border-[#233648] bg-white dark:bg-[#101922] px-6 py-4">
+        <div className="flex items-center gap-4">
+          <button
+            onClick={handleBack}
+            className="p-2 -ml-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors flex items-center justify-center text-slate-600 dark:text-slate-300"
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </button>
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white">
+            Riwayat Kehadiran Lengkap
+          </h2>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col items-center px-4 py-8 md:px-10 lg:px-40">
-        <div className="w-full max-w-[1200px]">
+      <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
+        <div className="w-full max-w-7xl mx-auto space-y-6">
           {/* Stats Section */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             {/* Date Range Filter */}
             <div className="lg:col-span-4">
               <DateRangeFilter
@@ -194,26 +180,24 @@ export function AttendanceHistoryView({ basePath = '/worker-attendance' }: Atten
           </div>
 
           {/* Full Attendance Table */}
-          <div className="w-full">
-            <FullAttendanceTable
-              records={paginatedRecords}
-              isLoading={isLoading}
-            />
+          <FullAttendanceTable
+            records={paginatedRecords}
+            isLoading={isLoading}
+          />
 
-            {/* Pagination */}
-            {!isLoading && allRecords.length > 0 && (
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                totalItems={allRecords.length}
-                itemsPerPage={ITEMS_PER_PAGE}
-                onPageChange={setCurrentPage}
-              />
-            )}
-          </div>
+          {/* Pagination */}
+          {!isLoading && allRecords.length > 0 && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              totalItems={allRecords.length}
+              itemsPerPage={ITEMS_PER_PAGE}
+              onPageChange={setCurrentPage}
+            />
+          )}
 
           {/* Footer */}
-          <div className="mt-12 text-center">
+          <div className="mt-8 text-center pb-20 md:pb-0">
             <p className="text-slate-500 dark:text-slate-500 text-xs">
               Laundry Web App © 2024
             </p>
@@ -222,7 +206,7 @@ export function AttendanceHistoryView({ basePath = '/worker-attendance' }: Atten
       </main>
 
       {/* Mobile Bottom Navigation */}
-      <MobileBottomNav />
+      <MobileBottomNav basePath={basePath} dashboardPath={dashboardPath} profilePath={profilePath} />
     </div>
   );
 }
