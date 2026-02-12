@@ -39,7 +39,7 @@ export function DriverDashboardView() {
   const totalRequests = pickups.length + deliveries.length;
 
   return (
-    <div className='min-h-full bg-[#101922] px-4 py-6 md:px-10'>
+    <div className='min-h-full bg-slate-50 px-4 py-6 dark:bg-[#101922] md:px-10'>
       <div className='mx-auto max-w-240'>
         {/* Profile Header & Status Toggle */}
         <DashboardHeader
@@ -49,20 +49,20 @@ export function DriverDashboardView() {
         />
 
         {/* Tabbed Navigation */}
-        <div className='mb-4 flex overflow-x-auto border-b border-[#223649]'>
+        <div className='mb-4 flex overflow-x-auto border-b border-slate-200 dark:border-slate-700'>
           <button
             onClick={() => setActiveTab('requests')}
             className={clsx(
               'flex items-center gap-2 px-6 py-3 text-sm font-medium whitespace-nowrap transition-colors',
               activeTab === 'requests'
-                ? 'border-b-2 border-[#0a7ff5] font-bold text-[#0a7ff5]'
-                : 'text-[#8fadcc] hover:text-white'
+                ? 'border-b-2 border-blue-600 font-bold text-blue-600 dark:border-blue-500 dark:text-blue-500'
+                : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
             )}
           >
             <Bell className='h-5 w-5' />
             Request Baru
             {totalRequests > 0 && (
-              <span className='rounded-full bg-[#0a7ff5]/20 px-1.5 py-0.5 text-[10px] text-[#0a7ff5]'>
+              <span className='bg-blue-100 text-blue-600 dark:bg-blue-500/20 rounded-full px-1.5 py-0.5 text-[10px] dark:text-blue-500'>
                 {totalRequests}
               </span>
             )}
@@ -72,8 +72,8 @@ export function DriverDashboardView() {
             className={clsx(
               'flex items-center gap-2 px-6 py-3 text-sm font-medium whitespace-nowrap transition-colors',
               activeTab === 'active'
-                ? 'border-b-2 border-[#0a7ff5] font-bold text-[#0a7ff5]'
-                : 'text-[#8fadcc] hover:text-white'
+                ? 'border-b-2 border-blue-600 font-bold text-blue-600 dark:border-blue-500 dark:text-blue-500'
+                : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
             )}
           >
             <Truck className='h-5 w-5' />
@@ -87,8 +87,8 @@ export function DriverDashboardView() {
             className={clsx(
               'flex items-center gap-2 px-6 py-3 text-sm font-medium whitespace-nowrap transition-colors',
               activeTab === 'history'
-                ? 'border-b-2 border-[#0a7ff5] font-bold text-[#0a7ff5]'
-                : 'text-[#8fadcc] hover:text-white'
+                ? 'border-b-2 border-blue-600 font-bold text-blue-600 dark:border-blue-500 dark:text-blue-500'
+                : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
             )}
           >
             <Clock className='h-5 w-5' />

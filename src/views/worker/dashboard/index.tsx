@@ -52,24 +52,24 @@ export function WorkerDashboardView() {
   return (
     <>
       {isError ? (
-        <div className='flex h-full w-full flex-col items-center justify-center bg-(--color-station-bg) p-6 text-center text-white'>
-          <div className='mb-4 rounded-full bg-red-500/20 p-4 text-red-500'>
+        <div className='flex h-full w-full flex-col items-center justify-center bg-slate-50 p-6 text-center text-slate-900 dark:bg-slate-900 dark:text-white'>
+          <div className='mb-4 rounded-full bg-red-100 p-4 text-red-500 dark:bg-red-900/20'>
             <AlertCircle className='h-8 w-8' />
           </div>
           <h3 className='text-lg font-bold'>Gagal memuat data</h3>
-          <p className='mt-2 text-sm text-(--color-station-text-muted)'>
+          <p className='mt-2 text-sm text-slate-500 dark:text-slate-400'>
             {(error as Error)?.message ||
               'Terjadi kesalahan saat mengambil data antrian.'}
           </p>
           <button
             onClick={() => window.location.reload()}
-            className='mt-6 rounded-lg bg-(--color-station-primary) px-6 py-2 text-sm font-bold text-white transition-colors hover:bg-blue-600'
+            className='mt-6 rounded-lg bg-blue-600 px-6 py-2 text-sm font-bold text-white transition-colors hover:bg-blue-700'
           >
             Coba Lagi
           </button>
         </div>
       ) : (
-        <>
+        <div className='flex h-full w-full flex-row overflow-hidden'>
           {/* Sidebar: Visible on Desktop/Tablet Landscape OR Mobile List Mode */}
           <div
             className={clsx(
@@ -93,7 +93,7 @@ export function WorkerDashboardView() {
           {!isError && (
             <div
               className={clsx(
-                'flex-1 flex-col overflow-hidden bg-(--color-station-bg) pb-20 lg:pb-0',
+                'flex-1 flex-col overflow-hidden bg-slate-50 pb-20 lg:pb-0 dark:bg-slate-900',
                 viewMode === 'LIST' ? 'hidden lg:flex' : 'flex'
               )}
             >
@@ -106,20 +106,20 @@ export function WorkerDashboardView() {
               ) : (
                 /* Empty State (Mobile & Desktop) */
                 <div className='flex flex-1 flex-col items-center justify-center p-8 text-center'>
-                  <div className='mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-(--color-station-surface) text-(--color-station-text-muted)'>
+                  <div className='mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-200 text-slate-400 dark:bg-slate-800 dark:text-slate-500'>
                     <ClipboardList className='h-8 w-8' />
                   </div>
-                  <h3 className='text-lg font-bold text-white'>
+                  <h3 className='text-lg font-bold text-slate-900 dark:text-white'>
                     Belum ada tugas dipilih
                   </h3>
-                  <p className='mt-2 text-sm text-(--color-station-text-muted)'>
+                  <p className='mt-2 text-sm text-slate-500 dark:text-slate-400'>
                     Silakan pilih tugas dari tab Antrean.
                   </p>
                 </div>
               )}
             </div>
           )}
-        </>
+        </div>
       )}
 
       {/* Bottom Navigation (Mobile Only) - Station Switcher */}

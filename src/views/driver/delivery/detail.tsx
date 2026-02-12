@@ -25,8 +25,8 @@ const MapView = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className='flex h-full items-center justify-center bg-[#1a2634]'>
-        <Map className='h-16 w-16 text-[#304d69]' />
+      <div className='flex h-full items-center justify-center bg-slate-100 dark:bg-[#1a2634]'>
+        <Map className='h-16 w-16 text-slate-400 dark:text-[#304d69]' />
       </div>
     ),
   }
@@ -156,7 +156,7 @@ export function DriverDeliveryDetailView() {
 
   if (loading) {
     return (
-      <div className='flex h-full items-center justify-center bg-[#101922] text-white'>
+      <div className='flex h-full items-center justify-center bg-slate-50 text-slate-900 dark:bg-[#101922] dark:text-white'>
         <p>Memuat...</p>
       </div>
     );
@@ -164,26 +164,26 @@ export function DriverDeliveryDetailView() {
 
   if (!delivery) {
     return (
-      <div className='flex h-full items-center justify-center bg-[#101922] text-white'>
+      <div className='flex h-full items-center justify-center bg-slate-50 text-slate-900 dark:bg-[#101922] dark:text-white'>
         <p>Delivery tidak ditemukan</p>
       </div>
     );
   }
 
   return (
-    <div className='flex min-h-full flex-col bg-[#101922]'>
+    <div className='flex min-h-full flex-col bg-slate-50 dark:bg-[#101922]'>
       {/* Header */}
-      <header className='sticky top-0 z-10 flex items-center justify-between border-b border-[#223649] bg-[#101922] px-4 py-3 md:px-10'>
+      <header className='sticky top-0 z-50 flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3 dark:border-slate-800 dark:bg-[#101922] md:px-10'>
         <div className='flex items-center gap-4'>
           <Link
             href='/driver-dashboard'
-            className='flex items-center gap-2 text-[#8fadcc] transition-colors hover:text-white'
+            className='flex items-center gap-2 text-slate-500 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
           >
             <ArrowLeft className='h-5 w-5' />
             <span className='text-sm font-medium'>Dashboard</span>
           </Link>
-          <div className='mx-2 h-4 w-px bg-[#223649]' />
-          <h2 className='text-lg font-bold text-white'>
+          <div className='mx-2 h-4 w-px bg-slate-200 dark:bg-slate-700' />
+          <h2 className='text-lg font-bold text-slate-900 dark:text-white'>
             Delivery #
             {delivery.order?.order_number ||
               `ORD-${delivery.order_id.slice(-4).toUpperCase()}`}
@@ -195,10 +195,10 @@ export function DriverDeliveryDetailView() {
       <main className='flex-1 px-4 py-6 md:px-10'>
         <div className='mx-auto max-w-240'>
           {/* Map */}
-          <div className='mb-6 overflow-hidden rounded-xl border border-[#223649] bg-[#182634]'>
+          <div className='mb-6 overflow-hidden rounded-xl border border-slate-200 bg-slate-100 dark:border-slate-800 dark:bg-[#182634]'>
             <div className='aspect-video w-full'>
               {delivery.order?.pickup_request?.customer_address?.lat &&
-              delivery.order?.pickup_request?.customer_address?.long ? (
+                delivery.order?.pickup_request?.customer_address?.long ? (
                 <MapView
                   center={[
                     parseFloat(
@@ -208,12 +208,12 @@ export function DriverDeliveryDetailView() {
                       delivery.order.pickup_request.customer_address.long
                     ),
                   ]}
-                  onLocationSelect={() => {}}
+                  onLocationSelect={() => { }}
                   zoom={15}
                 />
               ) : (
-                <div className='flex h-full items-center justify-center bg-[#1a2634]'>
-                  <Map className='h-16 w-16 text-[#304d69]' />
+                <div className='flex h-full items-center justify-center bg-slate-100 dark:bg-[#1a2634]'>
+                  <Map className='h-16 w-16 text-slate-400 dark:text-[#304d69]' />
                 </div>
               )}
             </div>
@@ -222,9 +222,9 @@ export function DriverDeliveryDetailView() {
           <div className='grid grid-cols-1 gap-6 lg:grid-cols-12'>
             {/* Progress Timeline */}
             <div className='lg:col-span-7'>
-              <div className='rounded-xl border border-[#223649] bg-[#182634] p-6'>
-                <h3 className='mb-6 flex items-center gap-2 text-lg font-bold text-white'>
-                  <Truck className='h-5 w-5 text-[#0a7ff5]' />
+              <div className='rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-[#182634]'>
+                <h3 className='mb-6 flex items-center gap-2 text-lg font-bold text-slate-900 dark:text-white'>
+                  <Truck className='h-5 w-5 text-blue-600 dark:text-blue-500' />
                   Progres Pengantaran
                 </h3>
                 <div className='grid grid-cols-[40px_1fr] gap-x-2'>
@@ -241,11 +241,11 @@ export function DriverDeliveryDetailView() {
                             className={clsx(
                               'flex h-8 w-8 items-center justify-center rounded-full',
                               isActive &&
-                                'bg-[#0a7ff5] text-white shadow-[0_0_15px_rgba(10,127,245,0.4)]',
+                              'bg-blue-600 text-white shadow-[0_0_15px_rgba(37,99,235,0.4)] dark:bg-blue-600 dark:shadow-[0_0_15px_rgba(10,127,245,0.4)]',
                               isCompleted && 'bg-green-500 text-white',
                               !isActive &&
-                                !isCompleted &&
-                                'bg-[#223649] text-[#8fadcc]'
+                              !isCompleted &&
+                              'bg-slate-100 text-slate-400 dark:bg-slate-700 dark:text-slate-500'
                             )}
                           >
                             {isCompleted ? (
@@ -261,8 +261,8 @@ export function DriverDeliveryDetailView() {
                                 isCompleted
                                   ? 'bg-green-500'
                                   : isActive
-                                    ? 'bg-[#0a7ff5]'
-                                    : 'bg-[#304d69]'
+                                    ? 'bg-blue-600 dark:bg-blue-500'
+                                    : 'bg-slate-200 dark:bg-slate-700'
                               )}
                             />
                           )}
@@ -272,10 +272,10 @@ export function DriverDeliveryDetailView() {
                             className={clsx(
                               'text-base font-medium',
                               isActive
-                                ? 'font-bold text-white'
+                                ? 'font-bold text-slate-900 dark:text-white'
                                 : isCompleted
-                                  ? 'text-green-400'
-                                  : 'text-[#8fadcc]'
+                                  ? 'text-green-600 dark:text-green-400'
+                                  : 'text-slate-500 dark:text-slate-400'
                             )}
                           >
                             {step.label}
@@ -284,8 +284,8 @@ export function DriverDeliveryDetailView() {
                             className={clsx(
                               'mt-1 text-sm',
                               isActive
-                                ? 'font-medium text-[#0a7ff5]'
-                                : 'text-[#52718f]'
+                                ? 'font-medium text-blue-600 dark:text-blue-500'
+                                : 'text-slate-400 dark:text-slate-500'
                             )}
                           >
                             {isActive
@@ -304,20 +304,20 @@ export function DriverDeliveryDetailView() {
 
             {/* Customer Info */}
             <div className='flex flex-col gap-6 lg:col-span-5'>
-              <div className='overflow-hidden rounded-xl border border-[#223649] bg-[#182634]'>
-                <div className='border-b border-[#223649] bg-[#1d2d3d] p-5'>
-                  <h3 className='text-xs font-bold tracking-widest text-[#8fadcc] uppercase'>
+              <div className='overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-[#182634]'>
+                <div className='border-b border-slate-200 bg-slate-50 p-5 dark:border-slate-800 dark:bg-[#1d2d3d]'>
+                  <h3 className='text-xs font-bold tracking-widest text-slate-500 uppercase dark:text-slate-400'>
                     Informasi Pelanggan
                   </h3>
                 </div>
                 <div className='flex flex-col gap-5 p-5'>
                   <div className='flex items-start justify-between'>
                     <div className='flex flex-col gap-1'>
-                      <p className='text-xl font-bold text-white'>
+                      <p className='text-xl font-bold text-slate-900 dark:text-white'>
                         {delivery.order?.pickup_request?.customer?.name ||
                           'N/A'}
                       </p>
-                      <p className='flex items-center gap-1 text-sm text-[#8fadcc]'>
+                      <p className='flex items-center gap-1 text-sm text-slate-500 dark:text-slate-400'>
                         <Phone className='h-4 w-4' />
                         {delivery.order?.pickup_request?.customer?.phone ||
                           'N/A'}
@@ -326,21 +326,21 @@ export function DriverDeliveryDetailView() {
                     <div className='flex gap-2'>
                       <a
                         href={`tel:${delivery.order?.pickup_request?.customer?.phone || ''}`}
-                        className='flex h-10 w-10 items-center justify-center rounded-lg bg-[#0a7ff5]/20 text-[#0a7ff5] transition-all hover:bg-[#0a7ff5] hover:text-white'
+                        className='flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 text-blue-600 transition-all hover:bg-blue-600 hover:text-white dark:bg-blue-500/20 dark:text-blue-500 dark:hover:bg-blue-500 dark:hover:text-white'
                       >
                         <Phone className='h-5 w-5' />
                       </a>
-                      <button className='flex h-10 w-10 items-center justify-center rounded-lg bg-[#223649] text-white transition-all hover:bg-[#304d69]'>
+                      <button className='flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 text-slate-600 transition-all hover:bg-slate-200 dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600'>
                         <MessageCircle className='h-5 w-5' />
                       </button>
                     </div>
                   </div>
 
-                  <div className='rounded-lg border border-[#223649] bg-[#101922] p-4'>
+                  <div className='rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-[#101922]'>
                     <div className='flex items-start gap-3'>
-                      <MapPin className='mt-1 h-5 w-5 text-[#0a7ff5]' />
+                      <MapPin className='mt-1 h-5 w-5 text-blue-600 dark:text-blue-500' />
                       <div className='flex flex-col gap-3'>
-                        <p className='text-sm leading-relaxed text-[#8fadcc]'>
+                        <p className='text-sm leading-relaxed text-slate-600 dark:text-slate-400'>
                           {delivery.order?.pickup_request?.customer_address
                             ?.address || 'N/A'}
                           {delivery.order?.pickup_request?.customer_address
@@ -354,14 +354,15 @@ export function DriverDeliveryDetailView() {
                           href={
                             delivery.order?.pickup_request?.customer_address
                               ?.lat &&
-                            delivery.order?.pickup_request?.customer_address
-                              ?.long
+                              delivery.order?.pickup_request?.customer_address
+                                ?.long
                               ? `https://www.google.com/maps/dir/?api=1&destination=${delivery.order.pickup_request.customer_address.lat},${delivery.order.pickup_request.customer_address.long}`
                               : '#'
                           }
                           target='_blank'
                           rel='noopener noreferrer'
-                          className='flex w-full items-center justify-center gap-2 rounded-lg bg-[#223649] px-4 py-2.5 text-sm font-bold text-white transition-all hover:bg-[#304d69]'
+
+                          className='flex w-full items-center justify-center gap-2 rounded-lg bg-slate-200 px-4 py-2.5 text-sm font-bold text-slate-700 transition-all hover:bg-slate-300 dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600'
                         >
                           <Map className='h-5 w-5' />
                           Buka Google Maps
@@ -373,21 +374,21 @@ export function DriverDeliveryDetailView() {
               </div>
 
               {/* Order Details */}
-              <div className='flex flex-col gap-4 rounded-xl border border-[#223649] bg-[#182634] p-5'>
-                <h4 className='text-xs font-bold tracking-widest text-[#8fadcc] uppercase'>
+              <div className='flex flex-col gap-4 rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-[#182634]'>
+                <h4 className='text-xs font-bold tracking-widest text-slate-500 uppercase dark:text-slate-400'>
                   Rincian Order
                 </h4>
                 <div className='flex items-center justify-between'>
-                  <span className='text-sm text-[#8fadcc]'>Order ID</span>
-                  <span className='text-sm font-medium text-white'>
+                  <span className='text-sm text-slate-500 dark:text-slate-400'>Order ID</span>
+                  <span className='text-sm font-medium text-slate-900 dark:text-white'>
                     {delivery.order?.order_number ||
                       `ORD-${delivery.order_id.slice(-4).toUpperCase()}`}
                   </span>
                 </div>
                 {delivery.total_weight && (
                   <div className='flex items-center justify-between'>
-                    <span className='text-sm text-[#8fadcc]'>Berat Total</span>
-                    <span className='text-sm font-medium text-white'>
+                    <span className='text-sm text-slate-500 dark:text-slate-400'>Berat Total</span>
+                    <span className='text-sm font-medium text-slate-900 dark:text-white'>
                       {delivery.total_weight} kg
                     </span>
                   </div>
@@ -395,9 +396,9 @@ export function DriverDeliveryDetailView() {
               </div>
 
               {/* Constraint Message */}
-              <div className='flex items-center gap-3 rounded-xl border border-orange-500/20 bg-orange-500/10 p-4'>
-                <Info className='h-5 w-5 text-orange-500' />
-                <p className='text-xs leading-tight text-orange-200/80'>
+              <div className='flex items-center gap-3 rounded-xl border border-orange-200 bg-orange-50 p-4 dark:border-orange-500/20 dark:bg-orange-500/10'>
+                <Info className='h-5 w-5 text-orange-600 dark:text-orange-500' />
+                <p className='text-xs leading-tight text-orange-700 dark:text-orange-200/80'>
                   Anda hanya dapat memproses 1 order dalam satu waktu untuk
                   menjaga kualitas layanan.
                 </p>
@@ -408,20 +409,20 @@ export function DriverDeliveryDetailView() {
       </main>
 
       {/* Bottom Action Bar */}
-      <div className='sticky bottom-0 border-t border-[#223649] bg-[#101922]/95 px-4 py-5 backdrop-blur-md md:px-10'>
+      <div className='sticky bottom-0 border-t border-slate-200 bg-white/95 px-4 py-5 backdrop-blur-md dark:border-slate-800 dark:bg-[#101922]/95 md:px-10'>
         <div className='mx-auto max-w-240'>
           {currentStep === 'DONE' ? (
             <div className='flex flex-col gap-3'>
-              <div className='flex items-center justify-center gap-2 rounded-xl border border-green-500/20 bg-green-500/10 p-3'>
-                <CheckCircle className='h-5 w-5 text-green-400' />
-                <span className='text-sm font-bold text-green-400'>
+              <div className='flex items-center justify-center gap-2 rounded-xl border border-green-200 bg-green-50 p-3 dark:border-green-500/20 dark:bg-green-500/10'>
+                <CheckCircle className='h-5 w-5 text-green-600 dark:text-green-400' />
+                <span className='text-sm font-bold text-green-600 dark:text-green-400'>
                   Pengiriman Berhasil!
                 </span>
               </div>
               <div className='flex gap-3'>
                 <button
                   onClick={() => router.push('/driver-dashboard')}
-                  className='flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#0a7ff5] py-3.5 text-sm font-bold text-white transition-all hover:bg-[#0a7ff5]/90 active:scale-[0.98]'
+                  className='flex flex-1 items-center justify-center gap-2 rounded-xl bg-blue-600 py-3.5 text-sm font-bold text-white transition-all hover:bg-blue-700 active:scale-[0.98] dark:bg-blue-600 dark:hover:bg-blue-500'
                 >
                   <Package className='h-5 w-5' />
                   Ambil Tugas Baru
@@ -434,7 +435,7 @@ export function DriverDeliveryDetailView() {
                   }
                   target='_blank'
                   rel='noopener noreferrer'
-                  className='flex flex-1 items-center justify-center gap-2 rounded-xl border border-[#223649] bg-[#182634] py-3.5 text-sm font-bold text-white transition-all hover:bg-[#223649] active:scale-[0.98]'
+                  className='flex flex-1 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-100 py-3.5 text-sm font-bold text-slate-700 transition-all hover:bg-slate-200 active:scale-[0.98] dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:hover:bg-slate-700'
                 >
                   <Navigation className='h-5 w-5' />
                   Kembali ke Outlet
@@ -445,7 +446,7 @@ export function DriverDeliveryDetailView() {
             <button
               onClick={handleUpdateStatus}
               disabled={updating}
-              className='flex w-full transform items-center justify-center gap-3 rounded-xl bg-[#0a7ff5] py-4 text-lg font-bold text-white shadow-[0_8px_30px_rgb(10,127,245,0.3)] transition-all hover:bg-[#0a7ff5]/90 active:scale-[0.98] disabled:opacity-50'
+              className='flex w-full transform items-center justify-center gap-3 rounded-xl bg-blue-600 py-4 text-lg font-bold text-white shadow-lg transition-all hover:bg-blue-700 active:scale-[0.98] disabled:opacity-50 dark:bg-blue-600 dark:hover:bg-blue-500'
             >
               <CheckCircle className='h-6 w-6' />
               {updating ? 'Memproses...' : getButtonLabel()}
