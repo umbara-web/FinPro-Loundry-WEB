@@ -5,10 +5,9 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard,
-  CalendarClock,
-  Truck,
-  Package,
+  ClipboardCheck,
   History,
+  User,
   LogOut,
   Home,
   X,
@@ -17,22 +16,20 @@ import clsx from 'clsx';
 
 const sidebarLinks = [
   { href: '/', label: 'Home', icon: Home },
-  { href: '/driver-dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/driver-attendance', label: 'Absensi', icon: CalendarClock },
-  { href: '/driver-pickup', label: 'Pickup', icon: Package },
-  { href: '/driver-delivery', label: 'Delivery', icon: Truck },
-  { href: '/driver-history', label: 'Riwayat', icon: History },
+  { href: '/worker-dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/worker-attendance', label: 'Absensi', icon: ClipboardCheck },
+  { href: '/worker-history', label: 'Riwayat', icon: History },
+  { href: '/worker-profile', label: 'Profil Saya', icon: User },
 ];
 
-interface DriverSidebarProps {
+interface WorkerSidebarProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export function DriverSidebar({ isOpen, onClose }: DriverSidebarProps) {
+export function WorkerSidebar({ isOpen, onClose }: WorkerSidebarProps) {
   const pathname = usePathname();
   const { logout, user } = useAuth();
-  // Driver doesn't use wallet/points for filtering, so we skip that logic
 
   return (
     <>
@@ -48,32 +45,22 @@ export function DriverSidebar({ isOpen, onClose }: DriverSidebarProps) {
       {/* Sidebar */}
       <div
         className={clsx(
-          'dark:border-card-border dark:bg-station-bg fixed inset-y-0 left-0 z-50 flex h-full w-[85vw] max-w-75 shrink-0 flex-col border-r border-gray-200 bg-white transition-transform duration-300 lg:static lg:flex lg:w-72 dark:border-slate-700 dark:bg-slate-900',
+          'fixed inset-y-0 left-0 z-50 flex h-full w-[85vw] max-w-75 shrink-0 flex-col border-r border-gray-200 bg-white transition-transform duration-300 lg:static lg:flex lg:w-72 dark:border-slate-700 dark:bg-slate-900',
           isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         )}
       >
         <div className='flex flex-col gap-6 p-6'>
           <div className='flex items-start justify-between'>
             <div className='flex items-center gap-3'>
-              <div className='ring-primary/20 relative size-12 overflow-hidden rounded-full border border-gray-200 ring-2 dark:border-gray-700'>
-                {user?.profile_picture_url ? (
-                  <img
-                    src={user.profile_picture_url}
-                    alt={user.name}
-                    className='h-full w-full object-cover'
-                  />
-                ) : (
-                  <div className='flex h-full w-full items-center justify-center bg-blue-100 text-lg font-bold text-blue-600 dark:bg-blue-900 dark:text-blue-200'>
-                    {user?.name?.charAt(0).toUpperCase() || 'D'}
-                  </div>
-                )}
+              <div className='flex items-center justify-center rounded-lg bg-blue-600 p-2 text-white shadow-lg shadow-blue-600/20'>
+                <LayoutDashboard className='size-6' />
               </div>
               <div className='flex flex-col'>
-                <p className='text-sm font-bold text-slate-900 dark:text-white'>
-                  {user?.name?.toUpperCase() || 'DRIVER'}
+                <p className='text-lg font-bold text-slate-900 dark:text-white'>
+                  Worker Portal
                 </p>
-                <p className='text-xs leading-normal font-normal text-blue-500'>
-                  Driver
+                <p className='text-xs font-medium text-slate-500 dark:text-slate-400'>
+                  FreshLaundry Inc.
                 </p>
               </div>
             </div>
@@ -88,8 +75,7 @@ export function DriverSidebar({ isOpen, onClose }: DriverSidebarProps) {
           <nav className='flex flex-col gap-2'>
             {sidebarLinks.map((link) => {
               const Icon = link.icon;
-              const isActive =
-                pathname === link.href || pathname.startsWith(link.href + '/');
+              const isActive = pathname === link.href;
               return (
                 <Link
                   key={link.label}

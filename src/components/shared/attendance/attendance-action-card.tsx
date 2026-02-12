@@ -42,9 +42,9 @@ export function AttendanceActionCard({
       <div className="flex flex-col items-stretch justify-start rounded-xl shadow-xl bg-white dark:bg-[#1e293b] overflow-hidden border border-slate-200 dark:border-slate-800">
         <div className="flex flex-col md:flex-row">
           {/* Left Decoration/Info Area */}
-          <div className="w-full md:w-1/3 bg-[#137fec]/10 dark:bg-[#137fec]/5 p-8 flex flex-col justify-center items-center text-center border-b md:border-b-0 md:border-r border-slate-200 dark:border-slate-800">
-            <div className="size-16 rounded-full bg-[#137fec]/20 flex items-center justify-center mb-4">
-              <Info className="text-[#137fec] w-8 h-8" />
+          <div className="w-full md:w-1/3 bg-blue-50 dark:bg-blue-900/20 p-8 flex flex-col justify-center items-center text-center border-b md:border-b-0 md:border-r border-slate-200 dark:border-slate-800">
+            <div className="size-16 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mb-4">
+              <Info className="text-blue-600 dark:text-blue-500 w-8 h-8" />
             </div>
             <h3 className="text-slate-900 dark:text-white font-bold text-lg mb-1">
               Status Shift
@@ -85,7 +85,7 @@ export function AttendanceActionCard({
                     'flex min-w-[160px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-14 px-8 text-white text-base font-bold transition-all shadow-lg active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed',
                     isClockedIn
                       ? 'bg-red-500 hover:bg-red-600 shadow-red-500/25'
-                      : 'bg-[#137fec] hover:bg-blue-600 shadow-[#137fec]/25'
+                      : 'bg-blue-600 hover:bg-blue-700 shadow-blue-600/25 dark:bg-blue-600 dark:hover:bg-blue-500'
                   )}
                 >
                   {isClockedIn ? (

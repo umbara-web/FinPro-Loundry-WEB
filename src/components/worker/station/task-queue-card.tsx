@@ -24,10 +24,9 @@ export function TaskQueueCard({
       onClick={onClick}
       className={clsx(
         'group cursor-pointer rounded-xl border p-4 transition-all duration-300',
-        'bg-(--color-station-surface)',
         isActive
-          ? 'border-transparent md:scale-[1.02] md:border-(--color-station-primary) md:shadow-[0_0_20px_rgba(10,127,245,0.2)]'
-          : 'border-transparent opacity-100 md:opacity-70 md:hover:translate-x-1 md:hover:border-(--color-station-border-hover) md:hover:opacity-100'
+          ? 'border-blue-500 bg-blue-500 shadow-lg shadow-blue-500/20 dark:bg-blue-600'
+          : 'border-slate-200 bg-white hover:border-blue-500/50 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:hover:border-blue-500/30 dark:hover:bg-slate-700/50'
       )}
     >
       {/* Header: Status Badge & Estimated Time */}
@@ -36,16 +35,21 @@ export function TaskQueueCard({
           className={clsx(
             'inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-bold',
             isInProgress
-              ? 'border-(--color-station-blue)/20 bg-(--color-station-blue)/20 text-(--color-station-blue)'
-              : 'border-(--color-station-yellow)/20 bg-(--color-station-yellow)/10 text-(--color-station-yellow)'
+              ? 'border-blue-500/20 bg-blue-50 text-blue-600 dark:bg-blue-500/20 dark:text-blue-300'
+              : 'border-yellow-500/20 bg-yellow-50 text-yellow-600 dark:bg-yellow-500/10 dark:text-yellow-400'
           )}
         >
           {isInProgress && (
-            <span className='h-1.5 w-1.5 animate-pulse rounded-full bg-(--color-station-blue)' />
+            <span className='h-1.5 w-1.5 animate-pulse rounded-full bg-blue-600 dark:bg-blue-400' />
           )}
           {isInProgress ? 'Sedang Diproses' : 'Menunggu'}
         </span>
-        <span className='text-xs text-(--color-station-text-muted)'>
+        <span
+          className={clsx(
+            'text-xs',
+            isActive ? 'text-blue-100' : 'text-slate-500 dark:text-slate-400'
+          )}
+        >
           Est: {task.estimatedTime}
         </span>
       </div>
@@ -56,13 +60,20 @@ export function TaskQueueCard({
         {task.customerAvatar ? (
           <div
             className={clsx(
-              'h-12 w-12 shrink-0 rounded-full bg-slate-700 bg-cover bg-center',
-              isActive && 'border-2 border-(--color-station-primary)/30'
+              'h-12 w-12 shrink-0 rounded-full bg-slate-200 bg-cover bg-center dark:bg-slate-700',
+              isActive && 'border-2 border-white/30'
             )}
             style={{ backgroundImage: `url('${task.customerAvatar}')` }}
           />
         ) : (
-          <div className='flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-slate-700 text-lg font-bold text-white'>
+          <div
+            className={clsx(
+              'flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-lg font-bold',
+              isActive
+                ? 'bg-white/20 text-white'
+                : 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300'
+            )}
+          >
             {task.customerName
               .split(' ')
               .map((n) => n[0])
@@ -72,10 +83,20 @@ export function TaskQueueCard({
           </div>
         )}
         <div>
-          <h3 className='text-base font-bold text-white'>
+          <h3
+            className={clsx(
+              'text-base font-bold',
+              isActive ? 'text-white' : 'text-slate-900 dark:text-white'
+            )}
+          >
             #{task.invoiceNumber}
           </h3>
-          <p className='text-sm text-(--color-station-text-muted)'>
+          <p
+            className={clsx(
+              'text-sm',
+              isActive ? 'text-blue-100' : 'text-slate-500 dark:text-slate-400'
+            )}
+          >
             {task.customerName}
           </p>
         </div>
@@ -83,14 +104,38 @@ export function TaskQueueCard({
 
       {/* Details: Weight & Service Type */}
       <div className='mt-4 flex items-center gap-3 text-sm'>
-        <div className='flex items-center gap-1.5 rounded-lg bg-(--color-station-bg) px-3 py-1.5'>
-          <Scale className='h-4 w-4 text-(--color-station-text-muted)' />
-          <span className='font-medium text-white'>{task.weight} kg</span>
+        <div
+          className={clsx(
+            'flex items-center gap-1.5 rounded-lg px-3 py-1.5',
+            isActive
+              ? 'bg-white/10 text-white'
+              : 'bg-slate-100 text-slate-600 dark:bg-slate-700/50 dark:text-slate-300'
+          )}
+        >
+          <Scale
+            className={clsx(
+              'h-4 w-4',
+              isActive ? 'text-blue-100' : 'text-slate-400 dark:text-slate-500'
+            )}
+          />
+          <span className='font-medium'>{task.weight} kg</span>
         </div>
 
-        <div className='flex items-center gap-1.5 rounded-lg bg-(--color-station-bg) px-3 py-1.5'>
-          <Shirt className='h-4 w-4 text-(--color-station-text-muted)' />
-          <span className='font-medium text-white'>{task.serviceType}</span>
+        <div
+          className={clsx(
+            'flex items-center gap-1.5 rounded-lg px-3 py-1.5',
+            isActive
+              ? 'bg-white/10 text-white'
+              : 'bg-slate-100 text-slate-600 dark:bg-slate-700/50 dark:text-slate-300'
+          )}
+        >
+          <Shirt
+            className={clsx(
+              'h-4 w-4',
+              isActive ? 'text-blue-100' : 'text-slate-400 dark:text-slate-500'
+            )}
+          />
+          <span className='font-medium'>{task.serviceType}</span>
         </div>
       </div>
     </div>

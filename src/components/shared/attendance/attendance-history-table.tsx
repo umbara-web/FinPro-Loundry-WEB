@@ -55,7 +55,7 @@ export function AttendanceHistoryTable({
         {showViewAll && onViewAll && (
           <button
             onClick={onViewAll}
-            className="text-[#137fec] text-sm font-semibold flex items-center gap-1 hover:underline"
+            className="text-blue-600 dark:text-blue-500 text-sm font-semibold flex items-center gap-1 hover:underline"
           >
             Lihat Semua <ArrowRight className="w-4 h-4" />
           </button>

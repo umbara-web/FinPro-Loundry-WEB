@@ -11,7 +11,7 @@ export function ActiveJobTab({ activeJob }: ActiveJobTabProps) {
       {activeJob ? (
         <ActiveJobCard activeJob={activeJob} />
       ) : (
-        <div className='py-12 text-center text-[#8fadcc]'>
+        <div className='py-12 text-center text-slate-500 dark:text-slate-400'>
           Tidak ada tugas yang sedang berjalan.
         </div>
       )}

@@ -16,26 +16,26 @@ export function ActiveJobCard({ activeJob }: ActiveJobCardProps) {
           ? `/driver-pickup/${activeJob.id}`
           : `/driver-delivery/${activeJob.id}`
       }
-      className='flex items-stretch justify-between gap-4 rounded-xl border-l-4 border-[#0a7ff5] bg-[#182634] p-5 shadow-lg transition-all hover:bg-[#1d2d3d]'
+      className='hover:bg-slate-50 dark:hover:bg-slate-700 flex items-stretch justify-between gap-4 rounded-xl border-l-4 border-blue-600 bg-white p-5 shadow-lg transition-all dark:border-blue-500 dark:bg-slate-800'
     >
       <div className='flex flex-col gap-3'>
         <div className='flex items-center gap-2'>
-          <span className='rounded-full bg-[#0a7ff5]/20 px-2 py-0.5 text-[10px] font-bold text-[#0a7ff5] uppercase'>
+          <span className='bg-blue-100 text-blue-600 dark:bg-blue-500/20 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase dark:text-blue-500'>
             Sedang Berjalan
           </span>
-          <span className='text-xs text-[#8fadcc]'>
+          <span className='text-xs text-slate-500 dark:text-slate-400'>
             #{activeJob.orderNumber || activeJob.id.slice(-4)}
           </span>
         </div>
-        <p className='text-lg font-bold text-white'>
+        <p className='text-lg font-bold text-slate-900 dark:text-white'>
           {activeJob.type === 'PICKUP' ? 'Jemput' : 'Antar'} -{' '}
           {activeJob.customer.name}
         </p>
-        <div className='flex items-center gap-1 text-[#8fadcc]'>
+        <div className='flex items-center gap-1 text-slate-500 dark:text-slate-400'>
           <MapPin className='h-4 w-4' />
           <p className='text-sm'>{activeJob.address.address}</p>
         </div>
-        <div className='mt-1 flex items-center gap-2 text-sm font-bold text-[#0a7ff5]'>
+        <div className='mt-1 flex items-center gap-2 text-sm font-bold text-blue-600 dark:text-blue-500'>
           Lanjutkan Tugas
           <ChevronRight className='h-5 w-5' />
         </div>

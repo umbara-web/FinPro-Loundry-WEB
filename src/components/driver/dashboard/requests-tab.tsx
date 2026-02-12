@@ -22,7 +22,7 @@ export function RequestsTab({
 }: RequestsTabProps) {
   if (isLoading) {
     return (
-      <div className='col-span-2 py-12 text-center text-[#8fadcc]'>
+      <div className='col-span-2 py-12 text-center text-slate-500 dark:text-slate-400'>
         Memuat data...
       </div>
     );
@@ -30,7 +30,7 @@ export function RequestsTab({
 
   if (pickups.length === 0 && deliveries.length === 0) {
     return (
-      <div className='col-span-2 py-12 text-center text-[#8fadcc]'>
+      <div className='col-span-2 py-12 text-center text-slate-500 dark:text-slate-400'>
         Tidak ada request baru saat ini.
       </div>
     );

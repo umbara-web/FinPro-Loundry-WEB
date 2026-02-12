@@ -63,10 +63,10 @@ export function TaskQueueSidebar({
   };
 
   return (
-    <aside className='flex h-full w-full shrink-0 flex-col border-r border-(--color-station-border) bg-(--color-station-bg) lg:w-95'>
+    <aside className='flex h-full w-full shrink-0 flex-col border-r border-slate-200 bg-white lg:w-95 dark:border-slate-800 dark:bg-slate-900'>
       {/* Station Tabs (Desktop) */}
       {stationTabs && onStationChange && (
-        <div className='hidden border-b border-(--color-station-border) lg:flex'>
+        <div className='hidden border-b border-slate-200 lg:flex dark:border-slate-800'>
           {stationTabs.map((tab) => (
             <button
               key={tab.id}
@@ -74,8 +74,8 @@ export function TaskQueueSidebar({
               className={clsx(
                 'flex-1 py-3 text-center text-sm font-semibold transition-colors',
                 stationType === tab.id
-                  ? 'border-b-2 text-white'
-                  : 'text-(--color-station-text-muted) hover:text-white'
+                  ? 'border-b-2 text-slate-900 dark:text-white'
+                  : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
               )}
               style={{
                 borderColor: stationType === tab.id ? tab.color : 'transparent',
@@ -88,13 +88,13 @@ export function TaskQueueSidebar({
       )}
 
       {/* Header with Search */}
-      <div className='sticky top-0 z-10 flex flex-col gap-4 border-b border-(--color-station-border) bg-(--color-station-bg)/50 p-4 backdrop-blur-sm'>
+      <div className='sticky top-0 z-10 flex flex-col gap-4 border-b border-slate-200 bg-white/50 p-4 backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/50'>
         <div className='flex items-center justify-between'>
           <div>
-            <h2 className='text-base font-bold text-white'>
+            <h2 className='text-base font-bold text-slate-900 dark:text-white'>
               Stasiun {config.nameBahasa}
             </h2>
-            <p className='text-sm text-(--color-station-text-muted)'>
+            <p className='text-sm text-slate-500 dark:text-slate-400'>
               {filteredMineTasks.length} Aktif · {filteredPoolTasks.length}{' '}
               Tersedia
             </p>
@@ -102,10 +102,10 @@ export function TaskQueueSidebar({
         </div>
 
         <div className='relative'>
-          <Search className='absolute top-2.5 left-2.5 h-4 w-4 text-(--color-station-text-muted)' />
+          <Search className='absolute top-2.5 left-2.5 h-4 w-4 text-slate-400' />
           <Input
             placeholder='Cari Invoice / Customer...'
-            className='w-full border-(--color-station-border) bg-(--color-station-surface) pl-9 text-white placeholder:text-(--color-station-text-muted) focus-visible:ring-(--color-station-primary)'
+            className='w-full border-slate-200 bg-slate-50 pl-9 text-slate-900 placeholder:text-slate-400 focus-visible:ring-blue-500 dark:border-slate-700 dark:bg-slate-800 dark:text-white'
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -120,14 +120,14 @@ export function TaskQueueSidebar({
           <>
             {/* MY ACTIVE TASKS (Top Section) */}
             <div className='p-4'>
-              <h3 className='mb-3 flex items-center gap-2 text-sm font-semibold text-emerald-400'>
-                <span className='flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500/20'>
+              <h3 className='mb-3 flex items-center gap-2 text-sm font-semibold text-emerald-600 dark:text-emerald-400'>
+                <span className='flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-500/20'>
                   {filteredMineTasks.length}
                 </span>
                 Tugas Saya
               </h3>
               {filteredMineTasks.length === 0 ? (
-                <div className='rounded-lg border border-dashed border-(--color-station-border) bg-(--color-station-surface)/50 p-4 text-center text-sm text-(--color-station-text-muted)'>
+                <div className='rounded-lg border border-dashed border-slate-200 bg-slate-50 p-4 text-center text-sm text-slate-500 dark:border-slate-700 dark:bg-slate-800/50 dark:text-slate-400'>
                   Tidak ada tugas aktif
                 </div>
               ) : (
@@ -145,18 +145,18 @@ export function TaskQueueSidebar({
             </div>
 
             {/* Divider */}
-            <div className='mx-4 border-t border-(--color-station-border)' />
+            <div className='mx-4 border-t border-slate-200 dark:border-slate-800' />
 
             {/* AVAILABLE TASKS (Bottom Section) */}
             <div className='p-4'>
-              <h3 className='mb-3 flex items-center gap-2 text-sm font-semibold text-amber-400'>
-                <span className='flex h-5 w-5 items-center justify-center rounded-full bg-amber-500/20'>
+              <h3 className='mb-3 flex items-center gap-2 text-sm font-semibold text-amber-600 dark:text-amber-400'>
+                <span className='flex h-5 w-5 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-500/20'>
                   {filteredPoolTasks.length}
                 </span>
                 Antrean Outlet
               </h3>
               {filteredPoolTasks.length === 0 ? (
-                <div className='rounded-lg border border-dashed border-(--color-station-border) bg-(--color-station-surface)/50 p-4 text-center text-sm text-(--color-station-text-muted)'>
+                <div className='rounded-lg border border-dashed border-slate-200 bg-slate-50 p-4 text-center text-sm text-slate-500 dark:border-slate-700 dark:bg-slate-800/50 dark:text-slate-400'>
                   Tidak ada tugas tersedia
                 </div>
               ) : (
@@ -166,13 +166,13 @@ export function TaskQueueSidebar({
                       <TaskQueueCard
                         task={task}
                         isActive={false}
-                        onClick={() => {}}
+                        onClick={() => { }}
                         isPoolTask
                       />
                       <button
                         onClick={() => handleClaimTask(task)}
                         disabled={claimMutation.isPending}
-                        className='absolute top-1/2 right-3 flex -translate-y-1/2 items-center gap-1.5 rounded-lg bg-amber-500 px-3 py-1.5 text-xs font-bold text-black transition-colors hover:bg-amber-400 disabled:opacity-50'
+                        className='absolute top-1/2 right-3 flex -translate-y-1/2 items-center gap-1.5 rounded-lg bg-amber-500 px-3 py-1.5 text-xs font-bold text-white transition-colors hover:bg-amber-600 disabled:opacity-50 dark:text-black dark:hover:bg-amber-400'
                       >
                         <Hand className='h-3.5 w-3.5' />
                         Ambil

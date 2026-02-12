@@ -58,10 +58,10 @@ export function AttendanceHistoryView({
 
       const formattedCheckOut = checkOutDate
         ? checkOutDate.toLocaleTimeString('id-ID', {
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: false,
-          })
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false,
+        })
         : null;
 
       const isLate =
@@ -119,20 +119,16 @@ export function AttendanceHistoryView({
 
   return (
     <div className='flex h-full flex-col overflow-hidden bg-[#f6f7f8] dark:bg-[#101922]'>
-      {/* Header */}
-      <header className='flex-none border-b border-slate-200 bg-white px-6 py-4 dark:border-[#233648] dark:bg-[#101922]'>
-        <div className='flex items-center gap-4'>
-          <button
-            onClick={handleBack}
-            className='-ml-2 flex items-center justify-center rounded-full p-2 text-slate-600 transition-colors hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800'
-          >
-            <ArrowLeft className='h-5 w-5' />
-          </button>
-          <h2 className='text-xl font-bold text-slate-900 dark:text-white'>
-            Riwayat Kehadiran Lengkap
-          </h2>
-        </div>
-      </header>
+      {/* Header (Back Button Only) */}
+      <div className='flex-none px-6 py-4'>
+        <button
+          onClick={handleBack}
+          className='-ml-2 flex items-center justify-center rounded-full p-2 text-slate-600 transition-colors hover:bg-slate-200 dark:text-slate-300 dark:hover:bg-slate-800'
+        >
+          <ArrowLeft className='h-5 w-5' />
+          <span className='ml-2 font-medium'>Kembali</span>
+        </button>
+      </div>
 
       {/* Main Content */}
       <main className='flex-1 overflow-y-auto p-4 md:p-6 lg:p-8'>

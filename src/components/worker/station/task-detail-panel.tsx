@@ -160,12 +160,12 @@ export function TaskDetailPanel({
 
   if (!task) {
     return (
-      <div className='hidden flex-1 flex-col items-center justify-center bg-(--color-station-bg) p-8 text-center md:flex'>
-        <div className='mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-(--color-station-surface) text-(--color-station-text-muted)'>
+      <div className='hidden flex-1 flex-col items-center justify-center bg-slate-50 p-8 text-center md:flex dark:bg-slate-900'>
+        <div className='mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-200 text-slate-400 dark:bg-slate-800 dark:text-slate-500'>
           <Hand className='h-8 w-8' />
         </div>
-        <h3 className='text-lg font-bold text-white'>Pilih task</h3>
-        <p className='mt-2 text-sm text-(--color-station-text-muted)'>
+        <h3 className='text-lg font-bold text-slate-900 dark:text-white'>Pilih task</h3>
+        <p className='mt-2 text-sm text-slate-500 dark:text-slate-400'>
           Klik pada card di daftar antrian untuk melihat detail.
           <br />
           Gunakan mode landscape untuk tampilan lebih baik.
@@ -189,7 +189,7 @@ export function TaskDetailPanel({
         className={`flex-1 overflow-y-auto px-6 md:px-8 ${showMismatchAlert ? 'pb-56' : 'pb-44'}`}
       >
         {/* Item Input Grid */}
-        <div className='grid grid-cols-1 gap-4 2xl:grid-cols-2'>
+        <div className='grid grid-cols-1 gap-4'>
           {sortedLaundryItems.map((item, index) => {
             return (
               <ItemCounter
