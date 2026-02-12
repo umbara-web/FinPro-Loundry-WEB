@@ -22,6 +22,7 @@ interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  isLoggingOut: boolean;
   login: (data: { email: string; password: string }) => Promise<void>;
   logout: () => Promise<void>;
   updateUser: (userData: Partial<User>) => void;
@@ -33,6 +34,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -63,11 +65,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (me?.data) {
       setUser(me.data);
       setIsAuthenticated(true);
-      window.location.assign('/'); // User requirement
+
+      if (me.data.role === 'WORKER') {
+        window.location.assign('/worker-dashboard');
+      } else if (me.data.role === 'DRIVER') {
+        window.location.assign('/driver-dashboard');
+      } else {
+        window.location.assign('/');
+      }
     }
   };
 
   const logout = async () => {
+    setIsLoggingOut(true);
     try {
       await authApi.logout();
     } catch (err) {
@@ -78,7 +88,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     router.refresh();
 
-    router.push('/auth/login');
+    window.location.href = '/auth/login';
   };
 
   const updateUser = (userData: Partial<User>) => {
@@ -87,7 +97,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated, isLoading, login, logout, updateUser }}
+      value={{
+        user,
+        isAuthenticated,
+        isLoading,
+        isLoggingOut,
+        login,
+        logout,
+        updateUser,
+      }}
     >
       {children}
     </AuthContext.Provider>

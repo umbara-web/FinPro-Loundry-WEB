@@ -10,10 +10,12 @@ import {
   Package,
   History,
   X,
+  Home,
 } from 'lucide-react';
 import clsx from 'clsx';
 
 const sidebarLinks = [
+  { href: '/', label: 'Home', icon: Home },
   { href: '/driver-dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/driver-attendance', label: 'Absensi', icon: CalendarClock },
   { href: '/driver-pickup', label: 'Pickup', icon: Package },
