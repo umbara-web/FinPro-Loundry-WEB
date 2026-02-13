@@ -1,33 +1,14 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useEffect } from 'react';
 import Link from 'next/link';
-import {
-  ArrowLeft,
-  Truck,
-  MapPin,
-  User,
-  Navigation,
-  RefreshCw,
-} from 'lucide-react';
-import { AvailableDeliveryRequest } from '@/src/types/driver';
-import { driverService } from '@/src/services/driver';
+import { ArrowLeft, RefreshCw } from 'lucide-react';
+import { useDeliveryList } from './_hooks/useDeliveryList';
+import { DeliveryCard } from './_components/DeliveryCard';
 
 export function DriverDeliveryListView() {
-  const [deliveries, setDeliveries] = useState<AvailableDeliveryRequest[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  const fetchDeliveries = useCallback(async () => {
-    setLoading(true);
-    try {
-      const data = await driverService.getAvailableDeliveries();
-      setDeliveries(data.data || []);
-    } catch (error) {
-      console.error('Error fetching deliveries:', error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const { deliveries, loading, fetchDeliveries, acceptDelivery } =
+    useDeliveryList();
 
   useEffect(() => {
     fetchDeliveries();
@@ -35,12 +16,10 @@ export function DriverDeliveryListView() {
 
   const handleAccept = async (orderId: string) => {
     try {
-      const data = await driverService.acceptDelivery(orderId);
-      const taskId = data.data.id;
+      const taskId = await acceptDelivery(orderId);
       window.location.href = `/driver-delivery/${taskId}`;
-    } catch (error: any) {
-      console.error('Error accepting delivery:', error);
-      alert(error.response?.data?.message || 'Gagal menerima delivery');
+    } catch (error) {
+      // Error handled in hook
     }
   };
 
@@ -87,64 +66,11 @@ export function DriverDeliveryListView() {
             </div>
           ) : (
             deliveries.map((delivery) => (
-              <div
+              <DeliveryCard
                 key={delivery.id}
-                className='flex flex-col gap-4 rounded-xl border border-transparent bg-white p-5 shadow-sm transition-all hover:border-blue-500/50 dark:bg-slate-800'
-              >
-                <div className='flex items-start justify-between'>
-                  <div className='flex items-center gap-3'>
-                    <div className='rounded-lg bg-blue-100 p-3 dark:bg-blue-500/10'>
-                      <Truck className='h-6 w-6 text-blue-600 dark:text-blue-500' />
-                    </div>
-                    <div>
-                      <p className='text-lg font-bold text-slate-900 dark:text-white'>
-                        Antar - Order #
-                        {delivery.order_number || delivery.id.slice(-4)}
-                      </p>
-                      <p className='text-sm text-slate-500 dark:text-slate-400'>
-                        #{delivery.id.slice(-8).toUpperCase()}
-                      </p>
-                    </div>
-                  </div>
-                  {delivery.distance && (
-                    <div className='flex items-center gap-1 text-sm font-bold text-blue-600 dark:text-blue-500'>
-                      <Navigation className='h-4 w-4' />
-                      {delivery.distance} km
-                    </div>
-                  )}
-                </div>
-
-                <div className='space-y-2'>
-                  <div className='flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400'>
-                    <User className='h-4 w-4' />
-                    <span>
-                      {delivery.pickup_request?.customer?.name || 'Pelanggan'}
-                    </span>
-                  </div>
-                  <div className='flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400'>
-                    <MapPin className='h-4 w-4' />
-                    <span>
-                      {delivery.pickup_request?.customer_address?.address ||
-                        'Alamat'}
-                    </span>
-                  </div>
-                </div>
-
-                <div className='flex gap-2 pt-2'>
-                  <button
-                    onClick={() => handleAccept(delivery.id)}
-                    className='flex-1 rounded-lg bg-blue-600 py-3 text-sm font-bold text-white transition-colors hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500'
-                  >
-                    Terima Request
-                  </button>
-                  <Link
-                    href={`/driver-delivery/${delivery.id}`}
-                    className='rounded-lg bg-slate-100 px-4 py-3 text-sm font-bold text-slate-700 transition-colors hover:bg-slate-200 dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600'
-                  >
-                    Detail
-                  </Link>
-                </div>
-              </div>
+                delivery={delivery}
+                onAccept={handleAccept}
+              />
             ))
           )}
         </div>
