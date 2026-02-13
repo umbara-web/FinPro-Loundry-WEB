@@ -3,7 +3,11 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { api } from '@/src/lib/api/axios-instance';
 import { toast } from 'sonner';
-import type { AttendanceRecord } from '@/src/types/staff-attendance';
+import type {
+  AttendanceRecord,
+  TimePreset,
+} from '@/src/types/staff-attendance';
+import { getDateRangeFromPreset } from '@/src/types/staff-attendance';
 
 export interface DateRange {
   from: Date;
@@ -13,12 +17,25 @@ export interface DateRange {
 export function useAttendanceReport() {
   const [records, setRecords] = useState<AttendanceRecord[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [date, setDate] = useState<DateRange | undefined>({
-    from: new Date(new Date().setDate(new Date().getDate() - 7)),
-    to: new Date(),
-  });
+  const [selectedPreset, setSelectedPreset] = useState<TimePreset>('THIS_WEEK');
+  const [date, setDate] = useState<DateRange | undefined>(
+    getDateRangeFromPreset('THIS_WEEK') ?? undefined
+  );
   const [staffType, setStaffType] = useState<string>('ALL');
   const [error, setError] = useState<string | null>(null);
+
+  const handlePresetChange = useCallback((preset: TimePreset) => {
+    setSelectedPreset(preset);
+    if (preset !== 'CUSTOM') {
+      const range = getDateRangeFromPreset(preset);
+      if (range) setDate(range);
+    }
+  }, []);
+
+  const handleCustomDateChange = useCallback((range: DateRange | undefined) => {
+    setSelectedPreset('CUSTOM');
+    setDate(range);
+  }, []);
 
   const fetchAttendance = useCallback(async () => {
     if (!date?.from || !date?.to) return;
@@ -63,9 +80,11 @@ export function useAttendanceReport() {
     records,
     isLoading,
     date,
-    setDate,
+    setDate: handleCustomDateChange,
     staffType,
     setStaffType,
+    selectedPreset,
+    handlePresetChange,
     refetch: fetchAttendance,
     stats,
     error,
