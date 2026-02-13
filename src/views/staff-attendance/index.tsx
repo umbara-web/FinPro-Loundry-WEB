@@ -20,21 +20,21 @@ export default function StaffAttendanceView() {
   } = useAttendanceReport();
 
   return (
-    <div className='min-h-full bg-[#101922] px-4 py-6 md:px-10'>
+    <div className='min-h-full bg-slate-50 px-4 py-6 md:px-10 dark:bg-[#101922]'>
       <div className='mx-auto max-w-300'>
         {/* Header */}
         <div className='mb-6 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center'>
           <div>
-            <h1 className='text-2xl font-bold tracking-tight text-white'>
+            <h1 className='text-2xl font-bold tracking-tight text-slate-900 dark:text-white'>
               Laporan Kehadiran
             </h1>
-            <p className='mt-1 text-sm text-[#8fadcc]'>
+            <p className='mt-1 text-sm text-slate-500 dark:text-slate-400'>
               Pantau kehadiran staff outlet Anda
             </p>
           </div>
           <button
             onClick={refetch}
-            className='flex items-center gap-2 rounded-lg border border-[#223649] bg-[#182634] px-4 py-2 text-sm font-medium text-[#8fadcc] transition-colors hover:border-[#0a7ff5]/50 hover:text-white'
+            className='flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-500 transition-colors hover:border-blue-500/50 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400 dark:hover:border-[#0a7ff5]/50 dark:hover:text-white'
           >
             <RefreshCw className='h-4 w-4' />
             Refresh
@@ -42,7 +42,7 @@ export default function StaffAttendanceView() {
         </div>
 
         {error && (
-          <div className='mb-6 rounded-lg border border-red-500/20 bg-red-500/10 p-4 text-red-400'>
+          <div className='mb-6 rounded-lg border border-red-200 bg-red-50 p-4 text-red-600 dark:border-red-500/20 dark:bg-red-500/10 dark:text-red-400'>
             <div className='flex items-center gap-2'>
               <AlertCircle className='h-5 w-5' />
               <p className='text-sm font-medium'>{error}</p>

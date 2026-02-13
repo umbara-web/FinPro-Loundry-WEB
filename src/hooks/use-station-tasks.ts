@@ -82,10 +82,19 @@ export const useBypassRequest = () => {
       taskId: string;
       stationType: StationType;
       reason: string;
+      itemCounts: ItemCountData;
     }) => {
+      const items = Object.entries(data.itemCounts)
+        .filter(([_, qty]) => qty > 0)
+        .map(([laundry_item_id, qty]) => ({
+          laundry_item_id,
+          qty,
+        }));
+
       return workerService.requestBypass({
         taskId: data.taskId,
         reason: data.reason,
+        items,
       });
     },
     onSuccess: () => {

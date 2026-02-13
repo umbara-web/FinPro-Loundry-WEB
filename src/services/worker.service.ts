@@ -59,7 +59,7 @@ function transformTask(apiTask: StationTaskResponse): StationTask {
     return {
       id: apiTask.id,
       orderId: apiTask.order_id,
-      invoiceNumber: `INV-${order.id?.slice(0, 4).toUpperCase() || '????'}`,
+      invoiceNumber: `ORD-${order.id?.slice(-4).toUpperCase() || '????'}`,
       customerName: customer?.name || 'Unknown Customer',
       customerAvatar: customer?.profile_picture_url,
       weight: order.total_weight || 0,
@@ -77,6 +77,11 @@ function transformTask(apiTask: StationTaskResponse): StationTask {
             minute: '2-digit',
           })
         : '--:--',
+      bypassStatus:
+        apiTask.bypass_request?.length > 0
+          ? (apiTask.bypass_request[apiTask.bypass_request.length - 1]
+              .status as 'PENDING' | 'REJECTED')
+          : undefined,
       items:
         order.order_item?.map((item) => ({
           id: item.laundry_item?.id || item.id,
@@ -108,6 +113,7 @@ interface ProcessTaskData {
 interface BypassRequestData {
   taskId: string;
   reason: string;
+  items: Array<{ laundry_item_id: string; qty: number }>;
 }
 
 export const workerService = {
@@ -148,6 +154,7 @@ export const workerService = {
       `/worker/station/tasks/${data.taskId}/bypass`,
       {
         reason: data.reason,
+        items: data.items,
       }
     );
     return response.data;
