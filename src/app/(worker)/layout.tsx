@@ -1,8 +1,10 @@
 'use client';
 
 import ProtectedRoute from '@/src/components/auth/protected-route';
-import { WorkerSidebar } from '@/src/components/worker/dashboard/sidebar';
-import { WorkerHeader } from '@/src/components/worker/dashboard/header';
+import {
+  WorkerSidebar,
+  WorkerHeader,
+} from '@/src/views/Worker/Dashboard/_components';
 import { useState } from 'react';
 
 export default function WorkerLayout({

@@ -80,7 +80,7 @@ export function WorkerSidebar({ isOpen, onClose }: WorkerSidebarProps) {
                 <Link
                   key={link.label}
                   href={link.href}
-                  onClick={() => onClose()} // Close sidebar on link click (mobile)
+                  onClick={() => onClose()}
                   className={clsx(
                     'flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors',
                     isActive

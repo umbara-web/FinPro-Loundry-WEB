@@ -1,16 +1,16 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { Hand, ArrowLeft, Clock, XCircle } from 'lucide-react';
+import { Hand, Clock, XCircle } from 'lucide-react';
 import {
   StationTask,
   StationType,
   ItemCountData,
   getStationConfig,
 } from '@/src/types/station';
-import { ItemCounter } from './item-counter';
-import { ActionBar } from './action-bar';
-import { TaskHeader } from '@/src/components/worker/detail/task-header';
+import { ItemCounter } from './ItemCounter';
+import { ActionBar } from './ActionBar';
+import { TaskHeader } from './TaskHeader';
 import {
   useCompleteTask,
   useBypassRequest,
@@ -71,8 +71,6 @@ export function TaskDetailPanel({
   );
   const expectedTotal =
     task?.items?.reduce((sum, item) => sum + item.qty, 0) || 0;
-  const progress =
-    expectedTotal > 0 ? Math.round((totalItems / expectedTotal) * 100) : 0;
 
   const isInputEmpty = totalItems === 0;
   const isBypassPending =

@@ -1,4 +1,4 @@
-import { WorkerDashboardView } from '@/src/views/worker/dashboard';
+import { WorkerDashboardView } from '@/src/views/Worker/Dashboard';
 
 export default function WorkerDashboardPage() {
   return <WorkerDashboardView />;
