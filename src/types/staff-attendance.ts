@@ -57,13 +57,18 @@ export function getDateRangeFromPreset(
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
   switch (preset) {
-    case 'TODAY':
-      return { from: today, to: today };
+    case 'TODAY': {
+      const endOfToday = new Date(today);
+      endOfToday.setHours(23, 59, 59, 999);
+      return { from: today, to: endOfToday };
+    }
 
     case 'YESTERDAY': {
       const yesterday = new Date(today);
       yesterday.setDate(yesterday.getDate() - 1);
-      return { from: yesterday, to: yesterday };
+      const endOfYesterday = new Date(yesterday);
+      endOfYesterday.setHours(23, 59, 59, 999);
+      return { from: yesterday, to: endOfYesterday };
     }
 
     case 'THIS_WEEK': {
@@ -71,12 +76,16 @@ export function getDateRangeFromPreset(
       const diffToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
       const monday = new Date(today);
       monday.setDate(today.getDate() - diffToMonday);
-      return { from: monday, to: today };
+      const endOfToday = new Date(today);
+      endOfToday.setHours(23, 59, 59, 999);
+      return { from: monday, to: endOfToday };
     }
 
     case 'THIS_MONTH': {
       const firstOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-      return { from: firstOfMonth, to: today };
+      const endOfToday = new Date(today);
+      endOfToday.setHours(23, 59, 59, 999);
+      return { from: firstOfMonth, to: endOfToday };
     }
 
     case 'LAST_MONTH': {
@@ -90,6 +99,7 @@ export function getDateRangeFromPreset(
         today.getMonth(),
         0
       );
+      lastOfLastMonth.setHours(23, 59, 59, 999);
       return { from: firstOfLastMonth, to: lastOfLastMonth };
     }
 
