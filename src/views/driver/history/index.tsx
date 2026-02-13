@@ -3,13 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import {
-  ArrowLeft,
-  Download,
-  ChevronRight,
-  Truck,
-  Package,
-} from 'lucide-react';
+import { ArrowLeft, ChevronRight, Truck, Package } from 'lucide-react';
 import clsx from 'clsx';
 import { DriverJobHistory } from '@/src/types/driver';
 import { driverService } from '@/src/services/driver.service';
@@ -62,7 +56,7 @@ export function DriverHistoryView() {
   return (
     <div className='min-h-full bg-slate-50 text-slate-900 dark:bg-[#101922] dark:text-white'>
       {/* Header */}
-      <header className='sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3 dark:border-slate-800 dark:bg-[#101922] md:px-10'>
+      <header className='sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3 md:px-10 dark:border-slate-800 dark:bg-[#101922]'>
         <div className='flex items-center gap-4'>
           <Link
             href='/driver-dashboard'
@@ -85,10 +79,6 @@ export function DriverHistoryView() {
               Total {jobs.length} pekerjaan telah diselesaikan.
             </p>
           </div>
-          <button className='flex h-11 items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 text-sm font-bold text-white shadow-lg shadow-blue-600/20 transition-all hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500'>
-            <Download className='h-5 w-5' />
-            <span>Ekspor Data</span>
-          </button>
         </div>
 
         {/* Stats Summary */}
@@ -127,7 +117,9 @@ export function DriverHistoryView() {
         {/* Job History List */}
         <div className='flex flex-col gap-4'>
           {loading ? (
-            <div className='py-12 text-center text-slate-500 dark:text-slate-400'>Memuat...</div>
+            <div className='py-12 text-center text-slate-500 dark:text-slate-400'>
+              Memuat...
+            </div>
           ) : filteredJobs.length === 0 ? (
             <div className='py-12 text-center text-slate-500 dark:text-slate-400'>
               Tidak ada riwayat pekerjaan.
@@ -143,7 +135,7 @@ export function DriverHistoryView() {
                       : `/driver-delivery/${job.id}`
                   )
                 }
-                className='hover:border-blue-500/50 group grid cursor-pointer grid-cols-[auto_1fr_auto_auto_auto] items-center gap-4 rounded-xl border border-slate-200 bg-white p-5 transition-all dark:border-slate-700 dark:bg-[#1a2632]'
+                className='group grid cursor-pointer grid-cols-[auto_1fr_auto_auto_auto] items-center gap-4 rounded-xl border border-slate-200 bg-white p-5 transition-all hover:border-blue-500/50 dark:border-slate-700 dark:bg-[#1a2632]'
               >
                 <div
                   className={clsx(

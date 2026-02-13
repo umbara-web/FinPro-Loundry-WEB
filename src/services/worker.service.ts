@@ -152,4 +152,11 @@ export const workerService = {
     );
     return response.data;
   },
+
+  getTaskDetail: async (taskId: string): Promise<StationTask> => {
+    const response = await api.get<StationTaskResponse>(
+      `/worker/station/tasks/${taskId}`
+    );
+    return transformTask(response.data);
+  },
 };

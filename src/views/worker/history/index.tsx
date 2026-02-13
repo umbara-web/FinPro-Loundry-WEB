@@ -134,8 +134,9 @@ export function WorkerHistoryView() {
             </div>
           ) : (
             jobs.map((job) => (
-              <div
+              <Link
                 key={job.id}
+                href={`/worker-history/${job.id}`}
                 className='group flex flex-wrap items-center justify-between gap-4 rounded-xl border border-slate-200 bg-white p-5 transition-all hover:border-blue-500/50 hover:shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:hover:border-blue-500/50'
               >
                 <div className='flex min-w-70 items-center gap-4'>
@@ -185,7 +186,7 @@ export function WorkerHistoryView() {
                     <ChevronRight className='h-5 w-5' />
                   </button>
                 </div>
-              </div>
+              </Link>
             ))
           )}
         </div>

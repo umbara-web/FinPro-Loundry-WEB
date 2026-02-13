@@ -55,25 +55,15 @@ export function DriverSidebar({ isOpen, onClose }: DriverSidebarProps) {
         <div className='flex flex-col gap-6 p-6'>
           <div className='flex items-start justify-between'>
             <div className='flex items-center gap-3'>
-              <div className='ring-primary/20 relative size-12 overflow-hidden rounded-full border border-gray-200 ring-2 dark:border-gray-700'>
-                {user?.profile_picture_url ? (
-                  <img
-                    src={user.profile_picture_url}
-                    alt={user.name}
-                    className='h-full w-full object-cover'
-                  />
-                ) : (
-                  <div className='flex h-full w-full items-center justify-center bg-blue-100 text-lg font-bold text-blue-600 dark:bg-blue-900 dark:text-blue-200'>
-                    {user?.name?.charAt(0).toUpperCase() || 'D'}
-                  </div>
-                )}
+              <div className='flex items-center justify-center rounded-lg bg-blue-600 p-2 text-white shadow-lg shadow-blue-600/20'>
+                <Truck className='size-6' />
               </div>
               <div className='flex flex-col'>
-                <p className='text-sm font-bold text-slate-900 dark:text-white'>
-                  {user?.name?.toUpperCase() || 'DRIVER'}
+                <p className='text-lg font-bold text-slate-900 dark:text-white'>
+                  Driver Portal
                 </p>
-                <p className='text-xs leading-normal font-normal text-blue-500'>
-                  Driver
+                <p className='text-xs font-medium text-slate-500 dark:text-slate-400'>
+                  FreshLaundry Inc.
                 </p>
               </div>
             </div>
