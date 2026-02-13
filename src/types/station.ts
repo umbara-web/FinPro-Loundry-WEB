@@ -12,6 +12,7 @@ export interface StationTask {
   weight: number;
   serviceType: string;
   status: 'IN_PROGRESS' | 'WAITING' | 'NEED_BYPASS';
+  bypassStatus?: 'PENDING' | 'REJECTED';
   estimatedTime: string;
   items: Array<{ id: string; name: string; qty: number }>;
 }

@@ -17,21 +17,6 @@ import {
 } from '@/src/components/ui/select';
 import type { DateRange } from '@/src/hooks/use-staff-attendance-report';
 
-const calendarThemeOverrides = {
-  '--background': 'oklch(0.15 0.02 240)',
-  '--foreground': 'oklch(0.9 0 0)',
-  '--popover': 'oklch(0.15 0.02 240)',
-  '--popover-foreground': 'oklch(0.9 0 0)',
-  '--muted-foreground': 'oklch(0.7 0.03 240)',
-  '--accent': 'oklch(0.25 0.02 240)',
-  '--accent-foreground': 'oklch(0.9 0 0)',
-  '--primary': 'oklch(0.55 0.2 260)',
-  '--primary-foreground': 'oklch(1 0 0)',
-  '--border': 'oklch(0.3 0.02 240)',
-  '--input': 'oklch(0.3 0.02 240)',
-  '--ring': 'oklch(0.55 0.2 260)',
-} as React.CSSProperties;
-
 interface FilterBarProps {
   date: DateRange | undefined;
   onDateChange: (range: DateRange | undefined) => void;
@@ -46,21 +31,21 @@ export function FilterBar({
   onStaffTypeChange,
 }: FilterBarProps) {
   return (
-    <div className='mb-6 flex flex-col items-end gap-4 rounded-xl border border-[#223649] bg-[#182634] p-4 md:flex-row md:items-center'>
+    <div className='mb-6 flex flex-col items-start gap-4 rounded-xl border border-slate-200 bg-white p-4 sm:items-end md:flex-row md:items-center dark:border-slate-700 dark:bg-[#182634]'>
       {/* Date Range Picker */}
-      <div className='grid gap-2'>
-        <span className='text-xs font-medium text-[#8fadcc]'>
+      <div className='grid w-full gap-2 sm:w-auto'>
+        <span className='text-xs font-medium text-slate-500 dark:text-slate-400'>
           Periode Tanggal
         </span>
         <Popover>
           <PopoverTrigger asChild>
             <button
               className={cn(
-                'flex w-75 items-center justify-start gap-2 rounded-lg border border-[#223649] bg-[#101922] px-3 py-2 text-left text-sm font-normal text-white transition-colors hover:border-[#0a7ff5]/50',
-                !date && 'text-[#8fadcc]'
+                'flex w-full items-center justify-start gap-2 rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-left text-sm font-normal text-slate-900 transition-colors hover:border-blue-500/50 sm:w-75 dark:border-slate-700 dark:bg-[#101922] dark:text-white dark:hover:border-[#0a7ff5]/50',
+                !date && 'text-slate-400 dark:text-[#8fadcc]'
               )}
             >
-              <CalendarIcon className='h-4 w-4 text-[#8fadcc]' />
+              <CalendarIcon className='h-4 w-4 text-slate-400 dark:text-[#8fadcc]' />
               {date?.from ? (
                 date.to ? (
                   <>
@@ -76,9 +61,8 @@ export function FilterBar({
             </button>
           </PopoverTrigger>
           <PopoverContent
-            className='w-auto border-[#223649] bg-[#182634] p-0'
+            className='w-auto border-slate-200 bg-white p-0 dark:border-slate-700 dark:bg-[#182634]'
             align='start'
-            style={calendarThemeOverrides}
           >
             <Calendar
               initialFocus
@@ -100,25 +84,30 @@ export function FilterBar({
       </div>
 
       {/* Staff Type Filter */}
-      <div className='grid gap-2'>
-        <span className='text-xs font-medium text-[#8fadcc]'>Tipe Staff</span>
+      <div className='grid w-full gap-2 sm:w-auto'>
+        <span className='text-xs font-medium text-slate-500 dark:text-slate-400'>
+          Tipe Staff
+        </span>
         <Select value={staffType} onValueChange={onStaffTypeChange}>
-          <SelectTrigger className='w-45 border-[#223649] bg-[#101922] text-white hover:border-[#0a7ff5]/50'>
+          <SelectTrigger className='w-full border-slate-300 bg-slate-50 text-slate-900 hover:border-blue-500/50 sm:w-45 dark:border-slate-700 dark:bg-[#101922] dark:text-white dark:hover:border-[#0a7ff5]/50'>
             <SelectValue placeholder='Semua Staff' />
           </SelectTrigger>
-          <SelectContent className='border-[#223649] bg-[#182634]'>
-            <SelectItem value='ALL' className='text-white hover:bg-[#223649]'>
+          <SelectContent className='border-slate-200 bg-white dark:border-slate-700 dark:bg-[#182634]'>
+            <SelectItem
+              value='ALL'
+              className='text-slate-900 hover:bg-slate-100 dark:text-white dark:hover:bg-slate-700'
+            >
               Semua Staff
             </SelectItem>
             <SelectItem
               value='WORKER'
-              className='text-white hover:bg-[#223649]'
+              className='text-slate-900 hover:bg-slate-100 dark:text-white dark:hover:bg-slate-700'
             >
               Worker
             </SelectItem>
             <SelectItem
               value='DRIVER'
-              className='text-white hover:bg-[#223649]'
+              className='text-slate-900 hover:bg-slate-100 dark:text-white dark:hover:bg-slate-700'
             >
               Driver
             </SelectItem>

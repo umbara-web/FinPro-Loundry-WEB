@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { Hand, ArrowLeft } from 'lucide-react';
+import { Hand, ArrowLeft, Clock, XCircle } from 'lucide-react';
 import {
   StationTask,
   StationType,
@@ -75,6 +75,10 @@ export function TaskDetailPanel({
     expectedTotal > 0 ? Math.round((totalItems / expectedTotal) * 100) : 0;
 
   const isInputEmpty = totalItems === 0;
+  const isBypassPending =
+    task?.status === 'NEED_BYPASS' && task?.bypassStatus === 'PENDING';
+  const isBypassRejected =
+    task?.status === 'NEED_BYPASS' && task?.bypassStatus === 'REJECTED';
 
   useEffect(() => {
     if (!task || totalItems === 0) {
@@ -155,6 +159,7 @@ export function TaskDetailPanel({
       taskId: task.id,
       stationType,
       reason: 'Item count mismatch',
+      itemCounts,
     });
   };
 
@@ -164,7 +169,9 @@ export function TaskDetailPanel({
         <div className='mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-200 text-slate-400 dark:bg-slate-800 dark:text-slate-500'>
           <Hand className='h-8 w-8' />
         </div>
-        <h3 className='text-lg font-bold text-slate-900 dark:text-white'>Pilih task</h3>
+        <h3 className='text-lg font-bold text-slate-900 dark:text-white'>
+          Pilih task
+        </h3>
         <p className='mt-2 text-sm text-slate-500 dark:text-slate-400'>
           Klik pada card di daftar antrian untuk melihat detail.
           <br />
@@ -188,8 +195,42 @@ export function TaskDetailPanel({
       <div
         className={`flex-1 overflow-y-auto px-6 md:px-8 ${showMismatchAlert ? 'pb-56' : 'pb-44'}`}
       >
+        {/* Bypass Status Banner */}
+        {isBypassPending && (
+          <div className='mb-4 flex items-center gap-3 rounded-xl border border-orange-400/30 bg-orange-500/10 p-4'>
+            <div className='rounded-lg bg-orange-500/20 p-2'>
+              <Clock className='h-5 w-5 text-orange-500' />
+            </div>
+            <div>
+              <h4 className='text-sm font-bold text-orange-600 dark:text-orange-400'>
+                Menunggu Persetujuan Admin
+              </h4>
+              <p className='text-xs text-orange-500/80 dark:text-orange-400/70'>
+                Request bypass telah dikirim. Mohon tunggu keputusan admin.
+              </p>
+            </div>
+          </div>
+        )}
+        {isBypassRejected && (
+          <div className='mb-4 flex items-center gap-3 rounded-xl border border-red-400/30 bg-red-500/10 p-4'>
+            <div className='rounded-lg bg-red-500/20 p-2'>
+              <XCircle className='h-5 w-5 text-red-500' />
+            </div>
+            <div>
+              <h4 className='text-sm font-bold text-red-600 dark:text-red-400'>
+                Bypass Ditolak
+              </h4>
+              <p className='text-xs text-red-500/80 dark:text-red-400/70'>
+                Silakan hitung ulang item dan kirim kembali.
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* Item Input Grid */}
-        <div className='grid grid-cols-1 gap-4'>
+        <div
+          className={`grid grid-cols-1 gap-4 ${isBypassPending ? 'pointer-events-none opacity-50' : ''}`}
+        >
           {sortedLaundryItems.map((item, index) => {
             return (
               <ItemCounter
@@ -218,7 +259,7 @@ export function TaskDetailPanel({
         isLoading={
           showMismatchAlert ? bypassRequest.isPending : completeTask.isPending
         }
-        isDisabled={isInputEmpty}
+        isDisabled={isInputEmpty || isBypassPending}
         variant={showMismatchAlert && !isInputEmpty ? 'warning' : 'primary'}
         actionLabel={
           showMismatchAlert && !isInputEmpty ? 'Request Bypass' : 'Selesai'

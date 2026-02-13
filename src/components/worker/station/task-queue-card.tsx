@@ -18,6 +18,26 @@ export function TaskQueueCard({
   isPoolTask = false,
 }: TaskQueueCardProps) {
   const isInProgress = task.status === 'IN_PROGRESS';
+  const isNeedBypass = task.status === 'NEED_BYPASS';
+  const isBypassRejected = isNeedBypass && task.bypassStatus === 'REJECTED';
+  const isBypassPending = isNeedBypass && task.bypassStatus === 'PENDING';
+
+  const getBadgeStyle = () => {
+    if (isBypassRejected)
+      return 'border-red-500/20 bg-red-50 text-red-600 dark:bg-red-500/20 dark:text-red-300';
+    if (isBypassPending)
+      return 'border-orange-500/20 bg-orange-50 text-orange-600 dark:bg-orange-500/20 dark:text-orange-300';
+    if (isInProgress)
+      return 'border-blue-500/20 bg-blue-50 text-blue-600 dark:bg-blue-500/20 dark:text-blue-300';
+    return 'border-yellow-500/20 bg-yellow-50 text-yellow-600 dark:bg-yellow-500/10 dark:text-yellow-400';
+  };
+
+  const getBadgeLabel = () => {
+    if (isBypassRejected) return 'Bypass Ditolak';
+    if (isBypassPending) return 'Menunggu Bypass';
+    if (isInProgress) return 'Sedang Diproses';
+    return 'Menunggu';
+  };
 
   return (
     <div
@@ -34,15 +54,25 @@ export function TaskQueueCard({
         <span
           className={clsx(
             'inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-bold',
-            isInProgress
-              ? 'border-blue-500/20 bg-blue-50 text-blue-600 dark:bg-blue-500/20 dark:text-blue-300'
-              : 'border-yellow-500/20 bg-yellow-50 text-yellow-600 dark:bg-yellow-500/10 dark:text-yellow-400'
+            isActive
+              ? 'border-white/20 bg-white/20 text-white'
+              : getBadgeStyle()
           )}
         >
-          {isInProgress && (
-            <span className='h-1.5 w-1.5 animate-pulse rounded-full bg-blue-600 dark:bg-blue-400' />
+          {(isInProgress || isBypassPending) && (
+            <span
+              className={clsx(
+                'h-1.5 w-1.5 animate-pulse rounded-full',
+                isBypassPending
+                  ? 'bg-orange-600 dark:bg-orange-400'
+                  : 'bg-blue-600 dark:bg-blue-400'
+              )}
+            />
           )}
-          {isInProgress ? 'Sedang Diproses' : 'Menunggu'}
+          {isBypassRejected && (
+            <span className='h-1.5 w-1.5 rounded-full bg-red-600 dark:bg-red-400' />
+          )}
+          {getBadgeLabel()}
         </span>
         <span
           className={clsx(
