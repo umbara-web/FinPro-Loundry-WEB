@@ -14,6 +14,8 @@ export default function StaffAttendanceView() {
     setDate,
     staffType,
     setStaffType,
+    selectedPreset,
+    handlePresetChange,
     refetch,
     stats,
     error,
@@ -62,6 +64,8 @@ export default function StaffAttendanceView() {
           onDateChange={setDate}
           staffType={staffType}
           onStaffTypeChange={setStaffType}
+          selectedPreset={selectedPreset}
+          onPresetChange={handlePresetChange}
         />
 
         <AttendanceTable records={records} isLoading={isLoading} />
