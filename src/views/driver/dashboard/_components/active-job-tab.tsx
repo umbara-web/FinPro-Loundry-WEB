@@ -1,5 +1,5 @@
 import { ActiveJob } from '@/src/types/driver';
-import { ActiveJobCard } from '@/src/components/driver/dashboard/active-job-card';
+import { ActiveJobCard } from './active-job-card';
 
 interface ActiveJobTabProps {
   activeJob: ActiveJob | null;

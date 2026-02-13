@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import clsx from 'clsx';
 import { toast } from 'sonner';
-import { driverService } from '@/src/services/driver.service';
+import { driverService } from '@/src/services/driver';
 
 const MapView = dynamic(
   () => import('@/src/components/dashboard/address/map/map-view'),
@@ -188,7 +188,7 @@ export function DriverPickupDetailView() {
   return (
     <div className='flex min-h-full flex-col bg-slate-50 dark:bg-[#101922]'>
       {/* Header */}
-      <header className='sticky top-0 z-50 flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3 dark:border-slate-800 dark:bg-[#101922] md:px-10'>
+      <header className='sticky top-0 z-50 flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3 md:px-10 dark:border-slate-800 dark:bg-[#101922]'>
         <div className='flex items-center gap-4'>
           <Link
             href='/driver-dashboard'
@@ -216,7 +216,7 @@ export function DriverPickupDetailView() {
                     parseFloat(pickup.outlet.lat),
                     parseFloat(pickup.outlet.long),
                   ]}
-                  onLocationSelect={() => { }}
+                  onLocationSelect={() => {}}
                   zoom={15}
                 />
               ) : pickup.customer_address.lat &&
@@ -226,7 +226,7 @@ export function DriverPickupDetailView() {
                     parseFloat(pickup.customer_address.lat),
                     parseFloat(pickup.customer_address.long),
                   ]}
-                  onLocationSelect={() => { }}
+                  onLocationSelect={() => {}}
                   zoom={15}
                 />
               ) : (
@@ -260,11 +260,11 @@ export function DriverPickupDetailView() {
                               className={clsx(
                                 'flex h-8 w-8 items-center justify-center rounded-full',
                                 isActive &&
-                                'bg-blue-600 text-white shadow-[0_0_15px_rgba(37,99,235,0.4)] dark:bg-blue-600 dark:shadow-[0_0_15px_rgba(10,127,245,0.4)]',
+                                  'bg-blue-600 text-white shadow-[0_0_15px_rgba(37,99,235,0.4)] dark:bg-blue-600 dark:shadow-[0_0_15px_rgba(10,127,245,0.4)]',
                                 isCompleted && 'bg-green-500 text-white',
                                 !isActive &&
-                                !isCompleted &&
-                                'bg-slate-100 text-slate-400 dark:bg-slate-700 dark:text-slate-500'
+                                  !isCompleted &&
+                                  'bg-slate-100 text-slate-400 dark:bg-slate-700 dark:text-slate-500'
                               )}
                             >
                               {isCompleted ? (
@@ -403,7 +403,7 @@ export function DriverPickupDetailView() {
                             getCurrentStepIndex() >= 1 && pickup.outlet
                               ? `https://www.google.com/maps/dir/?api=1&destination=${pickup.outlet.lat},${pickup.outlet.long}`
                               : pickup.customer_address.lat &&
-                                pickup.customer_address.long
+                                  pickup.customer_address.long
                                 ? `https://www.google.com/maps/dir/?api=1&destination=${pickup.customer_address.lat},${pickup.customer_address.long}`
                                 : '#'
                           }
@@ -428,7 +428,9 @@ export function DriverPickupDetailView() {
                   <h4 className='text-xs font-bold tracking-widest text-slate-500 uppercase dark:text-slate-400'>
                     Catatan
                   </h4>
-                  <p className='text-sm text-slate-900 dark:text-white'>{pickup.notes}</p>
+                  <p className='text-sm text-slate-900 dark:text-white'>
+                    {pickup.notes}
+                  </p>
                 </div>
               )}
 
@@ -448,13 +450,13 @@ export function DriverPickupDetailView() {
       </main>
 
       {/* Bottom Action Bar */}
-      <div className='sticky bottom-0 border-t border-slate-200 bg-white/95 px-4 py-5 backdrop-blur-md dark:border-slate-800 dark:bg-[#101922]/95 md:px-10'>
+      <div className='sticky bottom-0 border-t border-slate-200 bg-white/95 px-4 py-5 backdrop-blur-md md:px-10 dark:border-slate-800 dark:bg-[#101922]/95'>
         <div className='mx-auto max-w-240'>
           {isWaitingDriver ? (
             <button
               onClick={handleAcceptPickup}
               disabled={updating}
-              className='flex w-full transform items-center justify-center gap-3 rounded-xl bg-blue-600 py-4 text-lg font-bold text-white shadow-[0_8px_30px_rgb(37,99,235,0.3)] transition-all hover:bg-blue-700 active:scale-[0.98] disabled:opacity-50 dark:bg-blue-600 dark:hover:bg-blue-500 dark:shadow-[0_8px_30px_rgb(10,127,245,0.3)]'
+              className='flex w-full transform items-center justify-center gap-3 rounded-xl bg-blue-600 py-4 text-lg font-bold text-white shadow-[0_8px_30px_rgb(37,99,235,0.3)] transition-all hover:bg-blue-700 active:scale-[0.98] disabled:opacity-50 dark:bg-blue-600 dark:shadow-[0_8px_30px_rgb(10,127,245,0.3)] dark:hover:bg-blue-500'
             >
               <Package className='h-6 w-6' />
               {updating ? 'Memproses...' : 'Terima Request'}

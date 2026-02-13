@@ -1,4 +1,4 @@
-import { DriverHistoryView } from '@/src/views/driver/history';
+import { DriverHistoryView } from '@/src/views/Driver/history';
 
 export default function DriverHistoryPage() {
   return <DriverHistoryView />;

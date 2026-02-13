@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { toast } from 'sonner';
-import { driverService } from '@/src/services/driver.service';
+import { driverService } from '@/src/services/driver';
 import {
   AvailablePickupRequest,
   AvailableDeliveryRequest,
