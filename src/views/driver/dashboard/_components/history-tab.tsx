@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { CheckCircle2, Package, Truck } from 'lucide-react';
 import clsx from 'clsx';
-import { DashboardHistoryItem } from '@/src/hooks/use-driver-dashboard';
+import { DashboardHistoryItem } from '../_hooks/useDriverDashboard';
 
 interface HistoryTabProps {
   history: DashboardHistoryItem[];
@@ -47,9 +47,9 @@ export function HistoryTab({ history }: HistoryTabProps) {
               )}
             >
               {item.type === 'PICKUP' ? (
-                <Package className='text-orange-600 dark:text-orange-500 h-4 w-4' />
+                <Package className='h-4 w-4 text-orange-600 dark:text-orange-500' />
               ) : (
-                <Truck className='text-blue-600 dark:text-blue-500 h-4 w-4' />
+                <Truck className='h-4 w-4 text-blue-600 dark:text-blue-500' />
               )}
             </div>
             <div className='min-w-0 flex-1'>
@@ -69,9 +69,9 @@ export function HistoryTab({ history }: HistoryTabProps) {
             <p className='text-xs whitespace-nowrap text-slate-500 dark:text-slate-400'>
               {item.completed_at
                 ? new Date(item.completed_at).toLocaleTimeString('id-ID', {
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })
                 : '-'}
             </p>
           </div>

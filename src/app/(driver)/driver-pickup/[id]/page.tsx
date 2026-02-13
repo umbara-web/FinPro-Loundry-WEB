@@ -1,4 +1,4 @@
-import { DriverPickupDetailView } from '@/src/views/driver/pickup/detail';
+import { DriverPickupDetailView } from '@/src/views/Driver/pickup/detail';
 
 export default function DriverPickupDetailPage() {
   return <DriverPickupDetailView />;

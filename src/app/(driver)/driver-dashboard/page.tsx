@@ -1,4 +1,4 @@
-import { DriverDashboardView } from '@/src/views/driver/dashboard';
+import { DriverDashboardView } from '@/src/views/Driver/Dashboard';
 
 export default function DriverDashboardPage() {
   return <DriverDashboardView />;

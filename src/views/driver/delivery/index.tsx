@@ -11,7 +11,7 @@ import {
   RefreshCw,
 } from 'lucide-react';
 import { AvailableDeliveryRequest } from '@/src/types/driver';
-import { driverService } from '@/src/services/driver.service';
+import { driverService } from '@/src/services/driver';
 
 export function DriverDeliveryListView() {
   const [deliveries, setDeliveries] = useState<AvailableDeliveryRequest[]>([]);
@@ -47,7 +47,7 @@ export function DriverDeliveryListView() {
   return (
     <div className='min-h-full bg-slate-50 text-slate-900 dark:bg-[#101922] dark:text-white'>
       {/* Header */}
-      <header className='sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3 dark:border-slate-800 dark:bg-[#101922] md:px-10'>
+      <header className='sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3 md:px-10 dark:border-slate-800 dark:bg-[#101922]'>
         <div className='flex items-center gap-4'>
           <Link
             href='/driver-dashboard'
@@ -71,12 +71,16 @@ export function DriverDeliveryListView() {
       <main className='mx-auto max-w-240 px-4 py-6 md:px-10'>
         <div className='mb-6'>
           <h1 className='text-2xl font-bold'>Daftar Request Antar</h1>
-          <p className='text-slate-500 dark:text-slate-400'>{deliveries.length} request tersedia</p>
+          <p className='text-slate-500 dark:text-slate-400'>
+            {deliveries.length} request tersedia
+          </p>
         </div>
 
         <div className='flex flex-col gap-4'>
           {loading ? (
-            <div className='py-12 text-center text-slate-500 dark:text-slate-400'>Memuat...</div>
+            <div className='py-12 text-center text-slate-500 dark:text-slate-400'>
+              Memuat...
+            </div>
           ) : deliveries.length === 0 ? (
             <div className='py-12 text-center text-slate-500 dark:text-slate-400'>
               Tidak ada delivery request saat ini.
@@ -85,12 +89,12 @@ export function DriverDeliveryListView() {
             deliveries.map((delivery) => (
               <div
                 key={delivery.id}
-                className='hover:border-blue-500/50 flex flex-col gap-4 rounded-xl border border-transparent bg-white p-5 shadow-sm transition-all dark:bg-slate-800'
+                className='flex flex-col gap-4 rounded-xl border border-transparent bg-white p-5 shadow-sm transition-all hover:border-blue-500/50 dark:bg-slate-800'
               >
                 <div className='flex items-start justify-between'>
                   <div className='flex items-center gap-3'>
                     <div className='rounded-lg bg-blue-100 p-3 dark:bg-blue-500/10'>
-                      <Truck className='text-blue-600 dark:text-blue-500 h-6 w-6' />
+                      <Truck className='h-6 w-6 text-blue-600 dark:text-blue-500' />
                     </div>
                     <div>
                       <p className='text-lg font-bold text-slate-900 dark:text-white'>
@@ -129,13 +133,13 @@ export function DriverDeliveryListView() {
                 <div className='flex gap-2 pt-2'>
                   <button
                     onClick={() => handleAccept(delivery.id)}
-                    className='bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500 flex-1 rounded-lg py-3 text-sm font-bold text-white transition-colors'
+                    className='flex-1 rounded-lg bg-blue-600 py-3 text-sm font-bold text-white transition-colors hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500'
                   >
                     Terima Request
                   </button>
                   <Link
                     href={`/driver-delivery/${delivery.id}`}
-                    className='bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600 rounded-lg px-4 py-3 text-sm font-bold transition-colors'
+                    className='rounded-lg bg-slate-100 px-4 py-3 text-sm font-bold text-slate-700 transition-colors hover:bg-slate-200 dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600'
                   >
                     Detail
                   </Link>

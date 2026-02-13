@@ -1,4 +1,4 @@
-import { DriverDeliveryListView } from '@/src/views/driver/delivery';
+import { DriverDeliveryListView } from '@/src/views/Driver/delivery';
 
 export default function DriverDeliveryListPage() {
   return <DriverDeliveryListView />;

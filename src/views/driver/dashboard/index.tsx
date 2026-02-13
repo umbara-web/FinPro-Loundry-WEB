@@ -4,12 +4,12 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/src/context/AuthContext';
 import { Truck, Bell, Clock } from 'lucide-react';
 import clsx from 'clsx';
-import { useDriverDashboard } from '@/src/hooks/use-driver-dashboard';
+import { useDriverDashboard } from './_hooks/useDriverDashboard';
 
-import { DashboardHeader } from '@/src/components/driver/dashboard/dashboard-header';
-import { RequestsTab } from '@/src/components/driver/dashboard/requests-tab';
-import { ActiveJobTab } from '@/src/components/driver/dashboard/active-job-tab';
-import { HistoryTab } from '@/src/components/driver/dashboard/history-tab';
+import { DashboardHeader } from './_components/dashboard-header';
+import { RequestsTab } from './_components/requests-tab';
+import { ActiveJobTab } from './_components/active-job-tab';
+import { HistoryTab } from './_components/history-tab';
 
 type TabType = 'requests' | 'active' | 'history';
 
@@ -39,7 +39,7 @@ export function DriverDashboardView() {
   const totalRequests = pickups.length + deliveries.length;
 
   return (
-    <div className='min-h-full bg-slate-50 px-4 py-6 dark:bg-[#101922] md:px-10'>
+    <div className='min-h-full bg-slate-50 px-4 py-6 md:px-10 dark:bg-[#101922]'>
       <div className='mx-auto max-w-240'>
         {/* Profile Header & Status Toggle */}
         <DashboardHeader
@@ -62,7 +62,7 @@ export function DriverDashboardView() {
             <Bell className='h-5 w-5' />
             Request Baru
             {totalRequests > 0 && (
-              <span className='bg-blue-100 text-blue-600 dark:bg-blue-500/20 rounded-full px-1.5 py-0.5 text-[10px] dark:text-blue-500'>
+              <span className='rounded-full bg-blue-100 px-1.5 py-0.5 text-[10px] text-blue-600 dark:bg-blue-500/20 dark:text-blue-500'>
                 {totalRequests}
               </span>
             )}

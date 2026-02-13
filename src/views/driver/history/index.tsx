@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { ArrowLeft, ChevronRight, Truck, Package } from 'lucide-react';
 import clsx from 'clsx';
 import { DriverJobHistory } from '@/src/types/driver';
-import { driverService } from '@/src/services/driver.service';
+import { driverService } from '@/src/services/driver';
 
 export function DriverHistoryView() {
   const router = useRouter();

@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import clsx from 'clsx';
 import { toast } from 'sonner';
-import { driverService } from '@/src/services/driver.service';
+import { driverService } from '@/src/services/driver';
 
 const MapView = dynamic(
   () => import('@/src/components/dashboard/address/map/map-view'),
@@ -173,7 +173,7 @@ export function DriverDeliveryDetailView() {
   return (
     <div className='flex min-h-full flex-col bg-slate-50 dark:bg-[#101922]'>
       {/* Header */}
-      <header className='sticky top-0 z-50 flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3 dark:border-slate-800 dark:bg-[#101922] md:px-10'>
+      <header className='sticky top-0 z-50 flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3 md:px-10 dark:border-slate-800 dark:bg-[#101922]'>
         <div className='flex items-center gap-4'>
           <Link
             href='/driver-dashboard'
@@ -198,7 +198,7 @@ export function DriverDeliveryDetailView() {
           <div className='mb-6 overflow-hidden rounded-xl border border-slate-200 bg-slate-100 dark:border-slate-800 dark:bg-[#182634]'>
             <div className='aspect-video w-full'>
               {delivery.order?.pickup_request?.customer_address?.lat &&
-                delivery.order?.pickup_request?.customer_address?.long ? (
+              delivery.order?.pickup_request?.customer_address?.long ? (
                 <MapView
                   center={[
                     parseFloat(
@@ -208,7 +208,7 @@ export function DriverDeliveryDetailView() {
                       delivery.order.pickup_request.customer_address.long
                     ),
                   ]}
-                  onLocationSelect={() => { }}
+                  onLocationSelect={() => {}}
                   zoom={15}
                 />
               ) : (
@@ -241,11 +241,11 @@ export function DriverDeliveryDetailView() {
                             className={clsx(
                               'flex h-8 w-8 items-center justify-center rounded-full',
                               isActive &&
-                              'bg-blue-600 text-white shadow-[0_0_15px_rgba(37,99,235,0.4)] dark:bg-blue-600 dark:shadow-[0_0_15px_rgba(10,127,245,0.4)]',
+                                'bg-blue-600 text-white shadow-[0_0_15px_rgba(37,99,235,0.4)] dark:bg-blue-600 dark:shadow-[0_0_15px_rgba(10,127,245,0.4)]',
                               isCompleted && 'bg-green-500 text-white',
                               !isActive &&
-                              !isCompleted &&
-                              'bg-slate-100 text-slate-400 dark:bg-slate-700 dark:text-slate-500'
+                                !isCompleted &&
+                                'bg-slate-100 text-slate-400 dark:bg-slate-700 dark:text-slate-500'
                             )}
                           >
                             {isCompleted ? (
@@ -354,14 +354,13 @@ export function DriverDeliveryDetailView() {
                           href={
                             delivery.order?.pickup_request?.customer_address
                               ?.lat &&
-                              delivery.order?.pickup_request?.customer_address
-                                ?.long
+                            delivery.order?.pickup_request?.customer_address
+                              ?.long
                               ? `https://www.google.com/maps/dir/?api=1&destination=${delivery.order.pickup_request.customer_address.lat},${delivery.order.pickup_request.customer_address.long}`
                               : '#'
                           }
                           target='_blank'
                           rel='noopener noreferrer'
-
                           className='flex w-full items-center justify-center gap-2 rounded-lg bg-slate-200 px-4 py-2.5 text-sm font-bold text-slate-700 transition-all hover:bg-slate-300 dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600'
                         >
                           <Map className='h-5 w-5' />
@@ -379,7 +378,9 @@ export function DriverDeliveryDetailView() {
                   Rincian Order
                 </h4>
                 <div className='flex items-center justify-between'>
-                  <span className='text-sm text-slate-500 dark:text-slate-400'>Order ID</span>
+                  <span className='text-sm text-slate-500 dark:text-slate-400'>
+                    Order ID
+                  </span>
                   <span className='text-sm font-medium text-slate-900 dark:text-white'>
                     {delivery.order?.order_number ||
                       `ORD-${delivery.order_id.slice(-4).toUpperCase()}`}
@@ -387,7 +388,9 @@ export function DriverDeliveryDetailView() {
                 </div>
                 {delivery.total_weight && (
                   <div className='flex items-center justify-between'>
-                    <span className='text-sm text-slate-500 dark:text-slate-400'>Berat Total</span>
+                    <span className='text-sm text-slate-500 dark:text-slate-400'>
+                      Berat Total
+                    </span>
                     <span className='text-sm font-medium text-slate-900 dark:text-white'>
                       {delivery.total_weight} kg
                     </span>
@@ -409,7 +412,7 @@ export function DriverDeliveryDetailView() {
       </main>
 
       {/* Bottom Action Bar */}
-      <div className='sticky bottom-0 border-t border-slate-200 bg-white/95 px-4 py-5 backdrop-blur-md dark:border-slate-800 dark:bg-[#101922]/95 md:px-10'>
+      <div className='sticky bottom-0 border-t border-slate-200 bg-white/95 px-4 py-5 backdrop-blur-md md:px-10 dark:border-slate-800 dark:bg-[#101922]/95'>
         <div className='mx-auto max-w-240'>
           {currentStep === 'DONE' ? (
             <div className='flex flex-col gap-3'>

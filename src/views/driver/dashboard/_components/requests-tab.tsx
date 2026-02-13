@@ -2,8 +2,8 @@ import {
   AvailablePickupRequest,
   AvailableDeliveryRequest,
 } from '@/src/types/driver';
-import { PickupRequestCard } from '@/src/components/driver/dashboard/pickup-request-card';
-import { DeliveryRequestCard } from '@/src/components/driver/dashboard/delivery-request-card';
+import { PickupRequestCard } from './pickup-request-card';
+import { DeliveryRequestCard } from './delivery-request-card';
 
 interface RequestsTabProps {
   pickups: AvailablePickupRequest[];
