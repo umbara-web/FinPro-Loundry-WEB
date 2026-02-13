@@ -3,7 +3,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
-import { StationType, StationTask, ItemCountData } from '@/src/types/station';
+import { StationType, ItemCountData } from '@/src/types/station';
 
 import { workerService } from '../services/worker.service';
 
@@ -95,5 +95,13 @@ export const useBypassRequest = () => {
     onError: (error: Error) => {
       toast.error(error.message || 'Gagal mengirim permintaan bypass');
     },
+  });
+};
+
+export const useWorkerTaskDetail = (taskId: string) => {
+  return useQuery({
+    queryKey: ['worker-task-detail', taskId],
+    queryFn: () => workerService.getTaskDetail(taskId),
+    enabled: !!taskId,
   });
 };
