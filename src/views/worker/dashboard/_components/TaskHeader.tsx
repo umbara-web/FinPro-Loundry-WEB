@@ -1,3 +1,5 @@
+'use client';
+
 import { StationTask, StationConfig } from '@/src/types/station';
 import { ArrowLeft } from 'lucide-react';
 
@@ -59,6 +61,6 @@ export function TaskHeader({
           </p>
         </div>
       </div>
-    </div >
+    </div>
   );
 }

@@ -1,14 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import {
   TaskQueueSidebar,
   TaskDetailPanel,
-} from '@/src/components/worker/station';
-import { useStationTasks } from '@/src/hooks/use-station-tasks';
-import { StationTask, StationType } from '@/src/types/station';
+  WorkerMobileNav,
+} from '@/src/views/Worker/Dashboard/_components';
+import { useWorkerDashboard } from '@/src/views/Worker/Dashboard/_hooks/use-worker-dashboard';
+import { StationType } from '@/src/views/Worker/Dashboard/_types';
 import clsx from 'clsx';
-
 import { AlertCircle, ClipboardList } from 'lucide-react';
 
 const STATION_TABS: { id: StationType; label: string; color: string }[] = [
@@ -17,37 +16,19 @@ const STATION_TABS: { id: StationType; label: string; color: string }[] = [
   { id: 'PACKING', label: 'Packing', color: '#10b981' },
 ];
 
-import { WorkerMobileNav } from '@/src/components/worker/station/worker-mobile-nav';
-
 export function WorkerDashboardView() {
-  const [activeStation, setActiveStation] = useState<StationType>('WASHING');
-  const [selectedTask, setSelectedTask] = useState<StationTask | null>(null);
-  const [viewMode, setViewMode] = useState<'LIST' | 'DETAIL'>('LIST');
-  const { data, isLoading, isError, error } = useStationTasks(activeStation);
-
-  useEffect(() => {
-    setSelectedTask(null);
-    setViewMode('LIST');
-  }, [activeStation]);
-
-  const handleTaskSelect = (task: StationTask) => {
-    setSelectedTask(task);
-    setViewMode('DETAIL');
-  };
-
-  const handleBackToList = () => {
-    setSelectedTask(null);
-    setViewMode('LIST');
-  };
-
-  useEffect(() => {
-    if (!selectedTask && data?.mine && data.mine.length > 0) {
-      const inProgressTask = data.mine.find((t) => t.status === 'IN_PROGRESS');
-      if (inProgressTask) {
-        setSelectedTask(inProgressTask);
-      }
-    }
-  }, [data, selectedTask]);
+  const {
+    activeStation,
+    selectedTask,
+    viewMode,
+    data,
+    isLoading,
+    isError,
+    error,
+    handleTaskSelect,
+    handleBackToList,
+    handleStationChange,
+  } = useWorkerDashboard();
 
   return (
     <>
@@ -85,7 +66,7 @@ export function WorkerDashboardView() {
               stationType={activeStation}
               isLoading={isLoading}
               stationTabs={STATION_TABS}
-              onStationChange={setActiveStation}
+              onStationChange={handleStationChange}
             />
           </div>
 
@@ -125,7 +106,7 @@ export function WorkerDashboardView() {
       {/* Bottom Navigation (Mobile Only) - Station Switcher */}
       <WorkerMobileNav
         activeStation={activeStation}
-        onStationChange={setActiveStation}
+        onStationChange={handleStationChange}
       />
     </>
   );

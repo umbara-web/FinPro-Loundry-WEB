@@ -7,8 +7,8 @@ import {
   StationType,
   getStationConfig,
 } from '@/src/types/station';
-import { TaskQueueCard } from './task-queue-card';
-import { TaskQueueSkeleton } from './task-queue-skeleton';
+import { TaskQueueCard } from './TaskQueueCard';
+import { TaskQueueSkeleton } from './TaskQueueSkeleton';
 import { Input } from '@/src/components/ui/input';
 import { useClaimTask } from '@/src/hooks/use-station-tasks';
 import clsx from 'clsx';
@@ -166,7 +166,7 @@ export function TaskQueueSidebar({
                       <TaskQueueCard
                         task={task}
                         isActive={false}
-                        onClick={() => { }}
+                        onClick={() => {}}
                         isPoolTask
                       />
                       <button

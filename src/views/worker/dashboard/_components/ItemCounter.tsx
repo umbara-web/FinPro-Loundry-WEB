@@ -64,7 +64,9 @@ export function ItemCounter({
             <p
               className={clsx(
                 'mt-1 text-xs font-semibold',
-                isMatch ? 'text-green-600 dark:text-green-400' : 'text-yellow-600 dark:text-yellow-400'
+                isMatch
+                  ? 'text-green-600 dark:text-green-400'
+                  : 'text-yellow-600 dark:text-yellow-400'
               )}
             >
               Target: {expectedCount}
@@ -83,7 +85,7 @@ export function ItemCounter({
             'flex h-10 w-10 items-center justify-center rounded-md transition-all sm:h-12 sm:w-12',
             isZero
               ? 'cursor-not-allowed text-slate-300 dark:text-slate-600'
-              : 'text-red-500 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20 active:scale-95'
+              : 'text-red-500 hover:bg-red-50 active:scale-95 dark:text-red-400 dark:hover:bg-red-900/20'
           )}
           title='Reset ke 0'
         >
@@ -99,7 +101,7 @@ export function ItemCounter({
             'bg-white dark:bg-slate-800',
             isZero
               ? 'cursor-not-allowed text-slate-300 dark:text-slate-600'
-              : 'text-slate-700 hover:bg-slate-50 dark:text-white dark:hover:bg-slate-700 active:scale-95'
+              : 'text-slate-700 hover:bg-slate-50 active:scale-95 dark:text-white dark:hover:bg-slate-700'
           )}
         >
           <Minus className='h-4 w-4 sm:h-5 sm:w-5' />
@@ -116,7 +118,9 @@ export function ItemCounter({
           className={clsx(
             'h-10 w-12 border-none bg-transparent p-0 text-center font-mono text-lg font-bold sm:h-12 sm:w-16 sm:text-xl',
             'focus:ring-0 focus:outline-none',
-            isZero ? 'text-slate-400 dark:text-slate-500' : 'text-slate-900 dark:text-white'
+            isZero
+              ? 'text-slate-400 dark:text-slate-500'
+              : 'text-slate-900 dark:text-white'
           )}
         />
 

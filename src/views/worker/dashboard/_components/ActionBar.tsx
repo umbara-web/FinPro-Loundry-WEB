@@ -85,9 +85,7 @@ export function ActionBar({
               <div
                 className={clsx(
                   'h-full transition-all duration-300',
-                  isComplete
-                    ? 'bg-emerald-500'
-                    : 'bg-blue-600'
+                  isComplete ? 'bg-emerald-500' : 'bg-blue-600'
                 )}
                 style={{ width: `${validPercentage}%` }}
               />
@@ -102,7 +100,9 @@ export function ActionBar({
             <span
               className={clsx(
                 'text-xs font-bold whitespace-nowrap',
-                isExcess ? 'text-red-500 dark:text-red-400' : 'text-slate-900 dark:text-white'
+                isExcess
+                  ? 'text-red-500 dark:text-red-400'
+                  : 'text-slate-900 dark:text-white'
               )}
             >
               {progressLabel}

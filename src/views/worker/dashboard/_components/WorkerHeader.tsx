@@ -12,7 +12,10 @@ interface WorkerHeaderProps {
   onToggleSidebar: () => void;
 }
 
-export function WorkerHeader({ isSidebarOpen, onToggleSidebar }: WorkerHeaderProps) {
+export function WorkerHeader({
+  isSidebarOpen,
+  onToggleSidebar,
+}: WorkerHeaderProps) {
   const { user } = useAuth();
   const pathname = usePathname();
 
