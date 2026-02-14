@@ -4,12 +4,11 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/src/context/AuthContext';
 import { Truck, Bell, Clock } from 'lucide-react';
 import clsx from 'clsx';
-import { useDriverDashboard } from './_hooks/useDriverDashboard';
-
-import { DashboardHeader } from './_components/dashboard-header';
-import { RequestsTab } from './_components/requests-tab';
-import { ActiveJobTab } from './_components/active-job-tab';
-import { HistoryTab } from './_components/history-tab';
+import { useDriverDashboard } from '@/src/views/driver/dashboard/_hooks/useDriverDashboard';
+import { DashboardHeader } from '@/src/views/driver/dashboard/_components/dashboard-header';
+import { RequestsTab } from '@/src/views/driver/dashboard/_components/requests-tab';
+import { ActiveJobTab } from '@/src/views/driver/dashboard/_components/active-job-tab';
+import { HistoryTab } from '@/src/views/driver/dashboard/_components/history-tab';
 
 type TabType = 'requests' | 'active' | 'history';
 
