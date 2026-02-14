@@ -3,8 +3,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { Plus } from 'lucide-react';
-import SidebarDashboard from '@/app/components/mainsidebar';
-import Pagination from '@/app/components/pagination';
+import SidebarDashboard from '@/src/app/admin/allorder/components/mainsidebar';
+import Pagination from '@/src/app/admin/allorder/components/pagination';
 import { useItems } from './hooks/useItems';
 import ItemFilters from './components/ItemFilters';
 import ItemTable from './components/ItemTable';

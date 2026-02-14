@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Outlet, OutletFormData } from '../types';
-import api from '@/utils/api';
+import api from '@/src/app/utils/api';
 
 export const useOutlets = () => {
     const [outlets, setOutlets] = useState<Outlet[]>([]);

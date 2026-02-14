@@ -1,6 +1,6 @@
 'use client';
 
-import SidebarDashboard from '@/app/components/mainsidebar';
+import SidebarDashboard from '@/src/app/admin/allorder/components/mainsidebar';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';

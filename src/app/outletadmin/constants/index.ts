@@ -1,4 +1,4 @@
-import { Order, Stat } from '@/app/outletadmin/types';
+import { Order, Stat } from '@/src/app/outletadmin/types';
 
 export const MOCK_ORDERS: Order[] = [
     { id: "#LD-2301", date: "Today, 10:30 AM", customer: "Budi Santoso", phone: "+62 812-3456-7890", service: "Wash & Fold", items: "Mixed Clothes", quantity: 15, weight: 5, status: "In Progress", assigned: "Siti A.", total: "Rp 45.000", paid: true },

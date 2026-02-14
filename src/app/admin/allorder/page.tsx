@@ -1,9 +1,9 @@
 'use client';
 
-import React from 'react';
+
 import { FileText } from 'lucide-react';
-import SidebarDashboard from '@/app/components/mainsidebar';
-import Pagination from '../../components/pagination';
+import SidebarDashboard from '@/src/app/admin/allorder/components/mainsidebar';
+import Pagination from '@/src/app/admin/allorder/components/pagination';
 import OrderStats from './components/OrderStats';
 import OrderFilters from './components/OrderFilters';
 import OrderTable from './components/OrderTable';

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Package, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
-import api from '@/utils/api';
+import api from '@/src/app/utils/api';
 
 import { useAddresses } from './hooks/useAddresses';
 import { useOrderForm } from './hooks/useOrderForm';
@@ -51,7 +51,7 @@ export default function NewOrderPage() {
     }
 
     try {
-      
+
       const outletsRes = await api.get('/api/outlets');
       const outlets = outletsRes.data;
       const outletId = outlets.length > 0 ? outlets[0].id : null;
@@ -72,7 +72,7 @@ export default function NewOrderPage() {
       };
 
       if (!payload.userId) {
-  
+
         console.warn('User ID missing on address');
       }
 
@@ -151,7 +151,7 @@ export default function NewOrderPage() {
         isOpen={showNewAddressModal}
         onClose={() => setShowNewAddressModal(false)}
         onSuccess={(newAddress) => {
-         
+
           addAddress(newAddress);
           setSelectedAddressId(newAddress.id); // ID type issue potentially
           setShowNewAddressModal(false);

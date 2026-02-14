@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
-import api from '@/utils/api';
-// import { orders } from '../constants/mockData'; // No longer needed
+import api from '@/src/app/utils/api';
+
 
 export const useOrders = () => {
     const [orders, setOrders] = useState<any[]>([]);

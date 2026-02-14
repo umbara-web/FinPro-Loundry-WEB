@@ -1,6 +1,6 @@
-import React from 'react';
+
 import { Calendar, Clock, RefreshCcw, CheckCircle2 } from "lucide-react";
-import { Stat } from "@/app/outletadmin/types";
+import { Stat } from "@/src/app/outletadmin/types";
 
 const ICONS = {
     calendar: <Calendar size={18} />,

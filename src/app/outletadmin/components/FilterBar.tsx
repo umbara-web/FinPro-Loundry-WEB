@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { Search, Calendar, Filter, UserCircle, ChevronDown } from "lucide-react";
 
 interface FilterBarProps {
@@ -42,8 +42,8 @@ export default function FilterBar({
             <button
                 onClick={() => onDateChange(dateFilter === 'Today' ? 'All' : 'Today')}
                 className={`border rounded-xl px-4 py-2.5 text-sm flex items-center gap-2 transition-all ${dateFilter === 'Today'
-                        ? 'bg-[#4FD1C5]/10 border-[#4FD1C5] text-[#4FD1C5]'
-                        : 'bg-[#1E1E1E] border-gray-800 text-gray-300 hover:bg-[#252525]'
+                    ? 'bg-[#4FD1C5]/10 border-[#4FD1C5] text-[#4FD1C5]'
+                    : 'bg-[#1E1E1E] border-gray-800 text-gray-300 hover:bg-[#252525]'
                     }`}
             >
                 <Calendar size={16} />

@@ -1,7 +1,7 @@
 import React from 'react';
 import { MapPin, Phone, Clock, Edit2, Trash2 } from 'lucide-react';
 import { Outlet } from '../types';
-import Pagination from '../../../components/pagination';
+import Pagination from '@/src/app/admin/allorder/components/pagination';
 
 interface OutletTableProps {
     outlets: Outlet[];

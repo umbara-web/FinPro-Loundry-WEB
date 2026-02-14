@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { OutletFormData } from '../../types';
-import api from '@/utils/api';
+import api from '@/src/app/utils/api';
 
 export const useOutletForm = () => {
     const router = useRouter();
