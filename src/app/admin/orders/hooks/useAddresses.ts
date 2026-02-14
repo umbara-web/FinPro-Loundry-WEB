@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Address } from '../types';
-import api from '@/utils/api';
+import api from '@/src/app/utils/api';
 
 export const useAddresses = () => {
     const [addresses, setAddresses] = useState<Address[]>([]);

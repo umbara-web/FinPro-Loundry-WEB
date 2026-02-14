@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
-import SidebarDashboard from '@/app/components/mainsidebar';
+import SidebarDashboard from '@/src/app/admin/allorder/components/mainsidebar';
 import { useAddItem } from './hooks/useAddItem';
 
 function AddItemPage() {

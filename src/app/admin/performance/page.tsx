@@ -1,11 +1,11 @@
 'use client';
 
-import SidebarDashboard from '@/app/components/mainsidebar';
+import SidebarDashboard from '@/src/app/admin/allorder/components/mainsidebar';
 import { Download } from 'lucide-react';
-import { usePerformanceReport } from '@/app/components/reports/performance/usePerformanceReport';
-import { ReportFilter } from '@/app/components/reports/ReportFilter';
-import { PerformanceTable } from '@/app/components/reports/performance/PerformanceTable';
-import { EmployeeChart } from '@/app/components/reports/performance/EmployeeChart';
+import { usePerformanceReport } from '@/src/app/admin/reports/performance/usePerformanceReport';
+import { ReportFilter } from '@/src/app/admin/reports/ReportFilter';
+import { PerformanceTable } from '@/src/app/admin/reports/performance/PerformanceTable';
+import { EmployeeChart } from '@/src/app/admin/reports/performance/EmployeeChart';
 
 export default function AdminPerformanceReport() {
     const {

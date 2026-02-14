@@ -25,10 +25,36 @@ export default function OrdersPage() {
         setDateFilter,
         employeeFilter,
         setEmployeeFilter,
-        createOrder
+        createOrder,
+        updateOrder
     } = useOutletOrders();
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedOrder, setSelectedOrder] = useState<any>(null); // Use existing Order type if possible
+
+    const handleEditOrder = (order: any) => {
+        setSelectedOrder(order);
+        setIsModalOpen(true);
+    };
+
+    const handleCreateOrder = () => {
+        setSelectedOrder(null);
+        setIsModalOpen(true);
+    };
+
+    const handleModalSubmit = (orderData: any) => {
+        if (selectedOrder) {
+            // Update existing order
+            // We need to pass the ID. OrderData might have it if we spread initialData, but let's be safe.
+            // Also need to sanitize data if `updateOrder` expects Partial<Order>.
+            const { rawId, id, ...rest } = orderData; // rawId from our hook mapping
+            updateOrder(selectedOrder.rawId || selectedOrder.id, rest); // Usage of rawId if available
+        } else {
+            // Create new order
+            createOrder(orderData);
+        }
+        setIsModalOpen(false);
+    };
 
     return (
         <div className="p-8 bg-[#121212] min-h-screen text-white font-sans">
@@ -40,7 +66,7 @@ export default function OrdersPage() {
                     <p className="text-gray-500 text-sm">Manage and track all laundry orders for Downtown Branch.</p>
                 </div>
                 <button
-                    onClick={() => setIsModalOpen(true)}
+                    onClick={handleCreateOrder}
                     className="bg-[#4FD1C5] hover:bg-[#3fb9ae] text-[#121212] font-bold py-2.5 px-5 rounded-lg flex items-center gap-2 transition-all shadow-lg shadow-teal-500/10"
                 >
                     <Plus size={18} strokeWidth={3} /> Create New Order
@@ -75,13 +101,15 @@ export default function OrdersPage() {
                     setCurrentPage={setCurrentPage}
                     totalPages={totalPages}
                     itemsPerPage={itemsPerPage}
+                    onEdit={handleEditOrder}
                 />
             </div>
 
             <CreateOrderModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
-                onSubmit={createOrder}
+                onSubmit={handleModalSubmit}
+                initialData={selectedOrder}
             />
         </div>
     );

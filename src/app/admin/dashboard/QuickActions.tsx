@@ -22,9 +22,9 @@ export const QuickActions: React.FC = () => {
             <h3 className="text-lg font-bold mb-4">Aksi Cepat</h3>
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-10 items-center">
                 <Link href="/admin/outlet"><QuickAction icon={<Store size={24} />} label="Tambah Outlet" /></Link>
-                <Link href="/"><QuickAction icon={<UserPlus size={24} />} label="Daftar User" /></Link>
+                <Link href="/admin/workers"><QuickAction icon={<UserPlus size={24} />} label="Daftar User" /></Link>
                 <Link href="/admin/item"><QuickAction icon={<CheckCircle2 size={24} />} label="Item Laundry" /></Link>
-                <Link href="/"><QuickAction icon={<Package size={20} />} label="Penempatan Karyawan" /></Link>
+                <Link href="/admin/assignstaff"><QuickAction icon={<Package size={20} />} label="Penempatan Karyawan" /></Link>
             </div>
         </>
     );

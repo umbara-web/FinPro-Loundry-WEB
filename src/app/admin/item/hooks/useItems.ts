@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect, useCallback } from 'react';
-import api from '@/utils/api';
+import api from '@/src/app/utils/api';
 import { LaundryItem, ItemFormData } from '../types';
 
 export const useItems = () => {

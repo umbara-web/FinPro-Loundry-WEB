@@ -66,7 +66,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(me.data);
       setIsAuthenticated(true);
 
-      if (me.data.role === 'WORKER') {
+      if (me.data.role === 'ADMIN') {
+        window.location.assign('/admin/dashboard');
+      } else if (me.data.role === 'OUTLETADMIN') {
+        window.location.assign('/outletadmin');
+      } else if (me.data.role === 'WORKER') {
         window.location.assign('/worker-dashboard');
       } else if (me.data.role === 'DRIVER') {
         window.location.assign('/driver-dashboard');
