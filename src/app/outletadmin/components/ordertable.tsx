@@ -9,6 +9,7 @@ interface OrderTableProps {
     setCurrentPage: (page: number) => void;
     totalPages: number;
     itemsPerPage: number;
+    onEdit: (order: Order) => void;
 }
 
 export default function OrderTable({
@@ -17,7 +18,8 @@ export default function OrderTable({
     currentPage,
     setCurrentPage,
     totalPages,
-    itemsPerPage
+    itemsPerPage,
+    onEdit
 }: OrderTableProps) {
     return (
         <div className="w-full">
@@ -75,9 +77,11 @@ export default function OrderTable({
                             </td>
                             <td className="px-6 py-4">
                                 <div className="flex gap-3 text-gray-500">
-                                    <Eye size={16} className="cursor-pointer hover:text-white" />
-                                    <Pencil size={16} className="cursor-pointer hover:text-white" />
-                                    <Printer size={16} className="cursor-pointer hover:text-white" />
+                                    <Pencil
+                                        size={16}
+                                        className="cursor-pointer hover:text-white"
+                                        onClick={() => onEdit(order)}
+                                    />
                                 </div>
                             </td>
                         </tr>

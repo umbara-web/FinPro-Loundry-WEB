@@ -61,8 +61,17 @@ export const useItems = () => {
             const matchesCategory =
                 categoryFilter === 'Semua Kategori' ||
                 item.category === categoryFilter;
-            const matchesStatus =
-                statusFilter === 'Semua Status' || item.status === statusFilter;
+
+            let matchesStatus = statusFilter === 'Semua Status';
+            if (!matchesStatus) {
+                if (statusFilter === 'Aktif') {
+                    matchesStatus = item.status === 'Aktif' || item.status === 'ACTIVE';
+                } else if (statusFilter === 'Non-Aktif') {
+                    matchesStatus = item.status === 'Non-Aktif' || item.status === 'INACTIVE';
+                } else {
+                    matchesStatus = item.status === statusFilter;
+                }
+            }
 
             return matchesSearch && matchesCategory && matchesStatus;
         });
@@ -97,7 +106,7 @@ export const useItems = () => {
             category: item.category,
             price: item.price.toString(),
             unit: item.unit,
-            status: item.status,
+            status: item.status === 'ACTIVE' ? 'Aktif' : 'Non-Aktif',
         });
         setShowEditModal(true);
     };

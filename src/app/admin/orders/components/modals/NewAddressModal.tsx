@@ -1,7 +1,7 @@
 import React from 'react';
 import { MapPin } from 'lucide-react';
-import { Address } from '../../types';
-import { AddressForm } from '../AddressForm';
+import { Address } from '@/app/admin/orders/types';
+import { AddressForm } from '@/app/admin/orders/components/AddressForm';
 
 interface NewAddressModalProps {
     isOpen: boolean;

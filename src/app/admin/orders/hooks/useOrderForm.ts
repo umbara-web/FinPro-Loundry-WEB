@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Address } from '../types';
+import { Address } from '@/app/admin/orders/types';
 
 export const useOrderForm = (addresses: Address[]) => {
     const [selectedService, setSelectedService] = useState('Cuci & Lipat');

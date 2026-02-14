@@ -1,11 +1,11 @@
 import React from 'react';
 import { Search, MapPin, ChevronRight } from 'lucide-react';
-import { Outlet } from '../types';
+import { Outlet } from '@/app/admin/assignstaff/types';
 
 interface OutletListProps {
     outlets: Outlet[];
     selectedOutlet: Outlet | null;
-    onSelectOutlet: (id: number) => void;
+    onSelectOutlet: (id: string) => void;
     searchTerm: string;
     onSearchChange: (val: string) => void;
 }
@@ -40,8 +40,8 @@ const OutletList: React.FC<OutletListProps> = ({
                         key={outlet.id}
                         onClick={() => onSelectOutlet(outlet.id)}
                         className={`w-full text-left p-3 rounded-xl border transition-all group relative overflow-hidden ${selectedOutlet?.id === outlet.id
-                                ? 'bg-[#26E0C8]/10 border-[#26E0C8]'
-                                : 'bg-[#131C25] border-gray-800 hover:border-gray-600'
+                            ? 'bg-[#26E0C8]/10 border-[#26E0C8]'
+                            : 'bg-[#131C25] border-gray-800 hover:border-gray-600'
                             }`}
                     >
                         <div className={`absolute top-0 left-0 w-1 h-full ${outlet.color}`}></div>

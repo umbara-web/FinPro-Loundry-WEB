@@ -1,5 +1,5 @@
 import { Package, Shirt } from 'lucide-react';
-import { SERVICES } from '../constants';
+import { SERVICES } from '@/app/admin/orders/constants';
 
 interface ServiceDetailProps {
     selectedService: string;
@@ -33,8 +33,8 @@ export const ServiceDetail: React.FC<ServiceDetailProps> = ({
                         key={service.name}
                         onClick={() => setSelectedService(service.name)}
                         className={`bg-[#1E1E1E] p-5 rounded-2xl border-2 cursor-pointer transition ${selectedService === service.name
-                                ? 'border-[#4FD1C5]'
-                                : 'border-gray-800 hover:border-gray-600'
+                            ? 'border-[#4FD1C5]'
+                            : 'border-gray-800 hover:border-gray-600'
                             }`}
                     >
                         <div className={`w-10 h-10 rounded-lg flex items-center justify-center mb-4 ${selectedService === service.name ? 'bg-[#1a2e2c] text-[#4FD1C5]' : 'bg-gray-800 text-gray-400'}`}>

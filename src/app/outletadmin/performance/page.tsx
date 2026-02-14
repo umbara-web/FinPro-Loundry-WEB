@@ -1,10 +1,10 @@
 'use client';
 
 import { Download } from 'lucide-react';
-import { usePerformanceReport } from '@/src/app/admin/reports/performance/usePerformanceReport';
-import { ReportFilter } from '@/src/app/admin/reports/ReportFilter';
-import { PerformanceTable } from '@/src/app/admin/reports/performance/PerformanceTable';
-import { EmployeeChart } from '@/src/app/admin/reports/performance/EmployeeChart';
+import { usePerformanceReport } from '@/app/admin/reports/performance/usePerformanceReport';
+import { ReportFilter } from '@/app/admin/reports/ReportFilter';
+import { PerformanceTable } from '@/app/admin/reports/performance/PerformanceTable';
+import { EmployeeChart } from '@/app/admin/reports/performance/EmployeeChart';
 
 export default function OutletPerformanceReport() {
     const {

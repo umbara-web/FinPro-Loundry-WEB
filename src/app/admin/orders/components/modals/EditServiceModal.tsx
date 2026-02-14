@@ -1,5 +1,5 @@
 import React from 'react';
-import { SERVICES } from '../../constants';
+import { SERVICES } from '@/app/admin/orders/constants';
 
 interface EditServiceModalProps {
     isOpen: boolean;

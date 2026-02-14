@@ -2,8 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
-import SidebarDashboard from '@/app/components/mainsidebar';
-import { OutletForm } from '../components/OutletForm';
+import SidebarDashboard from '@/app/admin/allorder/components/mainsidebar';
+import { OutletForm } from '@/app/admin/outlet/components/OutletForm';
 import { useOutletForm } from './hooks/useOutletForm';
 
 export default function NewOutletPage() {

@@ -1,10 +1,10 @@
 import React from 'react';
 import { MinusCircle, UserCheck } from 'lucide-react';
-import { Staff } from '../types';
+import { Staff } from '@/app/admin/assignstaff/types';
 
 interface AssignedStaffProps {
     assignedList: Staff[];
-    onUnassign: (id: number) => void;
+    onUnassign: (id: string) => void;
 }
 
 const AssignedStaff: React.FC<AssignedStaffProps> = ({ assignedList, onUnassign }) => {

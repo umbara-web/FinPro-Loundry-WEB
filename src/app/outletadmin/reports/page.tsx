@@ -1,10 +1,10 @@
 'use client';
 
 import { Download } from 'lucide-react';
-import { useSalesReport } from '@/src/app/admin/reports/useSalesReport';
-import { ReportFilter } from '@/src/app/admin/reports/ReportFilter';
-import { SummaryCards } from '@/src/app/admin/reports/SummaryCards';
-import { IncomeChart } from '@/src/app/admin/reports/IncomeChart';
+import { useSalesReport } from '@/app/admin/reports/useSalesReport';
+import { ReportFilter } from '@/app/admin/reports/ReportFilter';
+import { SummaryCards } from '@/app/admin/reports/SummaryCards';
+import { IncomeChart } from '@/app/admin/reports/IncomeChart';
 
 export default function OutletReports() {
   const {

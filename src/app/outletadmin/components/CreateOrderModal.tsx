@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { Order } from '@/app/outletadmin/types';
 
 interface CreateOrderModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onSubmit: (order: Omit<Order, 'id' | 'date' | 'status' | 'total' | 'paid'>) => void;
+    onSubmit: (order: Order | any) => void;
+    initialData?: Order | null;
 }
 
-export default function CreateOrderModal({ isOpen, onClose, onSubmit }: CreateOrderModalProps) {
+export default function CreateOrderModal({ isOpen, onClose, onSubmit, initialData }: CreateOrderModalProps) {
+    const isEditMode = !!initialData;
+
     const [formData, setFormData] = useState({
         customer: '',
         phone: '',
@@ -16,8 +19,35 @@ export default function CreateOrderModal({ isOpen, onClose, onSubmit }: CreateOr
         items: '',
         quantity: '',
         weight: '',
-        assigned: ''
+        assigned: '',
+        status: ''
     });
+
+    useEffect(() => {
+        if (initialData) {
+            setFormData({
+                customer: initialData.customer,
+                phone: initialData.phone,
+                service: initialData.service,
+                items: initialData.items,
+                quantity: initialData.quantity.toString(),
+                weight: initialData.weight.toString(),
+                assigned: initialData.assigned || '',
+                status: initialData.status
+            });
+        } else {
+            setFormData({
+                customer: '',
+                phone: '',
+                service: '',
+                items: '',
+                quantity: '',
+                weight: '',
+                assigned: '',
+                status: ''
+            });
+        }
+    }, [initialData, isOpen]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -26,13 +56,15 @@ export default function CreateOrderModal({ isOpen, onClose, onSubmit }: CreateOr
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         onSubmit({
+            ...initialData,
             customer: formData.customer,
             phone: formData.phone,
             service: formData.service,
             items: formData.items,
             quantity: Number(formData.quantity) || 0,
             weight: Number(formData.weight) || 0,
-            assigned: formData.assigned || null
+            assigned: formData.assigned || null,
+            // only include status if we are editing? or just always send it.
         });
         onClose();
     };
@@ -43,7 +75,7 @@ export default function CreateOrderModal({ isOpen, onClose, onSubmit }: CreateOr
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
             <div className="bg-[#1E1E1E] rounded-2xl border border-gray-800 w-full max-w-lg shadow-2xl overflow-y-auto max-h-[90vh]">
                 <div className="flex justify-between items-center p-6 border-b border-gray-800">
-                    <h2 className="text-xl font-bold text-white">Create New Order</h2>
+                    <h2 className="text-xl font-bold text-white">{isEditMode ? 'Edit Order' : 'Create New Order'}</h2>
                     <button onClick={onClose} className="text-gray-400 hover:text-white transition-colors">
                         <X size={20} />
                     </button>
@@ -60,6 +92,7 @@ export default function CreateOrderModal({ isOpen, onClose, onSubmit }: CreateOr
                             className="w-full bg-[#121212] border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal-500 transition-colors"
                             placeholder="e.g. Budi Santoso"
                             required
+                            disabled={isEditMode} // Disable editing customer for now as backend doesn't support easy rename logic yet
                         />
                     </div>
 
@@ -73,6 +106,7 @@ export default function CreateOrderModal({ isOpen, onClose, onSubmit }: CreateOr
                             className="w-full bg-[#121212] border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal-500 transition-colors"
                             placeholder="e.g. 0812-3456-7890"
                             required
+                            disabled={isEditMode}
                         />
                     </div>
 
@@ -163,7 +197,7 @@ export default function CreateOrderModal({ isOpen, onClose, onSubmit }: CreateOr
                             type="submit"
                             className="flex-1 py-3 bg-[#4FD1C5] hover:bg-[#3fb9ae] text-black font-bold rounded-xl transition-colors shadow-lg shadow-teal-500/20"
                         >
-                            Create Order
+                            {isEditMode ? 'Save Changes' : 'Create Order'}
                         </button>
                     </div>
                 </form>

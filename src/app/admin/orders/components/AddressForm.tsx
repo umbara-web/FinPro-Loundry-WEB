@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Address } from '../types';
+import { Address } from '@/app/admin/orders/types';
 
 interface AddressFormProps {
     onSuccess: (address: Address) => void;

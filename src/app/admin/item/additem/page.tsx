@@ -1,9 +1,8 @@
 'use client';
 
-import React from 'react';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
-import SidebarDashboard from '@/app/components/mainsidebar';
+import SidebarDashboard from '@/app/admin/allorder/components/mainsidebar';
 import { useAddItem } from './hooks/useAddItem';
 
 function AddItemPage() {
@@ -14,7 +13,6 @@ function AddItemPage() {
             <SidebarDashboard />
 
             <main className="flex-1 p-8 overflow-y-auto">
-                {/* Header Section */}
                 <div className="max-w-4xl mx-auto">
                     <div className="text-xs text-gray-500 mb-2">
                         <Link href="/" className="hover:cursor-pointer">Dashboard /</Link>
@@ -35,10 +33,8 @@ function AddItemPage() {
                         </Link>
                     </div>
 
-                    {/* Form Container */}
                     <div className="bg-[#1C252E] rounded-2xl border border-gray-800 p-8">
                         <form onSubmit={handleAddItem} className="space-y-6">
-                            {/* Nama Item */}
                             <div>
                                 <label className="block text-sm font-bold text-gray-300 mb-2">
                                     Nama Item <span className="text-red-500">*</span>
@@ -54,7 +50,6 @@ function AddItemPage() {
                                 />
                             </div>
 
-                            {/* Kategori dan Unit */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <label className="block text-sm font-bold text-gray-300 mb-2">
@@ -91,7 +86,6 @@ function AddItemPage() {
                                 </div>
                             </div>
 
-                            {/* Harga dan Status */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <label className="block text-sm font-bold text-gray-300 mb-2">
@@ -129,7 +123,6 @@ function AddItemPage() {
                                 </div>
                             </div>
 
-                            {/* Form Actions */}
                             <div className="flex gap-4 pt-6 border-t border-gray-800">
                                 <Link href="/admin/item" className="flex-1">
                                     <button

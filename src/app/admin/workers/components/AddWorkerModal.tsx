@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
-import { WorkerFormData, WORKER_ROLES, WORKER_STATUSES } from '../types';
+import { WorkerFormData, WORKER_ROLES, WORKER_STATUSES } from '@/app/admin/workers/types';
+import { Outlet } from '@/app/admin/outlet/types';
 
 interface AddWorkerModalProps {
     isOpen: boolean;
@@ -8,6 +9,7 @@ interface AddWorkerModalProps {
     onSubmit: (data: WorkerFormData) => void;
     initialData?: WorkerFormData;
     isEdit?: boolean;
+    outlets: Outlet[];
 }
 
 export const AddWorkerModal: React.FC<AddWorkerModalProps> = ({
@@ -15,7 +17,8 @@ export const AddWorkerModal: React.FC<AddWorkerModalProps> = ({
     onClose,
     onSubmit,
     initialData,
-    isEdit = false
+    isEdit = false,
+    outlets
 }) => {
     const defaultData: WorkerFormData = {
         name: '',
@@ -30,7 +33,14 @@ export const AddWorkerModal: React.FC<AddWorkerModalProps> = ({
 
     useEffect(() => {
         if (isOpen) {
-            setFormData(initialData || defaultData);
+            setFormData({
+                name: initialData?.name || '',
+                email: initialData?.email || '',
+                phone: initialData?.phone || '',
+                role: initialData?.role || 'Pekerja',
+                outlet: initialData?.outlet || '',
+                status: initialData?.status || 'Active'
+            });
         }
     }, [isOpen, initialData]);
 
@@ -130,15 +140,18 @@ export const AddWorkerModal: React.FC<AddWorkerModalProps> = ({
 
                     <div>
                         <label className="block text-sm font-medium text-slate-300 mb-1">Outlet Penempatan</label>
-                        <input
-                            type="text"
+                        <select
                             name="outlet"
                             value={formData.outlet}
                             onChange={handleChange}
-                            placeholder="Contoh: Cabang Jakarta Selatan"
                             className="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-emerald-500"
                             required
-                        />
+                        >
+                            <option value="">Pilih Outlet</option>
+                            {outlets.map(outlet => (
+                                <option key={outlet.id} value={outlet.id}>{outlet.name}</option> // Use ID as value
+                            ))}
+                        </select>
                     </div>
 
                     <div className="flex gap-3 pt-4">

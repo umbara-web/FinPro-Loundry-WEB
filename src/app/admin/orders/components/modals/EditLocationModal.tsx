@@ -1,5 +1,5 @@
 import React from 'react';
-import { Address } from '../../types';
+import { Address } from '@/app/admin/orders/types';
 
 interface EditLocationModalProps {
     isOpen: boolean;

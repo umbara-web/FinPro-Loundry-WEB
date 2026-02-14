@@ -1,5 +1,5 @@
 import React from 'react';
-import { TIME_SLOTS } from '../../constants';
+import { TIME_SLOTS } from '@/app/admin/orders/constants';
 
 interface EditScheduleModalProps {
     isOpen: boolean;

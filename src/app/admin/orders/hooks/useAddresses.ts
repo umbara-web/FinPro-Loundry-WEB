@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Address } from '../types';
+import { Address } from '@/app/admin/orders/types';
 import api from '@/utils/api';
 
 export const useAddresses = () => {

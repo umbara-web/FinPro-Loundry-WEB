@@ -1,5 +1,5 @@
 import { ChevronRight, Headset } from 'lucide-react';
-import { Address } from '../types';
+import { Address } from '@/app/admin/orders/types';
 
 interface SummaryItemProps {
     label: string;

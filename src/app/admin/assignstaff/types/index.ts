@@ -1,16 +1,16 @@
 export interface Staff {
-    id: number;
+    id: string;
     name: string;
-    role: string;
+    role: 'Admin Outlet' | 'Staff Laundry' | 'Driver';
     status: 'Available' | 'Assigned';
     avatar: string;
-    outletId: number | null; // null means available (not assigned)
+    outletId: string | null;
 }
 
 export interface Outlet {
-    id: number;
+    id: string;
     name: string;
     location: string;
     description: string;
-    color: string;
+    color: string; // We might need to generate this or mapped from backend if available
 }

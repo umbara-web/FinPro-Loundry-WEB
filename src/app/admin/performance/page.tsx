@@ -1,6 +1,6 @@
 'use client';
 
-import SidebarDashboard from '@/app/components/mainsidebar';
+import SidebarDashboard from '@/app/admin/allorder/components/mainsidebar';
 import { Download } from 'lucide-react';
 import { usePerformanceReport } from '@/app/components/reports/performance/usePerformanceReport';
 import { ReportFilter } from '@/app/components/reports/ReportFilter';

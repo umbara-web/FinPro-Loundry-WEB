@@ -1,12 +1,14 @@
 'use client';
 
 import React, { useState } from 'react';
-import SidebarDashboard from '@/app/components/mainsidebar';
+import SidebarDashboard from '@/app/admin/allorder/components/mainsidebar';
 import { Plus } from 'lucide-react';
 import { WorkerStats } from './components/WorkerStats';
 import { WorkerTable } from './components/WorkerTable';
 import { WorkerFilter } from './components/WorkerFilter';
 import { AddWorkerModal } from './components/AddWorkerModal';
+
+import { Pagination } from './components/Pagination'; // Import Pagination
 import { useWorkers } from './hooks/useWorkers';
 import { Worker, WorkerFormData } from './types';
 
@@ -21,7 +23,12 @@ export default function LaundryAdmin() {
     roleFilter,
     setRoleFilter,
     statusFilter,
-    setStatusFilter
+    setStatusFilter,
+    outlets,
+    currentPage,
+    totalPages,
+    setCurrentPage,
+    totalWorkers
   } = useWorkers();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -33,7 +40,12 @@ export default function LaundryAdmin() {
   };
 
   const handleOpenEditModal = (worker: Worker) => {
-    setEditingWorker(worker);
+    // Map Worker to WorkerFormData, using outletId for the 'outlet' field which expects the ID for the form
+    const formData: any = {
+      ...worker,
+      outlet: worker.outletId || '' // Map ID to the form field 'outlet'
+    };
+    setEditingWorker(formData);
     setIsModalOpen(true);
   };
 
@@ -95,6 +107,14 @@ export default function LaundryAdmin() {
           onEdit={handleOpenEditModal}
           onDelete={deleteWorker}
         />
+
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+          totalItems={totalWorkers}
+          itemsPerPage={5}
+        />
       </main>
 
       <AddWorkerModal
@@ -103,6 +123,7 @@ export default function LaundryAdmin() {
         onSubmit={handleSubmit}
         initialData={editingWorker}
         isEdit={!!editingWorker}
+        outlets={outlets}
       />
     </div>
   );

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Search, Plus, Filter } from 'lucide-react';
-import { Staff, Outlet } from '../types';
+import { Staff, Outlet } from '@/app/admin/assignstaff/types';
 
 interface AvailableStaffProps {
     staffList: Staff[];
@@ -9,7 +9,7 @@ interface AvailableStaffProps {
     setActiveTab: (tab: 'all' | 'admin' | 'staff' | 'driver') => void;
     searchTerm: string;
     onSearchChange: (val: string) => void;
-    onAssign: (id: number) => void;
+    onAssign: (id: string) => void;
 }
 
 const AvailableStaff: React.FC<AvailableStaffProps> = ({
@@ -47,8 +47,8 @@ const AvailableStaff: React.FC<AvailableStaffProps> = ({
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id as any)}
                         className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${activeTab === tab.id
-                                ? 'bg-[#26E0C8] text-black shadow-lg'
-                                : 'text-gray-400 hover:text-white'
+                            ? 'bg-[#26E0C8] text-black shadow-lg'
+                            : 'text-gray-400 hover:text-white'
                             }`}
                     >
                         {tab.label}
@@ -82,8 +82,8 @@ const AvailableStaff: React.FC<AvailableStaffProps> = ({
                                 <div>
                                     <h4 className="font-bold text-sm text-white">{staff.name}</h4>
                                     <span className={`text-[10px] px-2 py-0.5 rounded border ${staff.role === 'Admin Outlet' ? 'bg-purple-500/10 text-purple-400 border-purple-500/20' :
-                                            staff.role === 'Driver' ? 'bg-orange-500/10 text-orange-400 border-orange-500/20' :
-                                                'bg-blue-500/10 text-blue-400 border-blue-500/20'
+                                        staff.role === 'Driver' ? 'bg-orange-500/10 text-orange-400 border-orange-500/20' :
+                                            'bg-blue-500/10 text-blue-400 border-blue-500/20'
                                         }`}>
                                         {staff.role}
                                     </span>
@@ -93,8 +93,8 @@ const AvailableStaff: React.FC<AvailableStaffProps> = ({
                                 onClick={() => onAssign(staff.id)}
                                 disabled={!selectedOutlet}
                                 className={`p-2 rounded-lg transition-all ${selectedOutlet
-                                        ? 'bg-[#26E0C8] text-black hover:bg-[#20bd9d] shadow-lg shadow-[#26E0C8]/20'
-                                        : 'bg-gray-800 text-gray-500 cursor-not-allowed'
+                                    ? 'bg-[#26E0C8] text-black hover:bg-[#20bd9d] shadow-lg shadow-[#26E0C8]/20'
+                                    : 'bg-gray-800 text-gray-500 cursor-not-allowed'
                                     }`}
                                 title={selectedOutlet ? "Assign to Outlet" : "Select an outlet first"}
                             >

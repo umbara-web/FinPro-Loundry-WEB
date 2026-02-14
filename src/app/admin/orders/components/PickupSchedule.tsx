@@ -1,5 +1,5 @@
 import { Calendar } from 'lucide-react';
-import { TIME_SLOTS } from '../constants';
+import { TIME_SLOTS } from '@/app/admin/orders/constants';
 
 interface PickupScheduleProps {
     selectedDate: string;
@@ -44,8 +44,8 @@ export const PickupSchedule: React.FC<PickupScheduleProps> = ({
                                 key={time}
                                 onClick={() => setSelectedTime(time)}
                                 className={`py-2.5 rounded-xl text-[11px] font-bold transition ${selectedTime === time
-                                        ? 'bg-[#4FD1C5] text-black'
-                                        : 'bg-[#121212] border border-gray-800 text-gray-300 hover:bg-gray-800 hover:cursor-pointer'
+                                    ? 'bg-[#4FD1C5] text-black'
+                                    : 'bg-[#121212] border border-gray-800 text-gray-300 hover:bg-gray-800 hover:cursor-pointer'
                                     }`}
                             >
                                 {time}

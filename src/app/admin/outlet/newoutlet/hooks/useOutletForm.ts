@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { OutletFormData } from '../../types';
+import { OutletFormData } from '@/app/admin/outlet/types';
 import api from '@/utils/api';
 
 export const useOutletForm = () => {
@@ -24,9 +24,10 @@ export const useOutletForm = () => {
 
             router.push('/admin/outlet');
             return true;
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
-            alert('Gagal membuat outlet baru');
+            const errorMessage = error.response?.data?.error || error.message || 'Gagal membuat outlet baru';
+            alert(`Gagal: ${errorMessage}`);
             return false;
         } finally {
             setLoading(false);

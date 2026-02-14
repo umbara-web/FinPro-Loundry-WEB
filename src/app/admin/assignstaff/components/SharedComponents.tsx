@@ -1,6 +1,6 @@
 import React from 'react';
 import { Plus, Minus } from 'lucide-react';
-import { Outlet, Staff } from '../types';
+import { Outlet, Staff } from '@/app/admin/assignstaff/types';
 
 export const OutletCard = ({ name, location, count, active = false, onClick }: Partial<Outlet> & { count?: string; active?: boolean; onClick?: () => void }) => (
     <div onClick={onClick} className={`p-4 rounded-xl border transition-all cursor-pointer ${active ? 'bg-[#1E2C2A] border-[#26E0C8]/50 ring-1 ring-[#26E0C8]' : 'bg-[#111] border-gray-800 hover:border-gray-700'}`}>
@@ -22,7 +22,7 @@ export const StaffRow = ({ staff, onAssign }: { staff: Staff, onAssign: (staff: 
             <div>
                 <h5 className="text-sm font-medium text-white">{staff.name}</h5>
                 <div className="flex items-center gap-2">
-                    <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold uppercase ${staff.role === 'Admin' ? 'bg-purple-900/40 text-purple-400' : staff.role === 'Driver' ? 'bg-yellow-900/40 text-yellow-400' : 'bg-blue-900/40 text-blue-400'}`}>{staff.role}</span>
+                    <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold uppercase ${staff.role.includes('Admin') ? 'bg-purple-900/40 text-purple-400' : staff.role === 'Driver' ? 'bg-yellow-900/40 text-yellow-400' : 'bg-blue-900/40 text-blue-400'}`}>{staff.role}</span>
                     <span className="text-[11px] text-gray-600"></span>
                 </div>
             </div>

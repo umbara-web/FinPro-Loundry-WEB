@@ -1,7 +1,7 @@
 import React from 'react';
 import { X } from 'lucide-react';
 import { OutletForm } from './OutletForm';
-import { OutletFormData } from '../types';
+import { OutletFormData } from '@/app/admin/outlet/types';
 
 interface EditOutletModalProps {
     isOpen: boolean;

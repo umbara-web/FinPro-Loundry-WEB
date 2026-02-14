@@ -85,16 +85,16 @@ const ItemTable: React.FC<ItemTableProps> = ({ items, loading, onEdit, onDelete 
                             </td>
                             <td className="px-6 py-4">
                                 <div
-                                    className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold w-fit ${item.status === 'Aktif'
-                                            ? 'bg-green-500/10 text-green-400'
-                                            : 'bg-gray-500/10 text-gray-400'
+                                    className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold w-fit ${item.status === 'Aktif' || item.status === 'ACTIVE'
+                                        ? 'bg-green-500/10 text-green-400 border border-green-500/20 shadow-[0_0_10px_rgba(74,222,128,0.2)]'
+                                        : 'bg-gray-500/10 text-gray-400'
                                         }`}
                                 >
                                     <span
-                                        className={`w-1.5 h-1.5 rounded-full ${item.status === 'Aktif' ? 'bg-green-500' : 'bg-gray-400'
+                                        className={`w-1.5 h-1.5 rounded-full ${item.status === 'Aktif' || item.status === 'ACTIVE' ? 'bg-green-500 animate-pulse' : 'bg-gray-400'
                                             }`}
                                     />
-                                    {item.status}
+                                    {item.status === 'ACTIVE' ? 'Active' : item.status === 'INACTIVE' ? 'Inactive' : item.status}
                                 </div>
                             </td>
                             <td className="px-6 py-4">

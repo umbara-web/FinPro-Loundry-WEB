@@ -5,6 +5,7 @@ export interface Worker {
     phone: string;
     role: 'Admin Outlet' | 'Pekerja' | 'Driver';
     outlet: string;
+    outletId?: string; // Added for editing purposes
     status: 'Active' | 'Inactive';
 }
 

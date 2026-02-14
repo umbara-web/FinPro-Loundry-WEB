@@ -1,33 +1,62 @@
-import { useState, useMemo } from 'react';
-import { Staff, Outlet } from '../types';
-
-// Mock Data
-const MOCK_OUTLETS: Outlet[] = [
-    { id: 1, name: 'Outlet Pusat', location: 'Jakarta Selatan', description: 'Main Operation Hub', color: 'bg-purple-500' },
-    { id: 2, name: 'Cabang Bandung', location: 'Bandung Utara', description: 'High Traffic Area', color: 'bg-blue-500' },
-    { id: 3, name: 'Cabang Surabaya', location: 'Surabaya Timur', description: 'New Opening', color: 'bg-orange-500' },
-];
-
-const MOCK_STAFF: Staff[] = [
-    { id: 101, name: 'Budi Santoso', role: 'Admin Outlet', status: 'Assigned', avatar: 'https://i.pravatar.cc/150?u=budi', outletId: 1 },
-    { id: 102, name: 'Siti Aminah', role: 'Staff Laundry', status: 'Available', avatar: 'https://i.pravatar.cc/150?u=siti', outletId: null },
-    { id: 103, name: 'Rudi Hartono', role: 'Driver', status: 'Available', avatar: 'https://i.pravatar.cc/150?u=rudi', outletId: null },
-    { id: 104, name: 'Dewi Sartika', role: 'Staff Laundry', status: 'Assigned', avatar: 'https://i.pravatar.cc/150?u=dewi', outletId: 2 },
-    { id: 105, name: 'Ahmad Fauzi', role: 'Driver', status: 'Assigned', avatar: 'https://i.pravatar.cc/150?u=ahmad', outletId: 1 },
-    { id: 106, name: 'Maya Sari', role: 'Admin Outlet', status: 'Available', avatar: 'https://i.pravatar.cc/150?u=maya', outletId: null },
-    { id: 107, name: 'Joko Widodo', role: 'Staff Laundry', status: 'Available', avatar: 'https://i.pravatar.cc/150?u=joko', outletId: null },
-];
+import { useState, useMemo, useEffect } from 'react';
+import { Staff, Outlet } from '@/app/admin/assignstaff/types';
+import api from '@/utils/api';
 
 export const useStaffAssignment = () => {
-    const [outlets] = useState<Outlet[]>(MOCK_OUTLETS);
-    const [allStaff, setAllStaff] = useState<Staff[]>(MOCK_STAFF);
+    const [outlets, setOutlets] = useState<Outlet[]>([]);
+    const [allStaff, setAllStaff] = useState<Staff[]>([]);
+    const [loading, setLoading] = useState(true);
 
-    const [selectedOutletId, setSelectedOutletId] = useState<number | null>(null);
+    const [selectedOutletId, setSelectedOutletId] = useState<string | null>(null);
     const [activeTab, setActiveTab] = useState<'all' | 'admin' | 'staff' | 'driver'>('all');
 
     // Search states
     const [outletSearch, setOutletSearch] = useState('');
     const [staffSearch, setStaffSearch] = useState('');
+
+    // Fetch Data
+    const fetchData = async () => {
+        try {
+            setLoading(true);
+            const [outletsRes, workersRes] = await Promise.all([
+                api.get('/api/outlets'),
+                api.get('/api/workers?limit=100') // Fetch all workers for now
+            ]);
+
+            // Map Outlets
+            const mappedOutlets = outletsRes.data.map((o: any) => ({
+                id: o.id,
+                name: o.name,
+                location: o.address || o.location || 'No Location',
+                description: o.description || 'No Description',
+                color: 'bg-blue-500' // Default color for now
+            }));
+            setOutlets(mappedOutlets);
+
+            // Map Workers
+            const workersData = workersRes.data.data || [];
+            const mappedStaff = workersData.map((w: any) => ({
+                id: w.id, // Use staff table ID (w.id) to match backend endpoints
+                name: w.staff?.name || 'Unknown',
+                role: w.staff_type === 'WORKER' ? 'Staff Laundry' :
+                    w.staff_type === 'DRIVER' ? 'Driver' :
+                        w.staff_type === 'ADMIN' ? 'Admin Outlet' : w.staff_type,
+                status: w.outlet_id ? 'Assigned' : 'Available',
+                avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(w.staff?.name || 'User')}&background=random`,
+                outletId: w.outlet_id || null
+            }));
+            setAllStaff(mappedStaff);
+
+        } catch (error) {
+            console.error('Failed to fetch data:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
 
     // --- SELECTION LOGIC ---
     const selectedOutlet = useMemo(() =>
@@ -67,23 +96,39 @@ export const useStaffAssignment = () => {
     }, [allStaff, selectedOutlet]);
 
 
-
-
-    const selectOutlet = (id: number) => {
+    const selectOutlet = (id: string) => {
         setSelectedOutletId(id);
     };
 
-    const assignStaff = (staffId: number) => {
+    const assignStaff = async (staffId: string) => {
         if (!selectedOutlet) return;
-        setAllStaff(prev => prev.map(s =>
-            s.id === staffId ? { ...s, outletId: selectedOutlet.id, status: 'Assigned' } : s
-        ));
+        try {
+            await api.put(`/api/workers/${staffId}`, { outletId: selectedOutlet.id });
+
+            // Optimistic Update
+            setAllStaff(prev => prev.map(s =>
+                s.id === staffId ? { ...s, outletId: selectedOutlet.id, status: 'Assigned' } : s
+            ));
+        } catch (error) {
+            console.error('Failed to assign staff:', error);
+            alert('Gagal menetapkan staff.');
+            fetchData(); // Revert on failure
+        }
     };
 
-    const unassignStaff = (staffId: number) => {
-        setAllStaff(prev => prev.map(s =>
-            s.id === staffId ? { ...s, outletId: null, status: 'Available' } : s
-        ));
+    const unassignStaff = async (staffId: string) => {
+        try {
+            await api.put(`/api/workers/${staffId}`, { outletId: null });
+
+            // Optimistic Update
+            setAllStaff(prev => prev.map(s =>
+                s.id === staffId ? { ...s, outletId: null, status: 'Available' } : s
+            ));
+        } catch (error) {
+            console.error('Failed to unassign staff:', error);
+            alert('Gagal menghapus staff dari outlet.');
+            fetchData(); // Revert on failure
+        }
     };
 
     return {
@@ -101,6 +146,7 @@ export const useStaffAssignment = () => {
 
         assignedStaff,
         assignStaff,
-        unassignStaff
+        unassignStaff,
+        loading
     };
 };

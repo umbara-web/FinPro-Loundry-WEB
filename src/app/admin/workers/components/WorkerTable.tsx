@@ -1,11 +1,11 @@
 import React from 'react';
 import { Edit2, Trash2 } from 'lucide-react';
-import { Worker } from '../types';
+import { Worker } from '@/app/admin/workers/types';
 
 interface WorkerTableProps {
     workers: Worker[];
     onEdit: (worker: Worker) => void;
-    onDelete: (id: number) => void;
+    onDelete: (id: string | number) => void;
 }
 
 export const WorkerTable: React.FC<WorkerTableProps> = ({ workers, onEdit, onDelete }) => {

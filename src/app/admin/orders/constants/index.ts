@@ -1,4 +1,4 @@
-import { ServiceOption } from '../types';
+import { ServiceOption } from '@/app/admin/orders/types';
 
 export const TIME_SLOTS = [
     '08:00 - 10:00',

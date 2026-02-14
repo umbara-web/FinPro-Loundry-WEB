@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { Outlet, OutletFormData } from '../types';
+import { Outlet, OutletFormData } from '@/app/admin/outlet/types';
 import api from '@/utils/api';
 
 export const useOutlets = () => {

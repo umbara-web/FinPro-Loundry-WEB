@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { MapPin, Phone, Clock } from 'lucide-react';
-import { OutletFormData, OUTLET_STATUS_OPTIONS } from '../types';
+import { OutletFormData, OUTLET_STATUS_OPTIONS } from '@/app/admin/outlet/types';
 
 interface OutletFormProps {
     initialData?: OutletFormData;
