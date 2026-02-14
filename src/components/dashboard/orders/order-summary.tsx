@@ -18,6 +18,20 @@ export function OrderSummary({
 }: OrderSummaryProps) {
   const router = useRouter();
 
+  // Calculate totals from order items when backend values are 0
+  const calculatedTotal =
+    order.price_total > 0
+      ? order.price_total
+      : (order.order_item || []).reduce((sum, item) => {
+          const unitPrice = item.price || item.laundry_item?.price || 0;
+          return sum + unitPrice * item.qty;
+        }, 0);
+
+  const calculatedWeight =
+    order.total_weight > 0
+      ? order.total_weight
+      : (order.order_item || []).reduce((sum, item) => sum + item.qty, 0);
+
   // Logic for Buttons
   const showPayButton =
     order.status === 'WAITING_PAYMENT' ||
@@ -71,7 +85,7 @@ export function OrderSummary({
         <div className='space-y-3'>
           <div className='flex justify-between text-sm'>
             <span className='text-muted-foreground'>Total Berat</span>
-            <span className='font-medium'>{order.total_weight} kg</span>
+            <span className='font-medium'>{calculatedWeight} kg</span>
           </div>
           {/* Add other cost items if available */}
           <div className='border-border mt-2 flex items-center justify-between border-t pt-4'>
@@ -79,7 +93,7 @@ export function OrderSummary({
               Total Pembayaran
             </span>
             <span className='text-primary text-2xl font-bold dark:text-white'>
-              {formatCurrency(order.price_total)}
+              {formatCurrency(calculatedTotal)}
             </span>
           </div>
         </div>
