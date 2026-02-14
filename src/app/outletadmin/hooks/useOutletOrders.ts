@@ -1,30 +1,18 @@
 import { useState, useMemo, useEffect } from 'react';
 import { Order } from '@/src/app/outletadmin/types';
 import api from '@/src/app/utils/api';
+import { useAuth } from '@/src/context/AuthContext';
 
 export const useOutletOrders = () => {
+    const { user } = useAuth();
     const [orders, setOrders] = useState<Order[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const [filterStatus, setFilterStatus] = useState<string>('All');
     const [dateFilter, setDateFilter] = useState<'All' | 'Today'>('All');
     const [employeeFilter, setEmployeeFilter] = useState<string>('All');
-    const [outletId, setOutletId] = useState<string | null>(null);
 
-    // Fetch Outlet ID (Simulating "My Outlet")
-    useEffect(() => {
-        const fetchOutlet = async () => {
-            try {
-                const res = await api.get('/api/outlets');
-                if (res.data && res.data.length > 0) {
-                    setOutletId(res.data[0].id); // Pick first outlet as user's outlet
-                }
-            } catch (e) {
-                console.error("Failed to fetch outlet", e);
-            }
-        };
-        fetchOutlet();
-    }, []);
+    const outletId = user?.outlet_id || null;
 
     // Fetch Orders
     const fetchOrders = async () => {

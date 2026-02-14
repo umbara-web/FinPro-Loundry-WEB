@@ -81,20 +81,24 @@ export function NavbarUserMenu({ user }: NavbarUserMenuProps) {
           <span>Saldo: Rp {balance.toLocaleString('id-ID')}</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        {(user.role === 'WORKER' || user.role === 'DRIVER') && (
-          <DropdownMenuItem className='cursor-pointer' asChild>
-            <Link
-              href={
-                user.role === 'WORKER'
-                  ? '/worker-dashboard'
-                  : '/driver-dashboard'
-              }
-            >
-              <LayoutDashboard className='mr-2 h-4 w-4' />
-              <span>Dashboard</span>
-            </Link>
-          </DropdownMenuItem>
-        )}
+        {(user.role === 'WORKER' ||
+          user.role === 'DRIVER' ||
+          user.role === 'OUTLET_ADMIN') && (
+            <DropdownMenuItem className='cursor-pointer' asChild>
+              <Link
+                href={
+                  user.role === 'WORKER'
+                    ? '/worker-dashboard'
+                    : user.role === 'DRIVER'
+                      ? '/driver-dashboard'
+                      : '/outletadmin'
+                }
+              >
+                <LayoutDashboard className='mr-2 h-4 w-4' />
+                <span>Dashboard</span>
+              </Link>
+            </DropdownMenuItem>
+          )}
         <DropdownMenuItem className='cursor-pointer' asChild>
           <Link href='/dashboard/orders'>
             <History className='mr-2 h-4 w-4' />
