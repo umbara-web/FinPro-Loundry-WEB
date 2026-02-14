@@ -33,12 +33,12 @@ export function RealTimeClock() {
   };
 
   return (
-    <div className="flex flex-col items-center mb-8">
-      <h1 className="text-slate-900 dark:text-white tracking-tight text-5xl md:text-[64px] font-bold leading-tight tabular-nums">
+    <div className='mb-8 flex flex-col items-center'>
+      <h1 className='text-5xl leading-tight font-bold tracking-tight text-slate-900 tabular-nums md:text-[64px] dark:text-white'>
         {formatTime(currentTime)}
       </h1>
-      <div className="flex items-center gap-2 text-slate-500 dark:text-[#92adc9] text-base md:text-lg font-normal mt-2">
-        <Calendar className="w-5 h-5" />
+      <div className='mt-2 flex items-center gap-2 text-base font-normal text-slate-500 md:text-lg dark:text-[#92adc9]'>
+        <Calendar className='h-5 w-5' />
         <p>{formatDate(currentTime)}</p>
       </div>
     </div>

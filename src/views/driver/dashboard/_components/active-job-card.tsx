@@ -16,11 +16,11 @@ export function ActiveJobCard({ activeJob }: ActiveJobCardProps) {
           ? `/driver-pickup/${activeJob.id}`
           : `/driver-delivery/${activeJob.id}`
       }
-      className='hover:bg-slate-50 dark:hover:bg-slate-700 flex items-stretch justify-between gap-4 rounded-xl border-l-4 border-blue-600 bg-white p-5 shadow-lg transition-all dark:border-blue-500 dark:bg-slate-800'
+      className='flex items-stretch justify-between gap-4 rounded-xl border-l-4 border-blue-600 bg-white p-5 shadow-lg transition-all hover:bg-slate-50 dark:border-blue-500 dark:bg-slate-800 dark:hover:bg-slate-700'
     >
       <div className='flex flex-col gap-3'>
         <div className='flex items-center gap-2'>
-          <span className='bg-blue-100 text-blue-600 dark:bg-blue-500/20 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase dark:text-blue-500'>
+          <span className='rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-bold text-blue-600 uppercase dark:bg-blue-500/20 dark:text-blue-500'>
             Sedang Berjalan
           </span>
           <span className='text-xs text-slate-500 dark:text-slate-400'>

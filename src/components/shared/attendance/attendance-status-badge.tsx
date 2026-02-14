@@ -19,8 +19,7 @@ const variantStyles: Record<AttendanceStatusVariant, string> = {
   on_time:
     'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400',
   late: 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-400',
-  overtime:
-    'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-400',
+  overtime: 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-400',
   checked_in:
     'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400',
 };
@@ -41,14 +40,14 @@ export function AttendanceStatusBadge({
   return (
     <span
       className={clsx(
-        'inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider',
+        'inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold tracking-wider uppercase',
         variantStyles[variant],
         className
       )}
     >
       {pulse && (
         <span
-          className={clsx('size-2 rounded-full animate-pulse', {
+          className={clsx('size-2 animate-pulse rounded-full', {
             'bg-amber-500': variant === 'not_checked',
             'bg-green-500': variant === 'on_time' || variant === 'checked_in',
             'bg-red-500': variant === 'late',

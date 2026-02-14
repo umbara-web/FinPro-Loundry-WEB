@@ -55,10 +55,10 @@ export function AttendanceView({
 
     const formattedCheckOut = checkOutDate
       ? checkOutDate.toLocaleTimeString('id-ID', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false,
-      })
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false,
+        })
       : null;
 
     const isLate = checkInDate.getHours() >= 8 && checkInDate.getMinutes() > 0;

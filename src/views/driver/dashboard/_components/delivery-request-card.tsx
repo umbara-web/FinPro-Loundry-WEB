@@ -14,11 +14,11 @@ export function DeliveryRequestCard({
   onAccept,
 }: DeliveryRequestCardProps) {
   return (
-    <div className='hover:border-blue-500/50 flex flex-col gap-4 rounded-xl border border-transparent bg-white p-5 shadow-sm transition-all dark:bg-slate-800'>
+    <div className='flex flex-col gap-4 rounded-xl border border-transparent bg-white p-5 shadow-sm transition-all hover:border-blue-500/50 dark:bg-slate-800'>
       <div className='flex items-start justify-between'>
         <div className='flex items-center gap-3'>
           <div className='rounded-lg bg-blue-100 p-2 dark:bg-blue-500/10'>
-            <Truck className='text-blue-600 dark:text-blue-500 h-5 w-5' />
+            <Truck className='h-5 w-5 text-blue-600 dark:text-blue-500' />
           </div>
           <div>
             <p className='font-bold text-slate-900 dark:text-white'>
@@ -51,13 +51,13 @@ export function DeliveryRequestCard({
       <div className='flex gap-2 pt-2'>
         <button
           onClick={() => onAccept(delivery.id)}
-          className='bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500 flex-1 rounded-lg py-2 text-sm font-bold text-white transition-colors'
+          className='flex-1 rounded-lg bg-blue-600 py-2 text-sm font-bold text-white transition-colors hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500'
         >
           Terima Request
         </button>
         <Link
           href={`/driver-delivery/${delivery.id}`}
-          className='bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600 rounded-lg px-3 py-2 text-sm font-bold'
+          className='rounded-lg bg-slate-100 px-3 py-2 text-sm font-bold text-slate-700 hover:bg-slate-200 dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600'
         >
           Detail
         </Link>

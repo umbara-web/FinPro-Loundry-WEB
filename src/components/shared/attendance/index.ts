@@ -16,4 +16,3 @@ export {
   FullAttendanceTable,
   type FullAttendanceRecord,
 } from './full-attendance-table';
-

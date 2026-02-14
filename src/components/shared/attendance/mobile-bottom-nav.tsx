@@ -20,28 +20,28 @@ interface MobileBottomNavProps {
 export function MobileBottomNav({
   basePath = '/worker-attendance',
   dashboardPath = '/worker-dashboard',
-  profilePath = '/worker-profile'
+  profilePath = '/worker-profile',
 }: MobileBottomNavProps) {
   const pathname = usePathname();
 
   const navItems: NavItem[] = [
     {
-      icon: <Home className="w-5 h-5" />,
+      icon: <Home className='h-5 w-5' />,
       label: 'Home',
       href: dashboardPath,
     },
     {
-      icon: <Fingerprint className="w-5 h-5" />,
+      icon: <Fingerprint className='h-5 w-5' />,
       label: 'Absen',
       href: basePath,
     },
     {
-      icon: <History className="w-5 h-5" />,
+      icon: <History className='h-5 w-5' />,
       label: 'Log',
       href: `${basePath}/history`,
     },
     {
-      icon: <User className="w-5 h-5" />,
+      icon: <User className='h-5 w-5' />,
       label: 'Profil',
       href: profilePath,
     },
@@ -55,8 +55,8 @@ export function MobileBottomNav({
   };
 
   return (
-    <nav className="md:hidden flex-none bg-white dark:bg-[#111a22] border-t border-slate-200 dark:border-slate-800 px-6 py-3 z-50">
-      <div className="flex justify-between items-center max-w-md mx-auto">
+    <nav className='z-50 flex-none border-t border-slate-200 bg-white px-6 py-3 md:hidden dark:border-slate-800 dark:bg-[#111a22]'>
+      <div className='mx-auto flex max-w-md items-center justify-between'>
         {navItems.map((item) => {
           const active = isActive(item.href);
           return (
@@ -71,9 +71,7 @@ export function MobileBottomNav({
               )}
             >
               {item.icon}
-              <span
-                className={clsx('text-[10px]', active && 'font-bold')}
-              >
+              <span className={clsx('text-[10px]', active && 'font-bold')}>
                 {item.label}
               </span>
             </Link>
