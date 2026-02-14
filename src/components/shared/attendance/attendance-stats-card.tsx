@@ -21,19 +21,21 @@ export function AttendanceStatsCard({
   variant = 'default',
 }: AttendanceStatsCardProps) {
   return (
-    <div className="bg-white dark:bg-[#1e293b] p-4 rounded-xl border border-slate-200 dark:border-slate-800">
+    <div className='rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-[#1e293b]'>
       <p
         className={clsx(
-          'text-xs font-bold uppercase tracking-wider mb-1',
+          'mb-1 text-xs font-bold tracking-wider uppercase',
           variantStyles[variant]
         )}
       >
         {label}
       </p>
-      <p className="text-2xl font-bold text-slate-900 dark:text-white">
+      <p className='text-2xl font-bold text-slate-900 dark:text-white'>
         {value}
         {unit && (
-          <span className="text-sm font-normal text-slate-400 ml-1">{unit}</span>
+          <span className='ml-1 text-sm font-normal text-slate-400'>
+            {unit}
+          </span>
         )}
       </p>
     </div>

@@ -7,14 +7,17 @@ import { usePathname } from 'next/navigation';
 import { NavbarLogo } from '@/src/components/Home/Navbar/navbar-logo';
 import { useAuth } from '@/src/context/AuthContext';
 // Notifications if applicable, otherwise omit or include placeholder
-// import { HeaderNotifications } from '../dashboard/main/header-notifications'; 
+// import { HeaderNotifications } from '../dashboard/main/header-notifications';
 
 interface DriverHeaderProps {
   isSidebarOpen: boolean;
   onToggleSidebar: () => void;
 }
 
-export function DriverHeader({ isSidebarOpen, onToggleSidebar }: DriverHeaderProps) {
+export function DriverHeader({
+  isSidebarOpen,
+  onToggleSidebar,
+}: DriverHeaderProps) {
   const { user } = useAuth();
   const pathname = usePathname();
 
