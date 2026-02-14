@@ -23,10 +23,12 @@ export const getOrderDetail = async (orderId: string) => {
     outlet_admin_id: '',
     total_weight: pickup.order?.[0]?.total_weight || 0,
     price_total: pickup.order?.[0]?.price_total || 0,
-    status:
-      (pickup.order?.[0]?.status as string) ||
-      mapPickupStatusToOrderStatus(pickup.status),
-    paid_at: null,
+    status: mapPickupStatusToOrderStatus(
+      pickup.status,
+      pickup.order?.[0]?.status,
+      pickup.order?.[0]?.paid_at
+    ),
+    paid_at: pickup.order?.[0]?.paid_at || null,
     created_at:
       pickup.createdAt || pickup.created_at || pickup.order?.[0]?.created_at,
     updated_at:
@@ -42,12 +44,29 @@ export const getOrderDetail = async (orderId: string) => {
   };
 };
 
-function mapPickupStatusToOrderStatus(pickupStatus: string): string {
+function mapPickupStatusToOrderStatus(
+  pickupStatus: string,
+  currentOrderStatus?: string,
+  paidAt?: string | null
+): string {
+  // If already paid, force status to PAID if it's currently lagging
+  if (
+    paidAt &&
+    (currentOrderStatus === 'CREATED' ||
+      currentOrderStatus === 'WAITING_PAYMENT' ||
+      !currentOrderStatus)
+  ) {
+    return 'PAID';
+  }
+  if (currentOrderStatus && currentOrderStatus !== 'CREATED') {
+    return currentOrderStatus;
+  }
+
   const statusMapping: { [key: string]: string } = {
     WAITING_DRIVER: 'CREATED',
     DRIVER_ASSIGNED: 'CREATED',
-    PICKED_UP: 'WAITING_PAYMENT',
-    ARRIVED_OUTLET: 'WAITING_PAYMENT',
+    PICKED_UP: 'CREATED', // Still in driver's hands, so technically created/pickup phase
+    ARRIVED_OUTLET: 'WAITING_PAYMENT', // Default next step if order status is still CREATED
     CANCELLED: 'CANCELLED',
   };
   return statusMapping[pickupStatus] || 'CREATED';

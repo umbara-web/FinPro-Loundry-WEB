@@ -6,13 +6,13 @@ import { OrderStatus } from '@/src/types/order';
 export const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
   [OrderStatus.CREATED]: 'Menunggu Penjemputan Driver',
   [OrderStatus.WAITING_PAYMENT]: 'Menunggu Pembayaran',
-  [OrderStatus.PAID]: 'Laundry Telah Sampai Outlet',
-  [OrderStatus.IN_WASHING]: 'Laundry Sedang Dicuci',
-  [OrderStatus.IN_IRONING]: 'Laundry Sedang Disetrika',
-  [OrderStatus.IN_PACKING]: 'Laundry Sedang Di Packing',
-  [OrderStatus.READY_FOR_DELIVERY]: 'Laundry Siap Diantar',
-  [OrderStatus.ON_DELIVERY]: 'Laundry Sedang Dikirim',
-  [OrderStatus.DELIVERED]: 'Laundry Telah Diterima',
+  [OrderStatus.PAID]: 'Pembayaran Berhasil',
+  [OrderStatus.IN_WASHING]: 'Sedang Dicuci',
+  [OrderStatus.IN_IRONING]: 'Sedang Disetrika',
+  [OrderStatus.IN_PACKING]: 'Sedang Di Packing',
+  [OrderStatus.READY_FOR_DELIVERY]: 'Siap Diantar',
+  [OrderStatus.ON_DELIVERY]: 'Sedang Dikirim',
+  [OrderStatus.DELIVERED]: 'Telah Diterima',
   [OrderStatus.COMPLETED]: 'Selesai',
   [OrderStatus.CANCELLED]: 'Dibatalkan',
   [OrderStatus.ON_HOLD]: 'Ditunda',
@@ -27,21 +27,21 @@ export const ORDER_STATUS_COLORS: Record<OrderStatus, string> = {
   [OrderStatus.WAITING_PAYMENT]:
     'bg-orange-100 dark:bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-200 dark:border-orange-500/20',
   [OrderStatus.PAID]:
-    'bg-blue-100 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-500/20',
+    'bg-green-100 dark:bg-green-500/10 text-green-600 dark:text-green-400 border-green-200 dark:border-green-500/20',
   [OrderStatus.IN_WASHING]:
-    'bg-blue-100 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-500/20',
+    'bg-sky-100 dark:bg-sky-500/10 text-sky-600 dark:text-sky-400 border-sky-200 dark:border-sky-500/20',
   [OrderStatus.IN_IRONING]:
     'bg-blue-100 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-500/20',
   [OrderStatus.IN_PACKING]:
-    'bg-blue-100 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-500/20',
-  [OrderStatus.READY_FOR_DELIVERY]:
     'bg-indigo-100 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-200 dark:border-indigo-500/20',
+  [OrderStatus.READY_FOR_DELIVERY]:
+    'bg-cyan-100 dark:bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border-cyan-200 dark:border-cyan-500/20',
   [OrderStatus.ON_DELIVERY]:
-    'bg-purple-100 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-200 dark:border-purple-500/20',
+    'bg-lime-100 dark:bg-lime-500/10 text-lime-600 dark:text-lime-400 border-lime-200 dark:border-lime-500/20',
   [OrderStatus.DELIVERED]:
-    'bg-green-100 dark:bg-green-500/10 text-green-700 dark:text-green-400 border-green-200 dark:border-green-500/20',
+    'bg-emerald-100 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-500/20',
   [OrderStatus.COMPLETED]:
-    'bg-green-100 dark:bg-green-500/10 text-green-700 dark:text-green-400 border-green-200 dark:border-green-500/20',
+    'bg-teal-100 dark:bg-teal-500/10 text-teal-700 dark:text-teal-400 border-teal-200 dark:border-teal-500/20',
   [OrderStatus.CANCELLED]:
     'bg-red-100 dark:bg-red-500/10 text-red-600 dark:text-red-400 border-red-200 dark:border-red-500/20',
   [OrderStatus.ON_HOLD]:

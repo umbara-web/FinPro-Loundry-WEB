@@ -47,9 +47,11 @@ export default function PaymentPage({
       router.push(redirectUrl);
     },
     onError: (error: any) => {
-      toast.error(
-        error?.response?.data?.message || 'Gagal memproses pembayaran'
-      );
+      const msg =
+        error?.response?.data?.message ||
+        error?.response?.data?.error ||
+        'Gagal memproses pembayaran';
+      toast.error(msg);
     },
   });
 
