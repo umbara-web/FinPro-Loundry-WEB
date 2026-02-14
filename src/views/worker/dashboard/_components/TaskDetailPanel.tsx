@@ -16,6 +16,16 @@ import {
   useBypassRequest,
 } from '@/src/hooks/use-station-tasks';
 import { useLaundryItems } from '@/src/hooks/use-master-data';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/src/components/ui/dialog';
+import { Textarea } from '@/src/components/ui/textarea';
+import { Button } from '@/src/components/ui/button';
 
 interface TaskDetailPanelProps {
   task: StationTask | null;
@@ -31,6 +41,8 @@ export function TaskDetailPanel({
   const config = getStationConfig(stationType);
   const [itemCounts, setItemCounts] = useState<ItemCountData>({});
   const [showMismatchAlert, setShowMismatchAlert] = useState(false);
+  const [isBypassDialogOpen, setIsBypassDialogOpen] = useState(false);
+  const [bypassReason, setBypassReason] = useState('');
 
   const completeTask = useCompleteTask();
   const bypassRequest = useBypassRequest();
@@ -44,6 +56,7 @@ export function TaskDetailPanel({
       });
       setItemCounts(initialCounts);
       setShowMismatchAlert(false);
+      setBypassReason('');
     }
   }, [task?.id, laundryItems]);
 
@@ -151,14 +164,27 @@ export function TaskDetailPanel({
     });
   };
 
-  const handleBypassRequest = () => {
-    if (!task) return;
-    bypassRequest.mutate({
-      taskId: task.id,
-      stationType,
-      reason: 'Item count mismatch',
-      itemCounts,
-    });
+  const handleOpenBypassDialog = () => {
+    setIsBypassDialogOpen(true);
+  };
+
+  const handleSubmitBypass = () => {
+    if (!task || !bypassReason.trim()) return;
+
+    bypassRequest.mutate(
+      {
+        taskId: task.id,
+        stationType,
+        reason: bypassReason,
+        itemCounts,
+      },
+      {
+        onSuccess: () => {
+          setIsBypassDialogOpen(false);
+          setBypassReason('');
+        },
+      }
+    );
   };
 
   if (!task) {
@@ -252,11 +278,9 @@ export function TaskDetailPanel({
         currentCount={totalItems}
         targetCount={expectedTotal}
         hasMismatch={showMismatchAlert}
-        onComplete={showMismatchAlert ? handleBypassRequest : handleComplete}
+        onComplete={showMismatchAlert ? handleOpenBypassDialog : handleComplete}
         onResetAll={handleResetAll}
-        isLoading={
-          showMismatchAlert ? bypassRequest.isPending : completeTask.isPending
-        }
+        isLoading={completeTask.isPending}
         isDisabled={isInputEmpty || isBypassPending}
         variant={showMismatchAlert && !isInputEmpty ? 'warning' : 'primary'}
         actionLabel={
@@ -268,6 +292,40 @@ export function TaskDetailPanel({
             : undefined
         }
       />
+
+      <Dialog open={isBypassDialogOpen} onOpenChange={setIsBypassDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Request Bypass</DialogTitle>
+            <DialogDescription>
+              Jelaskan alasan kenapa jumlah item tidak sesuai dengan order.
+            </DialogDescription>
+          </DialogHeader>
+          <div className='py-4'>
+            <Textarea
+              placeholder='Contoh: Ada 1 item tambahan di kantong...'
+              value={bypassReason}
+              onChange={(e) => setBypassReason(e.target.value)}
+              className='min-h-[100px]'
+            />
+          </div>
+          <DialogFooter>
+            <Button
+              variant='outline'
+              onClick={() => setIsBypassDialogOpen(false)}
+              disabled={bypassRequest.isPending}
+            >
+              Batal
+            </Button>
+            <Button
+              onClick={handleSubmitBypass}
+              disabled={!bypassReason.trim() || bypassRequest.isPending}
+            >
+              {bypassRequest.isPending ? 'Mengirim...' : 'Kirim Request'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </main>
   );
 }
