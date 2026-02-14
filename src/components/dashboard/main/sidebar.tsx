@@ -29,7 +29,7 @@ const sidebarLinks = [
   { href: '/dashboard/addresses', label: 'Kelola Alamat', icon: MapPin },
   { href: '/dashboard/orders', label: 'Pesanan', icon: ShoppingBag },
   {
-    href: '/dashboard/payment-history',
+    href: '/dashboard/payments/payment-history',
     label: 'Riwayat Pembayaran',
     icon: Wallet,
   },

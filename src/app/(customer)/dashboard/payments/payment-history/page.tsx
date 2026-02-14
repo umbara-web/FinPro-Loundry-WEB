@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { getOrders } from '@/src/lib/api/order-api';
@@ -36,6 +36,30 @@ export default function PaymentHistoryPage() {
 
   const debouncedSearch = useDebounce(localSearch, 500);
   const normalizedSearch = normalizeSearchTerm(debouncedSearch);
+
+  // Auto-search: sync debounced search value to URL
+  useEffect(() => {
+    const currentUrlSearch = searchParams.get('search') || '';
+    if (normalizedSearch !== currentUrlSearch) {
+      updateURL({
+        search: normalizedSearch || undefined,
+        page: '1',
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [normalizedSearch]);
+
+  // Auto-apply status change to URL
+  useEffect(() => {
+    const currentUrlStatus = searchParams.get('status') || 'all';
+    if (localStatus !== currentUrlStatus) {
+      updateURL({
+        status: localStatus === 'all' ? undefined : localStatus,
+        page: '1',
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [localStatus]);
 
   // Fetch orders
   const { data, isLoading } = useQuery({
@@ -85,8 +109,11 @@ export default function PaymentHistoryPage() {
       }
 
       // Count successful payments based on Payment_Status enum
-      const paymentStatus = order.payment?.[0]?.status;
-      if (paymentStatus === 'PAID') {
+      // Use robust check similar to PaymentRow and OrderMapper
+      const payments = order.payment || [];
+      const isPaid = payments.some((p: any) => p.status === 'PAID');
+
+      if (isPaid) {
         successfulTransactions++;
       }
 
@@ -121,19 +148,7 @@ export default function PaymentHistoryPage() {
   };
 
   // Handler functions
-  const handleFilter = () => {
-    // Normalize search for case-insensitive matching
-    const normalized = normalizeSearchTerm(localSearch);
-    updateURL({
-      search: normalized || undefined,
-      status: localStatus === 'all' ? undefined : localStatus,
-      dateFrom: localDateFrom || undefined,
-      dateTo: localDateTo || undefined,
-      page: '1',
-    });
-  };
-
-  const handleClearFilters = () => {
+  const handleResetFilters = () => {
     setLocalSearch('');
     setLocalStatus('all');
     setLocalDateFrom('');
@@ -170,8 +185,7 @@ export default function PaymentHistoryPage() {
           dateTo={localDateTo}
           onDateFromChange={setLocalDateFrom}
           onDateToChange={setLocalDateTo}
-          onFilter={handleFilter}
-          onClearFilters={handleClearFilters}
+          onResetFilters={handleResetFilters}
         />
       </div>
 
