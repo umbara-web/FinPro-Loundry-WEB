@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
-import { Order } from '@/src/app/outletadmin/types';
+import { Order } from '@/src/app/outletadmin/_types';
 
 interface CreateOrderModalProps {
     isOpen: boolean;

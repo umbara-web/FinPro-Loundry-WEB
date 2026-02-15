@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { Order } from '@/src/app/outletadmin/types';
+import { Order } from '@/src/app/outletadmin/_types';
 import api from '@/src/app/utils/api';
 import { useAuth } from '@/src/context/AuthContext';
 

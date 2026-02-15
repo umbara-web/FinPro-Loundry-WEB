@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import { Plus } from "lucide-react";
-import StatCard from "./components/statcard";
-import OrderTable from "./components/ordertable";
-import FilterBar from "./components/FilterBar";
-import CreateOrderModal from "./components/CreateOrderModal";
-import { useOutletOrders } from "./hooks/useOutletOrders";
-import { STATS_DATA } from "./constants";
+import StatCard from "./_components/statcard";
+import OrderTable from "./_components/ordertable";
+import FilterBar from "./_components/FilterBar";
+import CreateOrderModal from "./_components/CreateOrderModal";
+import { useOutletOrders } from "./_hooks/useOutletOrders";
+import { STATS_DATA } from "./_constants";
 
 export default function OrdersPage() {
     const {
