@@ -4,9 +4,9 @@ import {
   TaskQueueSidebar,
   TaskDetailPanel,
   WorkerMobileNav,
-} from '@/src/views/Worker/Dashboard/_components';
-import { useWorkerDashboard } from '@/src/views/Worker/Dashboard/_hooks/use-worker-dashboard';
-import { StationType } from '@/src/views/Worker/Dashboard/_types';
+} from '@/src/views/worker/dashboard/_components';
+import { useWorkerDashboard } from '@/src/views/worker/dashboard/_hooks/use-worker-dashboard';
+import { StationType } from '@/src/views/worker/dashboard/_types';
 import clsx from 'clsx';
 import { AlertCircle, ClipboardList } from 'lucide-react';
 

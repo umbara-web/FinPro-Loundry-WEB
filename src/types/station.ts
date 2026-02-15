@@ -1,1 +1,1 @@
-export * from '@/src/views/Worker/Dashboard/_types';
+export * from '@/src/views/worker/dashboard/_types';
