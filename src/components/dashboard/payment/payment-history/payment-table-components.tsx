@@ -33,7 +33,20 @@ export function TableHeader({ sortBy, sortOrder, onSort }: TableHeaderProps) {
   return (
     <thead>
       <tr className='border-b border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-slate-800/50'>
-        <th className={headerClass}>ID Transaksi</th>
+        <th className={clickClass} onClick={() => onSort('transaction_id')}>
+          <div className='flex items-center gap-2'>
+            <span
+              className={`text-xs font-bold tracking-widest uppercase ${sortBy === 'transaction_id' ? 'text-blue-500' : 'text-slate-500'}`}
+            >
+              ID Transaksi
+            </span>
+            <SortIndicator
+              field='transaction_id'
+              sortBy={sortBy}
+              sortOrder={sortOrder}
+            />
+          </div>
+        </th>
         <th className={headerClass}>No. Pesanan</th>
         <th className={clickClass} onClick={() => onSort('created_at')}>
           <div className='flex items-center gap-2'>
@@ -108,7 +121,8 @@ export function ActionButton({
 
   return (
     <Link
-      href={`/dashboard/orders/${orderId}`}
+      href={`/dashboard/invoices/${orderId}`}
+      target='_blank'
       className='inline-flex items-center gap-2 rounded-lg border border-blue-500/20 bg-blue-500/10 px-4 py-1.5 text-[11px] font-bold text-blue-500 transition-all hover:bg-blue-500 hover:text-white'
     >
       <Receipt className='h-4 w-4' />

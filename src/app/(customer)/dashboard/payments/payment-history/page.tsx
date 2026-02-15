@@ -61,7 +61,7 @@ export default function PaymentHistoryPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [localStatus]);
 
-  // Fetch orders
+  // Fetch orders (paginated for table display)
   const { data, isLoading } = useQuery({
     queryKey: [
       'payment-history',
@@ -81,7 +81,7 @@ export default function PaymentHistoryPage() {
         search: urlSearch || undefined,
         dateFrom: urlDateFrom ? new Date(urlDateFrom) : undefined,
         dateTo: urlDateTo ? new Date(urlDateTo) : undefined,
-        sortBy,
+        sortBy: sortBy === 'transaction_id' ? 'created_at' : sortBy,
         sortOrder,
       }),
   });
@@ -89,7 +89,14 @@ export default function PaymentHistoryPage() {
   const orders = data?.data || [];
   const meta = data?.meta;
 
-  // Calculate summary stats from orders
+  // Fetch ALL orders (no pagination) for summary stats calculation
+  const { data: allData } = useQuery({
+    queryKey: ['payment-history-all'],
+    queryFn: () => getOrders({ page: 1, limit: 9999 }),
+  });
+  const allOrders = allData?.data || [];
+
+  // Calculate summary stats from ALL orders (not just current page)
   const summaryStats = useMemo(() => {
     const currentMonth = new Date().getMonth();
     const currentYear = new Date().getFullYear();
@@ -98,7 +105,7 @@ export default function PaymentHistoryPage() {
     let successfulTransactions = 0;
     const methodCounts: Record<string, number> = {};
 
-    orders.forEach((order) => {
+    allOrders.forEach((order) => {
       const orderDate = new Date(order.created_at);
       const isCurrentMonth =
         orderDate.getMonth() === currentMonth &&
@@ -109,7 +116,6 @@ export default function PaymentHistoryPage() {
       }
 
       // Count successful payments based on Payment_Status enum
-      // Use robust check similar to PaymentRow and OrderMapper
       const payments = order.payment || [];
       const isPaid = payments.some((p: any) => p.status === 'PAID');
 
@@ -132,7 +138,20 @@ export default function PaymentHistoryPage() {
     });
 
     return { totalSpending, successfulTransactions, favoriteMethod };
-  }, [orders]);
+  }, [allOrders]);
+
+  // Build stable order number mapping: oldest order = 001, newest = highest
+  const orderNumberMap = useMemo(() => {
+    const sorted = [...allOrders].sort(
+      (a, b) =>
+        new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+    );
+    const map: Record<string, number> = {};
+    sorted.forEach((order, i) => {
+      map[order.id] = i + 1;
+    });
+    return map;
+  }, [allOrders]);
 
   // URL update helper
   const updateURL = (params: Record<string, string | undefined>) => {
@@ -161,21 +180,29 @@ export default function PaymentHistoryPage() {
     updateURL({ sortBy: field, sortOrder: newOrder });
   };
 
+  // Map frontend sort fields to backend fields
+  const getBackendSortBy = (field: string) => {
+    if (field === 'transaction_id') return 'created_at';
+    return field;
+  };
+
   const handlePageChange = (newPage: number) => {
     updateURL({ page: newPage.toString() });
   };
 
   return (
-    <div className='container mx-auto h-full max-w-7xl overflow-y-auto p-6 md:p-8'>
-      {/* Summary Cards */}
-      <PaymentSummaryCards
-        totalSpending={summaryStats.totalSpending}
-        successfulTransactions={summaryStats.successfulTransactions}
-        favoriteMethod={summaryStats.favoriteMethod}
-      />
+    <div className='container mx-auto h-full max-w-7xl overflow-y-auto p-4 md:p-6'>
+      {/* Summary Cards - sticky header */}
+      <div className='bg-background-light dark:bg-background-dark sticky top-0 z-10 pt-0 pb-2'>
+        <PaymentSummaryCards
+          totalSpending={summaryStats.totalSpending}
+          successfulTransactions={summaryStats.successfulTransactions}
+          favoriteMethod={summaryStats.favoriteMethod}
+        />
+      </div>
 
       {/* Filters */}
-      <div className='mt-6 md:mt-8'>
+      <div className='bg-background-light dark:bg-background-dark sticky top-16 z-10 mt-4 md:mt-4'>
         <PaymentFilters
           search={localSearch}
           onSearchChange={setLocalSearch}
@@ -190,13 +217,14 @@ export default function PaymentHistoryPage() {
       </div>
 
       {/* Table with Pagination */}
-      <div className='mt-6 overflow-hidden rounded-2xl border border-slate-200 shadow-sm md:mt-8 dark:border-slate-700'>
+      <div className='mt-4 overflow-hidden rounded-2xl border border-slate-200 shadow-sm md:mt-4 dark:border-slate-700'>
         <PaymentTable
           orders={orders}
           isLoading={isLoading}
           sortBy={sortBy}
           sortOrder={sortOrder}
           onSort={handleSort}
+          orderNumberMap={orderNumberMap}
         />
 
         {meta && meta.totalPages > 1 && (

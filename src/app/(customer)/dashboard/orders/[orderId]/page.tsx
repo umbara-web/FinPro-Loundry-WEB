@@ -105,6 +105,9 @@ export default function OrderDetailPage({
             </Button>
             <Button
               variant='default'
+              onClick={() =>
+                window.open(`/dashboard/invoices/${orderId}`, '_blank')
+              }
               className='flex cursor-pointer items-center gap-2 rounded-lg bg-blue-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-500/20 transition-all hover:bg-blue-900'
             >
               <FiDownload className='h-6 w-6 text-white' />

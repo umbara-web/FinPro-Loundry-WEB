@@ -79,8 +79,11 @@ export function getPaymentStatusBadge(
   return BADGE_STYLES[status] || DEFAULT_BADGE;
 }
 
-export function generateTransactionId(index: number, orderId: string): string {
-  return `${String(index + 1).padStart(3, '0')}-${orderId.slice(0, 8).toUpperCase()}`;
+export function generateTransactionId(
+  globalNumber: number,
+  orderId: string
+): string {
+  return `${String(globalNumber).padStart(3, '0')}-${orderId.slice(0, 8).toUpperCase()}`;
 }
 
 export type { BadgeStyle };
