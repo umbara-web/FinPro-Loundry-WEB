@@ -22,6 +22,8 @@ const AllOrderPage = () => {
     totalPages,
     totalItems,
     itemsPerPage,
+    outletOptions,
+    statusOptions,
   } = useOrders();
 
   return (
@@ -49,6 +51,8 @@ const AllOrderPage = () => {
           setSelectedOutlet={setSelectedOutlet}
           selectedStatus={selectedStatus}
           setSelectedStatus={setSelectedStatus}
+          outletOptions={outletOptions}
+          statusOptions={statusOptions}
         />
 
         {/* Table */}

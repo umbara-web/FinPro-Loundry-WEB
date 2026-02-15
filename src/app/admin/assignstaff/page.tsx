@@ -8,6 +8,7 @@ import AssignedStaff from './components/AssignedStaff';
 
 const StaffManagementPage = () => {
   const {
+    loading,
     activeTab,
     setActiveTab,
     selectedOutlet,
@@ -22,6 +23,17 @@ const StaffManagementPage = () => {
     assignStaff,
     unassignStaff,
   } = useStaffAssignment();
+
+  if (loading) {
+    return (
+      <div className="p-8 flex items-center justify-center min-h-[400px]">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-10 h-10 border-4 border-[#26E0C8] border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-gray-500 text-sm">Memuat data...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-8">

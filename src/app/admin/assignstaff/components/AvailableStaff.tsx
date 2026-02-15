@@ -9,7 +9,7 @@ interface AvailableStaffProps {
     setActiveTab: (tab: 'all' | 'admin' | 'staff' | 'driver') => void;
     searchTerm: string;
     onSearchChange: (val: string) => void;
-    onAssign: (id: number) => void;
+    onAssign: (id: number | string) => void;
 }
 
 const AvailableStaff: React.FC<AvailableStaffProps> = ({

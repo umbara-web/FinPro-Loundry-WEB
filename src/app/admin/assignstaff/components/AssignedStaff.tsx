@@ -4,7 +4,7 @@ import { Staff } from '../types';
 
 interface AssignedStaffProps {
     assignedList: Staff[];
-    onUnassign: (id: number) => void;
+    onUnassign: (id: number | string) => void;
 }
 
 const AssignedStaff: React.FC<AssignedStaffProps> = ({ assignedList, onUnassign }) => {
