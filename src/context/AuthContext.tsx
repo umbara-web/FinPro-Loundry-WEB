@@ -69,7 +69,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (me.data.role === 'ADMIN') {
         window.location.assign('/admin/dashboard');
       } else if (me.data.role === 'OUTLET_ADMIN') {
-        window.location.assign('/outletadmin');
+        window.location.assign('/outletadmin/dashboard');
       } else if (me.data.role === 'WORKER') {
         window.location.assign('/worker-dashboard');
       } else if (me.data.role === 'DRIVER') {
