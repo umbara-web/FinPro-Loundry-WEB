@@ -33,7 +33,15 @@ export const OutletForm: React.FC<OutletFormProps> = ({
     // Load initial data if provided
     useEffect(() => {
         if (initialData) {
-            setFormData(initialData);
+            setFormData({
+                name: initialData.name ?? '',
+                address: initialData.address ?? '',
+                city: initialData.city ?? '',
+                manager: initialData.manager ?? '',
+                phone: initialData.phone ?? '',
+                openTime: initialData.openTime ?? '',
+                status: initialData.status ?? 'ACTIVE'
+            });
         }
     }, [initialData]);
 
