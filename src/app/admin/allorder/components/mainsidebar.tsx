@@ -6,10 +6,12 @@ import {
   UserPlus, CheckCircle2, Package, Megaphone, LogOut
 } from 'lucide-react';
 import Link from 'next/link';
-import { signOut } from 'next-auth/react';
+import { useAuth } from '@/src/context/AuthContext';
 
 
 function SidebarDashboard() {
+  const { logout } = useAuth();
+
   const menu = [
     { label: 'Dashboard', icon: <Store size={20} />, href: '/admin/dashboard' },
     { label: 'MANAJEMEN', isHeader: true },
@@ -23,7 +25,7 @@ function SidebarDashboard() {
   ];
 
   const handleLogout = () => {
-    signOut({ callbackUrl: '/' });
+    logout();
   };
 
   return (

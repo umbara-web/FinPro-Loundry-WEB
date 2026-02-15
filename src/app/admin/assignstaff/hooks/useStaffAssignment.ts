@@ -1,33 +1,90 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Staff, Outlet } from '../types';
+import api from '@/src/app/utils/api';
 
-// Mock Data
-const MOCK_OUTLETS: Outlet[] = [
-    { id: 1, name: 'Outlet Pusat', location: 'Jakarta Selatan', description: 'Main Operation Hub', color: 'bg-purple-500' },
-    { id: 2, name: 'Cabang Bandung', location: 'Bandung Utara', description: 'High Traffic Area', color: 'bg-blue-500' },
-    { id: 3, name: 'Cabang Surabaya', location: 'Surabaya Timur', description: 'New Opening', color: 'bg-orange-500' },
-];
+const OUTLET_COLORS = ['bg-purple-500', 'bg-blue-500', 'bg-orange-500', 'bg-emerald-500', 'bg-pink-500', 'bg-cyan-500', 'bg-yellow-500'];
 
-const MOCK_STAFF: Staff[] = [
-    { id: 101, name: 'Budi Santoso', role: 'Admin Outlet', status: 'Assigned', avatar: 'https://i.pravatar.cc/150?u=budi', outletId: 1 },
-    { id: 102, name: 'Siti Aminah', role: 'Staff Laundry', status: 'Available', avatar: 'https://i.pravatar.cc/150?u=siti', outletId: null },
-    { id: 103, name: 'Rudi Hartono', role: 'Driver', status: 'Available', avatar: 'https://i.pravatar.cc/150?u=rudi', outletId: null },
-    { id: 104, name: 'Dewi Sartika', role: 'Staff Laundry', status: 'Assigned', avatar: 'https://i.pravatar.cc/150?u=dewi', outletId: 2 },
-    { id: 105, name: 'Ahmad Fauzi', role: 'Driver', status: 'Assigned', avatar: 'https://i.pravatar.cc/150?u=ahmad', outletId: 1 },
-    { id: 106, name: 'Maya Sari', role: 'Admin Outlet', status: 'Available', avatar: 'https://i.pravatar.cc/150?u=maya', outletId: null },
-    { id: 107, name: 'Joko Widodo', role: 'Staff Laundry', status: 'Available', avatar: 'https://i.pravatar.cc/150?u=joko', outletId: null },
-];
+// Map backend staff_type to frontend display role
+const mapStaffType = (type: string): string => {
+    const map: Record<string, string> = {
+        'OUTLET_ADMIN': 'Admin Outlet',
+        'WORKER': 'Staff Laundry',
+        'DRIVER': 'Driver',
+    };
+    return map[type] || type;
+};
 
 export const useStaffAssignment = () => {
-    const [outlets] = useState<Outlet[]>(MOCK_OUTLETS);
-    const [allStaff, setAllStaff] = useState<Staff[]>(MOCK_STAFF);
+    const [outlets, setOutlets] = useState<Outlet[]>([]);
+    const [allStaff, setAllStaff] = useState<Staff[]>([]);
+    const [loading, setLoading] = useState(true);
 
-    const [selectedOutletId, setSelectedOutletId] = useState<number | null>(null);
+    const [selectedOutletId, setSelectedOutletId] = useState<number | string | null>(null);
     const [activeTab, setActiveTab] = useState<'all' | 'admin' | 'staff' | 'driver'>('all');
 
     // Search states
     const [outletSearch, setOutletSearch] = useState('');
     const [staffSearch, setStaffSearch] = useState('');
+
+    // Fetch outlets and staff from API
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [outletsRes, workersRes] = await Promise.all([
+                    api.get('/api/outlets'),
+                    api.get('/api/workers'),
+                ]);
+
+                // Map outlets
+                const outletsData = Array.isArray(outletsRes.data) ? outletsRes.data : (outletsRes.data.data || []);
+                const mappedOutlets: Outlet[] = outletsData.map((o: any, index: number) => ({
+                    id: o.id,
+                    name: o.name || '-',
+                    location: o.address || o.city || '-',
+                    description: o.city || '',
+                    color: OUTLET_COLORS[index % OUTLET_COLORS.length],
+                }));
+                setOutlets(mappedOutlets);
+
+                // Map staff/workers
+                const workersData = workersRes.data.data || workersRes.data;
+                const mappedStaff: Staff[] = Array.isArray(workersData) ? workersData.map((w: any) => ({
+                    id: w.id,
+                    name: w.staff?.name || w.name || '-',
+                    role: mapStaffType(w.staff_type || w.role || ''),
+                    status: w.outlet_id ? 'Assigned' as const : 'Available' as const,
+                    avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(w.staff?.name || w.name || 'U')}&background=1e293b&color=26E0C8&bold=true`,
+                    outletId: w.outlet_id || null,
+                })) : [];
+                setAllStaff(mappedStaff);
+
+            } catch (error) {
+                console.error('Failed to fetch data:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
+
+    // --- Refetch helper ---
+    const refetchStaff = async () => {
+        try {
+            const res = await api.get('/api/workers');
+            const workersData = res.data.data || res.data;
+            const mappedStaff: Staff[] = Array.isArray(workersData) ? workersData.map((w: any) => ({
+                id: w.id,
+                name: w.staff?.name || w.name || '-',
+                role: mapStaffType(w.staff_type || w.role || ''),
+                status: w.outlet_id ? 'Assigned' as const : 'Available' as const,
+                avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(w.staff?.name || w.name || 'U')}&background=1e293b&color=26E0C8&bold=true`,
+                outletId: w.outlet_id || null,
+            })) : [];
+            setAllStaff(mappedStaff);
+        } catch (error) {
+            console.error('Failed to refetch staff:', error);
+        }
+    };
 
     // --- SELECTION LOGIC ---
     const selectedOutlet = useMemo(() =>
@@ -44,11 +101,10 @@ export const useStaffAssignment = () => {
         );
     }, [outlets, outletSearch]);
 
-    // 2. Available Staff (Middle Column)
-
+    // 2. Available Staff (not assigned to any outlet)
     const availableStaff = useMemo(() => {
         return allStaff.filter(s => {
-            const isUnassigned = s.outletId === null;
+            const isUnassigned = !s.outletId;
             const matchesSearch = s.name.toLowerCase().includes(staffSearch.toLowerCase());
             const matchesRole = activeTab === 'all' ||
                 (activeTab === 'admin' && s.role === 'Admin Outlet') ||
@@ -59,31 +115,42 @@ export const useStaffAssignment = () => {
         });
     }, [allStaff, staffSearch, activeTab]);
 
-    // 3. Assigned Staff (Right Column)
-
+    // 3. Assigned Staff (assigned to the selected outlet)
     const assignedStaff = useMemo(() => {
         if (!selectedOutlet) return [];
         return allStaff.filter(s => s.outletId === selectedOutlet.id);
     }, [allStaff, selectedOutlet]);
 
-
-
-
-    const selectOutlet = (id: number) => {
+    const selectOutlet = (id: number | string) => {
         setSelectedOutletId(id);
     };
 
-    const assignStaff = (staffId: number) => {
+    const assignStaff = async (staffId: number | string) => {
         if (!selectedOutlet) return;
-        setAllStaff(prev => prev.map(s =>
-            s.id === staffId ? { ...s, outletId: selectedOutlet.id, status: 'Assigned' } : s
-        ));
+        try {
+            // Update on backend
+            await api.put(`/api/workers/${staffId}`, { outletId: selectedOutlet.id });
+            // Update local state optimistically
+            setAllStaff(prev => prev.map(s =>
+                s.id === staffId ? { ...s, outletId: selectedOutlet.id, status: 'Assigned' as const } : s
+            ));
+        } catch (error) {
+            console.error('Failed to assign staff:', error);
+            alert('Gagal menugaskan staff');
+        }
     };
 
-    const unassignStaff = (staffId: number) => {
-        setAllStaff(prev => prev.map(s =>
-            s.id === staffId ? { ...s, outletId: null, status: 'Available' } : s
-        ));
+    const unassignStaff = async (staffId: number | string) => {
+        try {
+            // We need to find a "default" or null outlet - for now just update local state
+            // The backend might need a specific endpoint for unassignment
+            setAllStaff(prev => prev.map(s =>
+                s.id === staffId ? { ...s, outletId: null, status: 'Available' as const } : s
+            ));
+        } catch (error) {
+            console.error('Failed to unassign staff:', error);
+            alert('Gagal menghapus penugasan staff');
+        }
     };
 
     return {
@@ -92,6 +159,7 @@ export const useStaffAssignment = () => {
         outletSearch,
         setOutletSearch,
         filteredOutlets,
+        loading,
 
         activeTab,
         setActiveTab,
@@ -104,3 +172,4 @@ export const useStaffAssignment = () => {
         unassignStaff
     };
 };
+

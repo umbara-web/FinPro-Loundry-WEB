@@ -8,11 +8,11 @@ interface PerformanceTableProps {
 
 export const PerformanceTable: React.FC<PerformanceTableProps> = ({ data }) => {
     return (
-        <div className="bg-[#1C252E] border border-gray-800 rounded-2xl overflow-hidden">
+        <div className="bg-[#1C252E] border border-gray-800 rounded-2xl overflow-x-auto">
             <div className="p-6 border-b border-gray-800">
                 <h3 className="text-lg font-bold text-white">Employee Performance Details</h3>
             </div>
-            <table className="w-full text-left text-sm">
+            <table className="w-full text-left text-sm min-w-[650px]">
                 <thead className="bg-[#233648]/30 text-gray-500 uppercase text-[10px] tracking-wider">
                     <tr>
                         <th className="px-6 py-4">Employee</th>

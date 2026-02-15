@@ -8,6 +8,8 @@ interface OrderFiltersProps {
     setSelectedOutlet: (value: string) => void;
     selectedStatus: string;
     setSelectedStatus: (value: string) => void;
+    outletOptions: string[];
+    statusOptions: string[];
 }
 
 const FilterSelect = ({
@@ -44,6 +46,8 @@ const OrderFilters: React.FC<OrderFiltersProps> = ({
     setSelectedOutlet,
     selectedStatus,
     setSelectedStatus,
+    outletOptions,
+    statusOptions,
 }) => {
     return (
         <div className="p-6 border-b border-slate-800 flex flex-wrap gap-4 items-end">
@@ -65,13 +69,13 @@ const OrderFilters: React.FC<OrderFiltersProps> = ({
                 label="Lokasi Outlet"
                 value={selectedOutlet}
                 onChange={setSelectedOutlet}
-                options={['Semua Outlet', 'Jakarta', 'Bandung', 'Surabaya']}
+                options={outletOptions}
             />
             <FilterSelect
                 label="Order Status"
                 value={selectedStatus}
                 onChange={setSelectedStatus}
-                options={['Semua Status', 'Mencuci', 'Selesai', 'Pick Up']}
+                options={statusOptions}
             />
         </div>
     );

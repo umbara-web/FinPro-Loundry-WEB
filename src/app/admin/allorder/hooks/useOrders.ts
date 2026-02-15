@@ -20,7 +20,7 @@ export const useOrders = () => {
 
                 // Map backend data to frontend structure expected by OrderTable
                 const ordersData = res.data.data || res.data;
-                
+
                 if (!ordersData || !Array.isArray(ordersData)) {
                     setOrders([]);
                     return;
@@ -62,6 +62,18 @@ export const useOrders = () => {
         });
     }, [orders, searchTerm, selectedOutlet, selectedStatus]);
 
+    // Extract unique outlet names from orders for the filter dropdown
+    const outletOptions = useMemo(() => {
+        const uniqueOutlets = [...new Set(orders.map(o => o.outlet).filter(Boolean))];
+        return ['Semua Outlet', ...uniqueOutlets.sort()];
+    }, [orders]);
+
+    // Extract unique statuses from orders for the filter dropdown
+    const statusOptions = useMemo(() => {
+        const uniqueStatuses = [...new Set(orders.map(o => o.status).filter(Boolean))];
+        return ['Semua Status', ...uniqueStatuses.sort()];
+    }, [orders]);
+
     const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
     const paginatedOrders = filteredOrders.slice(startIndex, startIndex + itemsPerPage);
@@ -79,6 +91,8 @@ export const useOrders = () => {
         totalPages,
         totalItems: filteredOrders.length,
         itemsPerPage,
-        loading
+        loading,
+        outletOptions,
+        statusOptions
     };
 };
