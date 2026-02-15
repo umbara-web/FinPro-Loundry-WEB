@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { StationTask, StationType } from '@/src/views/Worker/Dashboard/_types';
+import { StationTask, StationType } from '@/src/views/worker/dashboard/_types';
 import { useStationTasks } from '@/src/hooks/use-station-tasks';
 
 export const useWorkerDashboard = () => {
