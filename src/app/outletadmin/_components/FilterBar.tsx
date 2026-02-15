@@ -1,5 +1,7 @@
 
 import { Search, Calendar, Filter, UserCircle, ChevronDown } from "lucide-react";
+import { Employee } from "../_types";
+
 
 interface FilterBarProps {
     searchTerm: string;
@@ -13,6 +15,7 @@ interface FilterBarProps {
 
     employeeFilter: string;
     onEmployeeChange: (val: string) => void;
+    employees?: Employee[];
 }
 
 export default function FilterBar({
@@ -23,7 +26,8 @@ export default function FilterBar({
     statusFilter,
     onStatusChange,
     employeeFilter,
-    onEmployeeChange
+    onEmployeeChange,
+    employees = []
 }: FilterBarProps) {
     return (
         <div className="flex flex-wrap gap-3 mb-6">
@@ -75,9 +79,11 @@ export default function FilterBar({
                     className="appearance-none bg-[#1E1E1E] border border-gray-800 rounded-xl px-4 py-2.5 pl-10 pr-8 text-sm text-gray-300 focus:outline-none hover:bg-[#252525] cursor-pointer min-w-[150px]"
                 >
                     <option value="All">All Employees</option>
-                    <option value="Siti A.">Siti A.</option>
-                    <option value="Rudi H.">Rudi H.</option>
-                    <option value="Dewi S.">Dewi S.</option>
+                    {employees.map((employee) => (
+                        <option key={employee.id} value={employee.name}>
+                            {employee.name}
+                        </option>
+                    ))}
                 </select>
                 <UserCircle size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
                 <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />

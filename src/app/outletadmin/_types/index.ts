@@ -21,3 +21,9 @@ export interface Stat {
     icon: 'calendar' | 'clock' | 'refresh' | 'check';
     iconColor: string;
 }
+
+export interface Employee {
+    id: string;
+    name: string;
+    role: string;
+}
