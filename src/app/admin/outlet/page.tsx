@@ -50,7 +50,7 @@ export default function KelolaOutlet() {
       city: outlet.city,
       manager: outlet.manager,
       phone: outlet.phone,
-      openTime: outlet.openTime,
+      openTime: outlet.openTime ?? '',
       status: outlet.status as 'ACTIVE' | 'CLOSED' | 'RENOVATION'
     });
     setShowEditModal(true);
