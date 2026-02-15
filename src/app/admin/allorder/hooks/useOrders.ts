@@ -14,7 +14,15 @@ export const useOrders = () => {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
+                console.log('[useOrders] Fetching from /api/orders...');
                 const res = await api.get('/api/orders');
+                console.log('[useOrders] Response:', res.data);
+
+                if (!res.data || !Array.isArray(res.data)) {
+                    setOrders([]);
+                    return;
+                }
+
                 // Map backend data to frontend structure expected by OrderTable
                 const mappedOrders = res.data.map((o: any) => ({
                     id: o.invoiceId || o.id,
