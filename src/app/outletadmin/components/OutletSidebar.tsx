@@ -9,12 +9,14 @@ import {
   LogOut,
   X,
   Home,
+  GitPullRequest,
 } from 'lucide-react';
 import clsx from 'clsx';
 
 const sidebarLinks = [
   { href: '/outletadmin', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/outletadmin/staff-attendance', label: 'Staff Attendance', icon: ClipboardCheck },
+  { href: '/outletadmin/bypass-request', label: 'Bypass Requests', icon: GitPullRequest },
 ];
 
 interface OutletSidebarProps {
