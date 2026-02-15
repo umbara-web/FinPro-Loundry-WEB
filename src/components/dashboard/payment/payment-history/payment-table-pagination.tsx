@@ -67,7 +67,7 @@ export function PaymentTablePagination({
         <button
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage <= 1}
-          className='flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 text-slate-500 transition-all hover:bg-slate-100 disabled:opacity-30 disabled:hover:bg-transparent dark:border-slate-700 dark:hover:bg-slate-800'
+          className='flex h-10 w-10 cursor-pointer items-center justify-center rounded-xl border border-slate-200 text-slate-500 transition-all hover:bg-slate-100 disabled:opacity-30 disabled:hover:bg-transparent dark:border-slate-700 dark:hover:bg-slate-800'
         >
           <ChevronLeft className='h-5 w-5' />
         </button>
@@ -77,10 +77,10 @@ export function PaymentTablePagination({
           <button
             key={page}
             onClick={() => onPageChange(page)}
-            className={`h-10 w-10 rounded-xl text-xs font-bold transition-all ${
+            className={`h-10 w-10 cursor-pointer rounded-xl text-xs font-bold transition-all ${
               currentPage === page
                 ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20'
-                : 'border border-transparent text-slate-500 hover:border-slate-200 hover:bg-slate-100 dark:text-slate-400 dark:hover:border-slate-700 dark:hover:bg-slate-800'
+                : 'cursor-pointer border border-transparent text-slate-500 hover:border-slate-200 hover:bg-slate-100 dark:text-slate-400 dark:hover:border-slate-700 dark:hover:bg-slate-800'
             }`}
           >
             {page}
@@ -91,7 +91,7 @@ export function PaymentTablePagination({
         <button
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage >= totalPages}
-          className='flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 text-slate-500 transition-all hover:bg-slate-100 disabled:opacity-30 disabled:hover:bg-transparent dark:border-slate-700 dark:hover:bg-slate-800'
+          className='flex h-10 w-10 cursor-pointer items-center justify-center rounded-xl border border-slate-200 text-slate-500 transition-all hover:bg-slate-100 disabled:opacity-30 disabled:hover:bg-transparent dark:border-slate-700 dark:hover:bg-slate-800'
         >
           <ChevronRight className='h-5 w-5' />
         </button>

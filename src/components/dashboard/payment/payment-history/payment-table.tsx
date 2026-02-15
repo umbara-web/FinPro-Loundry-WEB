@@ -10,6 +10,7 @@ interface PaymentTableProps {
   sortBy: string;
   sortOrder: 'asc' | 'desc';
   onSort: (field: string) => void;
+  orderNumberMap: Record<string, number>;
 }
 
 export function PaymentTable({
@@ -18,6 +19,7 @@ export function PaymentTable({
   sortBy,
   sortOrder,
   onSort,
+  orderNumberMap,
 }: PaymentTableProps) {
   if (isLoading) return <LoadingState />;
   if (orders.length === 0) return <EmptyState />;
@@ -28,9 +30,12 @@ export function PaymentTable({
         <table className='w-full border-collapse text-left'>
           <TableHeader sortBy={sortBy} sortOrder={sortOrder} onSort={onSort} />
           <tbody className='divide-y divide-slate-200 dark:divide-slate-700'>
-            {orders.map((order, index) => (
-              <PaymentRow key={order.id} order={order} index={index} />
-            ))}
+            {orders.map((order) => {
+              const globalNumber = orderNumberMap[order.id] || 0;
+              return (
+                <PaymentRow key={order.id} order={order} index={globalNumber} />
+              );
+            })}
           </tbody>
         </table>
       </div>

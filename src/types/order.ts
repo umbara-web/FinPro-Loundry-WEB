@@ -25,6 +25,7 @@ export interface OrderItem {
   laundry_item_id: string;
   qty: number;
   price?: number;
+  itemName?: string;
   laundry_item: LaundryItem;
 }
 
@@ -33,6 +34,8 @@ export interface CustomerAddress {
   address: string;
   city: string;
   postal_code: string;
+  recipient_name?: string;
+  recipient_phone?: string;
 }
 
 export interface PickupRequest {

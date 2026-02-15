@@ -34,12 +34,12 @@ export function OrderItemsList({ items }: OrderItemsListProps) {
               <th className='text-muted-foreground px-6 py-4 text-center text-xs font-bold tracking-widest uppercase'>
                 Jumlah
               </th>
-              <th className='text-muted-foreground px-6 py-4 text-right text-xs font-bold tracking-widest uppercase'>
+              {/* <th className='text-muted-foreground px-6 py-4 text-right text-xs font-bold tracking-widest uppercase'>
                 Harga Satuan
               </th>
               <th className='text-muted-foreground px-6 py-4 text-right text-xs font-bold tracking-widest uppercase'>
                 Subtotal
-              </th>
+              </th> */}
             </tr>
           </thead>
           <tbody className='divide-border/50 divide-y'>
@@ -70,12 +70,12 @@ export function OrderItemsList({ items }: OrderItemsListProps) {
                   <td className='px-6 py-5 text-center text-sm font-medium'>
                     {item.qty}
                   </td>
-                  <td className='text-muted-foreground px-6 py-5 text-right text-sm'>
+                  {/* <td className='text-muted-foreground px-6 py-5 text-right text-sm'>
                     {unitPrice > 0 ? formatCurrency(unitPrice) : '-'}
                   </td>
                   <td className='px-6 py-5 text-right text-sm font-bold'>
                     {subtotal > 0 ? formatCurrency(subtotal) : '-'}
-                  </td>
+                  </td> */}
                 </tr>
               );
             })}

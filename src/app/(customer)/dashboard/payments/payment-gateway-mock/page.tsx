@@ -102,7 +102,7 @@ function MockPaymentContent() {
                 Order ID:
               </span>
               <span className='font-mono font-medium text-[#111418] dark:text-white'>
-                {orderId.slice(0, 8)}...
+                {orderId.slice(0, 13)}
               </span>
             </div>
             <div className='flex justify-between'>
@@ -119,7 +119,7 @@ function MockPaymentContent() {
               disabled={processing}
               className='flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-green-500 px-4 py-3 font-bold text-white shadow-lg shadow-green-500/20 transition-colors hover:bg-green-600 disabled:cursor-not-allowed disabled:opacity-50'
             >
-              {processing ? 'Processing...' : 'Simulate Success (Pay)'}
+              {processing ? 'Processing...' : 'Bayar'}
             </button>
 
             <button
@@ -127,7 +127,7 @@ function MockPaymentContent() {
               disabled={processing}
               className='w-full cursor-pointer rounded-xl bg-red-500/10 px-4 py-3 font-bold text-red-500 transition-colors hover:bg-red-500/20 disabled:opacity-50 dark:bg-red-500/10 dark:text-red-400 dark:hover:bg-red-500/20'
             >
-              Simulate Failure / Cancel
+              Cancel
             </button>
           </div>
 

@@ -85,7 +85,7 @@ export function OrderSummary({
         <div className='space-y-3'>
           <div className='flex justify-between text-sm'>
             <span className='text-muted-foreground'>Total Berat</span>
-            <span className='font-medium'>{calculatedWeight} kg</span>
+            <span className='font-medium'>{order.total_weight} kg</span>
           </div>
           {/* Add other cost items if available */}
           <div className='border-border mt-2 flex items-center justify-between border-t pt-4'>
@@ -93,7 +93,7 @@ export function OrderSummary({
               Total Pembayaran
             </span>
             <span className='text-primary text-2xl font-bold dark:text-white'>
-              {formatCurrency(calculatedTotal)}
+              {formatCurrency(order.price_total)}
             </span>
           </div>
         </div>
