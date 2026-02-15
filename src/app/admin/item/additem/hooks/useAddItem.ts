@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import api from '@/utils/api';
+import api from '@/src/app/utils/api';
 import { ItemFormData } from '../../types';
+import { toast } from 'sonner';
 
 export const useAddItem = () => {
     const router = useRouter();
@@ -10,7 +11,6 @@ export const useAddItem = () => {
         name: '',
         category: 'Cuci Setrika',
         unit: 'kg',
-        price: '',
         status: 'Aktif',
     });
 
@@ -22,8 +22,8 @@ export const useAddItem = () => {
     const handleAddItem = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!formData.name || !formData.price || !formData.category || !formData.unit || !formData.status) {
-            alert('Semua field harus diisi!');
+        if (!formData.name || !formData.category || !formData.unit || !formData.status) {
+            toast.error('Semua field harus diisi!');
             return;
         }
 
@@ -32,15 +32,14 @@ export const useAddItem = () => {
                 name: formData.name,
                 category: formData.category,
                 unit: formData.unit,
-                price: formData.price,
                 status: formData.status
             });
 
-            alert('Item berhasil ditambahkan!');
+            toast.success('Item berhasil ditambahkan!');
             router.push('/admin/item');
         } catch (error) {
             console.error('Failed to add item:', error);
-            alert('Gagal menambahkan item. Silakan coba lagi.');
+            toast.error('Gagal menambahkan item. Silakan coba lagi.');
         }
     };
 

@@ -7,12 +7,14 @@ import { WorkerStats } from './components/WorkerStats';
 import { WorkerTable } from './components/WorkerTable';
 import { WorkerFilter } from './components/WorkerFilter';
 import { AddWorkerModal } from './components/AddWorkerModal';
+import Pagination from '@/src/app/admin/allorder/components/pagination';
 import { useWorkers } from './hooks/useWorkers';
 import { Worker, WorkerFormData } from './types';
 
 export default function LaundryAdmin() {
   const {
     workers,
+    outlets,
     addWorker,
     updateWorker,
     deleteWorker,
@@ -21,7 +23,12 @@ export default function LaundryAdmin() {
     roleFilter,
     setRoleFilter,
     statusFilter,
-    setStatusFilter
+    setStatusFilter,
+    currentPage,
+    setCurrentPage,
+    totalPages,
+    totalItems,
+    itemsPerPage
   } = useWorkers();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -95,6 +102,19 @@ export default function LaundryAdmin() {
           onEdit={handleOpenEditModal}
           onDelete={deleteWorker}
         />
+
+        {totalItems > 0 && (
+          <div className="mt-6">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+              itemsPerPage={itemsPerPage}
+              totalItems={totalItems}
+              showInfo={true}
+            />
+          </div>
+        )}
       </main>
 
       <AddWorkerModal
@@ -103,6 +123,7 @@ export default function LaundryAdmin() {
         onSubmit={handleSubmit}
         initialData={editingWorker}
         isEdit={!!editingWorker}
+        outlets={outlets}
       />
     </div>
   );
