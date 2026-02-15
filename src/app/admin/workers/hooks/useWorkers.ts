@@ -1,9 +1,12 @@
 import { useState, useMemo, useEffect } from 'react';
 import { Worker, WorkerFormData } from '../types';
-import api from '@/utils/api';
+import api from '@/src/app/utils/api';
 import { Outlet } from '../../outlet/types';
 
+import { useAuth } from '@/src/context/AuthContext';
+
 export const useWorkers = () => {
+    const { user } = useAuth();
     const [workers, setWorkers] = useState<Worker[]>([]);
     const [outlets, setOutlets] = useState<Outlet[]>([]);
     const [searchTerm, setSearchTerm] = useState('');
@@ -15,15 +18,29 @@ export const useWorkers = () => {
     const fetchData = async () => {
         try {
             setLoading(true);
-            const [workersRes, outletsRes] = await Promise.all([
+
+            // Define outlet fetch promise based on role
+            let outletPromise;
+            if (user?.role === 'OUTLET_ADMIN' && user?.outlet_id) {
+                outletPromise = api.get(`/api/outlets/${user.outlet_id}`)
+                    .then(res => Array.isArray(res.data) ? res.data : [res.data]);
+            } else if (user?.role === 'ADMIN') {
+                outletPromise = api.get('/api/outlets').then(res => res.data);
+            } else {
+                outletPromise = Promise.resolve([]);
+            }
+
+            const [workersRes, outletsData] = await Promise.all([
                 api.get('/api/workers'),
-                api.get('/api/outlets')
+                outletPromise
             ]);
 
-            setOutlets(outletsRes.data);
+            setOutlets(outletsData);
 
             // Map backend data to frontend interface
-            const mappedWorkers = workersRes.data.map((w: any) => ({
+            // Handle pagination structure: res.data = { data: [], meta: {} }
+            const workersData = workersRes.data.data || workersRes.data; // Fallback if regular array
+            const mappedWorkers = Array.isArray(workersData) ? workersData.map((w: any) => ({
                 id: w.id,
                 name: w.name,
                 email: w.email,

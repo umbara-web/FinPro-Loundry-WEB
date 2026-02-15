@@ -83,7 +83,8 @@ export function NavbarUserMenu({ user }: NavbarUserMenuProps) {
         <DropdownMenuSeparator />
         {(user.role === 'WORKER' ||
           user.role === 'DRIVER' ||
-          user.role === 'OUTLET_ADMIN') && (
+          user.role === 'OUTLET_ADMIN' ||
+          user.role === 'SUPER_ADMIN') && (
             <DropdownMenuItem className='cursor-pointer' asChild>
               <Link
                 href={
@@ -91,7 +92,9 @@ export function NavbarUserMenu({ user }: NavbarUserMenuProps) {
                     ? '/worker-dashboard'
                     : user.role === 'DRIVER'
                       ? '/driver-dashboard'
-                      : '/outletadmin'
+                      : user.role === 'OUTLET_ADMIN'
+                        ? '/outletadmin'
+                        : '/admin/dashboard'
                 }
               >
                 <LayoutDashboard className='mr-2 h-4 w-4' />
