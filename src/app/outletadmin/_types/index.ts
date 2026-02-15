@@ -7,7 +7,7 @@ export interface Order {
     items: string;
     quantity: number;
     weight: number;
-    status: 'In Progress' | 'Pending' | 'Ready' | 'Completed' | 'Cancelled';
+    status: 'WAITING_DRIVER' | 'DRIVER_ASSIGNED' | 'PICKED_UP' | 'ARRIVED_OUTLET' | 'CANCELLED';
     assigned: string | null;
     total: string;
     paid: boolean;

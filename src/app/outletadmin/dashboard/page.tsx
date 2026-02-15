@@ -1,16 +1,18 @@
 'use client';
 
 import { useState } from 'react';
-import { Plus } from 'lucide-react';
+import { Settings } from 'lucide-react';
 import StatCard from '../_components/statcard';
 import OrderTable from '../_components/ordertable';
 import FilterBar from '../_components/FilterBar';
-import CreateOrderModal from '../_components/CreateOrderModal';
+import ProsesOrderModal from '../_components/ProsesOrderModal';
 import { useOutletOrders } from '../_hooks/useOutletOrders';
+import { toast } from 'sonner';
 
 export default function OrdersPage() {
   const {
     orders,
+    allOrders,
     totalOrders,
     searchTerm,
     setSearchTerm,
@@ -24,38 +26,29 @@ export default function OrdersPage() {
     setDateFilter,
     employeeFilter,
     setEmployeeFilter,
-    createOrder,
     updateOrder,
     stats,
     employees,
   } = useOutletOrders();
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedOrder, setSelectedOrder] = useState<any>(null); // Use existing Order type if possible
+  const [isProsesModalOpen, setIsProsesModalOpen] = useState(false);
 
   const handleEditOrder = (order: any) => {
-    setSelectedOrder(order);
-    setIsModalOpen(true);
+    // Could open the proses modal pre-filled if needed
   };
 
-  const handleCreateOrder = () => {
-    setSelectedOrder(null);
-    setIsModalOpen(true);
-  };
-
-  const handleModalSubmit = (orderData: any) => {
-    if (selectedOrder) {
-      // Update existing order
-      // We need to pass the ID. OrderData might have it if we spread initialData, but let's be safe.
-      // Also need to sanitize data if `updateOrder` expects Partial<Order>.
-      const { rawId, id, ...rest } = orderData; // rawId from our hook mapping
-      updateOrder(selectedOrder.rawId || selectedOrder.id, rest); // Usage of rawId if available
-    } else {
-      // Create new order
-      createOrder(orderData);
+  const handleProsesSubmit = async (orderId: string, status: string) => {
+    try {
+      await updateOrder(orderId, { pickupStatus: status });
+      toast.success('Status order berhasil diperbarui!');
+      setIsProsesModalOpen(false);
+    } catch (error) {
+      toast.error('Gagal memperbarui status order.');
     }
-    setIsModalOpen(false);
   };
+
+  // Map orders to id/rawId pairs for the dropdown
+  const orderIds = allOrders.map((o: any) => ({ id: o.id, rawId: o.rawId }));
 
   return (
     <div className='min-h-screen bg-[#121212] p-8 font-sans text-white'>
@@ -73,10 +66,10 @@ export default function OrdersPage() {
           </p>
         </div>
         <button
-          onClick={handleCreateOrder}
+          onClick={() => setIsProsesModalOpen(true)}
           className='flex items-center gap-2 rounded-lg bg-[#4FD1C5] px-5 py-2.5 font-bold text-[#121212] shadow-lg shadow-teal-500/10 transition-all hover:bg-[#3fb9ae]'
         >
-          <Plus size={18} strokeWidth={3} /> Create New Order
+          <Settings size={18} strokeWidth={3} /> Proses Order
         </button>
       </div>
 
@@ -113,12 +106,13 @@ export default function OrdersPage() {
         />
       </div>
 
-      <CreateOrderModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSubmit={handleModalSubmit}
-        initialData={selectedOrder}
+      <ProsesOrderModal
+        isOpen={isProsesModalOpen}
+        onClose={() => setIsProsesModalOpen(false)}
+        onSubmit={handleProsesSubmit}
+        orderIds={orderIds}
       />
     </div>
   );
 }
+

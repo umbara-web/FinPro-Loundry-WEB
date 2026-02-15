@@ -62,10 +62,11 @@ export default function FilterBar({
                     className="appearance-none bg-[#1E1E1E] border border-gray-800 rounded-xl px-4 py-2.5 pl-10 pr-8 text-sm text-gray-300 focus:outline-none hover:bg-[#252525] cursor-pointer min-w-[140px]"
                 >
                     <option value="All">All Statuses</option>
-                    <option value="Pending">Pending</option>
-                    <option value="In Progress">In Progress</option>
-                    <option value="Ready">Ready</option>
-                    <option value="Completed">Completed</option>
+                    <option value="WAITING_DRIVER">Waiting Driver</option>
+                    <option value="DRIVER_ASSIGNED">Driver Assigned</option>
+                    <option value="PICKED_UP">Picked Up</option>
+                    <option value="ARRIVED_OUTLET">Arrived Outlet</option>
+                    <option value="CANCELLED">Cancelled</option>
                 </select>
                 <Filter size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
                 <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />

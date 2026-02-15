@@ -38,12 +38,7 @@ export const useOutletOrders = () => {
                 items: o.order_item?.[0]?.itemName || '-',
                 quantity: o.order_item?.[0]?.qty || 0,
                 weight: o.total_weight || 0,
-                status:
-                    o.status === 'CREATED'
-                        ? 'Pending'
-                        : o.status === 'COMPLETED'
-                            ? 'Completed'
-                            : 'In Progress',
+                status: o.pickup_request?.status || 'WAITING_DRIVER',
                 assigned: o.station_task?.[0]?.worker?.name || o.outlet_admin?.name || 'Unassigned',
                 total: `Rp ${o.price_total?.toLocaleString() || '0'}`,
                 paid: !!o.paid_at,
@@ -200,6 +195,7 @@ export const useOutletOrders = () => {
 
     return {
         orders: paginatedOrders,
+        allOrders: orders,
         totalOrders,
         stats,
         searchTerm,
