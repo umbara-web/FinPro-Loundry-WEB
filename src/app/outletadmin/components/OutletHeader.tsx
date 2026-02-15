@@ -4,6 +4,8 @@ import { Menu, X } from 'lucide-react';
 import { ModeToggle } from '@/src/components/ui/mode-toggle';
 import { Button } from '@/src/components/ui/button';
 import { useAuth } from '@/src/context/AuthContext';
+import { NavbarLogo } from '@/src/components/Home/Navbar/navbar-logo';
+import { usePathname } from 'next/navigation';
 
 interface OutletHeaderProps {
   isSidebarOpen: boolean;
@@ -15,6 +17,7 @@ export default function OutletHeader({
   onToggleSidebar,
 }: OutletHeaderProps) {
   const { user } = useAuth();
+  const pathname = usePathname();
 
   return (
     <header className='bg-surface-light dark:bg-background-dark dark:border-card-border z-10 flex shrink-0 items-center justify-between border-b border-solid border-slate-200 px-6 py-4 whitespace-nowrap dark:border-slate-800'>
@@ -31,9 +34,9 @@ export default function OutletHeader({
             <Menu className='h-5.5 w-5.5' />
           )}
         </Button>
-        <span className='lg:hidden font-bold text-slate-900 dark:text-white'>
-          Outlet Admin
-        </span>
+        <div>
+          <NavbarLogo isLoggedIn={true} pathname={pathname} />
+        </div>
       </div>
 
       <div className='flex flex-1 items-center justify-end gap-4 md:gap-3'>
