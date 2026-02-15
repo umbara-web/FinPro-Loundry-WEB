@@ -93,7 +93,7 @@ export function NavbarUserMenu({ user }: NavbarUserMenuProps) {
                     : user.role === 'DRIVER'
                       ? '/driver-dashboard'
                       : user.role === 'OUTLET_ADMIN'
-                        ? '/outletadmin'
+                        ? '/outletadmin/dashboard'
                         : '/admin/dashboard'
                 }
               >

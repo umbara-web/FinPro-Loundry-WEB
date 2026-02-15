@@ -17,7 +17,7 @@ import clsx from 'clsx';
 
 const sidebarLinks = [
   { href: '/', label: 'Home', icon: Home },
-  { href: '/outletadmin', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/outletadmin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/outletadmin/performance', label: 'Performance', icon: BarChart3 },
   { href: '/outletadmin/reports', label: 'Reports', icon: FileText },
   { href: '/outletadmin/bypass-request', label: 'Bypass Requests', icon: GitPullRequest },
