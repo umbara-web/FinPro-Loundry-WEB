@@ -23,7 +23,7 @@ function SidebarDashboard() {
   ];
 
   const handleLogout = () => {
-    signOut({ callbackUrl: '/' });
+    signOut({ callbackUrl: '/auth/login' });
   };
 
   return (

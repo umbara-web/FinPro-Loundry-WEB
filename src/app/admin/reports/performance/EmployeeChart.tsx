@@ -9,7 +9,7 @@ export const EmployeeChart: React.FC<EmployeeChartProps> = ({ data }) => {
     const maxJobs = Math.max(...data.map(d => d.jobsCompleted), 1);
 
     return (
-        <div className="bg-[#1C252E] border border-gray-800 rounded-2xl p-6 mb-8">
+        <div className="bg-[#1C252E] border border-gray-800 rounded-2xl p-6">
             <h3 className="text-lg font-bold text-white mb-6">Top Performing Employees (Jobs Completed)</h3>
 
             <div className="space-y-4">

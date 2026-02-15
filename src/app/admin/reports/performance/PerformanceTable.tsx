@@ -12,7 +12,8 @@ export const PerformanceTable: React.FC<PerformanceTableProps> = ({ data }) => {
             <div className="p-6 border-b border-gray-800">
                 <h3 className="text-lg font-bold text-white">Employee Performance Details</h3>
             </div>
-            <table className="w-full text-left text-sm">
+            <div className="overflow-x-auto">
+                <table className="w-full text-left text-sm">
                 <thead className="bg-[#233648]/30 text-gray-500 uppercase text-[10px] tracking-wider">
                     <tr>
                         <th className="px-6 py-4">Employee</th>
@@ -60,6 +61,7 @@ export const PerformanceTable: React.FC<PerformanceTableProps> = ({ data }) => {
                     ))}
                 </tbody>
             </table>
+            </div>
         </div>
     );
 };

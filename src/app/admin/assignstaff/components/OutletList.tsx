@@ -5,7 +5,7 @@ import { Outlet } from '../types';
 interface OutletListProps {
     outlets: Outlet[];
     selectedOutlet: Outlet | null;
-    onSelectOutlet: (id: number) => void;
+    onSelectOutlet: (id: number | string) => void;
     searchTerm: string;
     onSearchChange: (val: string) => void;
 }
