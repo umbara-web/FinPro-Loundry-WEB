@@ -226,6 +226,37 @@ export default function ProsesOrderPage() {
         );
     }
 
+
+    const handleProcessOrder = async () => {
+        if (!order) return;
+
+        try {
+            const w = parseFloat(weightKg);
+            if (isNaN(w) || w <= 0) {
+                toast.error('Berat harus diisi (lebih dari 0)');
+                return;
+            }
+
+            const payload = {
+                items: Object.entries(itemInputs).map(([id, qty]) => ({
+                    laundry_item_id: id,
+                    qty: qty
+                })).filter(i => i.qty > 0), // Only send items with qty > 0? Or all? 
+                // The service updates matches. If qty is 0, it updates to 0. 
+                // Let's send all inputs that are defined.
+                totalWeight: w
+            };
+
+            await api.post(`/api/outlet-admin/orders/${orderId}/process`, payload);
+
+            toast.success('Order berhasil diproses!');
+            router.push('/outletadmin/dashboard');
+        } catch (error: any) {
+            console.error('Failed to process order:', error);
+            toast.error(error.response?.data?.message || 'Gagal memproses order');
+        }
+    };
+
     return (
         <div className="min-h-screen bg-[#121212] p-8 font-sans text-white">
             {/* Header */}
@@ -478,10 +509,7 @@ export default function ProsesOrderPage() {
                     Batal
                 </button>
                 <button
-                    onClick={() => {
-                        toast.success('Order berhasil diproses!');
-                        router.push('/outletadmin/dashboard');
-                    }}
+                    onClick={handleProcessOrder}
                     className="px-8 py-3 bg-[#4FD1C5] hover:bg-[#3fb9ae] rounded-xl font-bold text-[#121212] transition-all shadow-lg shadow-teal-500/10 text-sm"
                 >
                     Simpan & Proses
