@@ -14,9 +14,10 @@ import {
 import clsx from 'clsx';
 
 const sidebarLinks = [
+  { href: '/', label: 'Home', icon: Home },
   { href: '/outletadmin', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/outletadmin/staff-attendance', label: 'Staff Attendance', icon: ClipboardCheck },
   { href: '/outletadmin/bypass-request', label: 'Bypass Requests', icon: GitPullRequest },
+  { href: '/outletadmin/staff-attendance', label: 'Staff Attendance', icon: ClipboardCheck },
 ];
 
 interface OutletSidebarProps {
