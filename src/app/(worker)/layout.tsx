@@ -4,7 +4,7 @@ import ProtectedRoute from '@/src/components/auth/protected-route';
 import {
   WorkerSidebar,
   WorkerHeader,
-} from '@/src/views/Worker/Dashboard/_components';
+} from '@/src/views/worker/dashboard/_components';
 import { useState } from 'react';
 
 export default function WorkerLayout({

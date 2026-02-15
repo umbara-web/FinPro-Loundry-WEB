@@ -1,11 +1,11 @@
 import { Outlet, Staff } from '../types';
 
 export const outlets: Outlet[] = [
-    { id: 1, name: 'Laundry Cabang Jakarta', address: 'Jl. Fatmawati Raya No. 12...', count: '12 Staff' },
-    { id: 2, name: 'Laundry Cabang Bandung', address: 'Jl. Ahmad Yani, Bandung', count: '8 Staff' },
-    { id: 3, name: 'Laundry Cabang Surabaya', address: 'Jl. Margonda, Surabaya', count: '5 Staff' },
-    { id: 4, name: 'Laundry Cabang Semarang', address: 'Jl. Pandanaran No. 5', count: '3 Staff' },
-    { id: 5, name: 'Laundry Cabang Yogyakarta', address: 'Jl. Malioboro No. 1', count: '7 Staff' },
+    { id: 1, name: 'Laundry Cabang Jakarta', location: 'Jl. Fatmawati Raya No. 12...', description: 'Branch Jakarta', color: 'bg-red-500' },
+    { id: 2, name: 'Laundry Cabang Bandung', location: 'Jl. Ahmad Yani, Bandung', description: 'Branch Bandung', color: 'bg-blue-500' },
+    { id: 3, name: 'Laundry Cabang Surabaya', location: 'Jl. Margonda, Surabaya', description: 'Branch Surabaya', color: 'bg-green-500' },
+    { id: 4, name: 'Laundry Cabang Semarang', location: 'Jl. Pandanaran No. 5', description: 'Branch Semarang', color: 'bg-yellow-500' },
+    { id: 5, name: 'Laundry Cabang Yogyakarta', location: 'Jl. Malioboro No. 1', description: 'Branch Yogyakarta', color: 'bg-purple-500' },
 ];
 
 export const availableStaffData: Staff[] = [
@@ -45,15 +45,15 @@ export const availableStaffData: Staff[] = [
         avatar: '',
         outletId: null
     },
-    { id: 7, name: 'Andi Pratama', role: 'Admin', spec: 'Manager' },
-    { id: 8, name: 'Dewi Lestari', role: 'Worker', spec: 'Ironing' },
-    { id: 9, name: 'Rizky Ramadhan', role: 'Driver', spec: 'Pick-up' },
-    { id: 10, name: 'Siti Nurhaliza', role: 'Worker', spec: 'Washing' },
+    { id: 7, name: 'Andi Pratama', role: 'Admin', status: 'Available', avatar: '', outletId: null },
+    { id: 8, name: 'Dewi Lestari', role: 'Worker', status: 'Available', avatar: '', outletId: null },
+    { id: 9, name: 'Rizky Ramadhan', role: 'Driver', status: 'Available', avatar: '', outletId: null },
+    { id: 10, name: 'Siti Nurhaliza', role: 'Worker', status: 'Available', avatar: '', outletId: null },
 ];
 
 export const initialAssignedStaff: Staff[] = [
-    { id: 7, name: 'Andi Pratama', role: 'Admin', spec: 'Manager' },
-    { id: 8, name: 'Dewi Lestari', role: 'Worker', spec: 'Ironing' },
-    { id: 9, name: 'Rizky Ramadhan', role: 'Driver', spec: 'Pick-up' },
-    { id: 10, name: 'Siti Nurhaliza', role: 'Worker', spec: 'Washing' },
+    { id: 7, name: 'Andi Pratama', role: 'Admin', status: 'Assigned', avatar: '', outletId: 1 },
+    { id: 8, name: 'Dewi Lestari', role: 'Worker', status: 'Assigned', avatar: '', outletId: 1 },
+    { id: 9, name: 'Rizky Ramadhan', role: 'Driver', status: 'Assigned', avatar: '', outletId: 1 },
+    { id: 10, name: 'Siti Nurhaliza', role: 'Worker', status: 'Assigned', avatar: '', outletId: 1 },
 ];
