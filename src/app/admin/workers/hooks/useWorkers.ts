@@ -48,7 +48,7 @@ export const useWorkers = () => {
                 role: mapBackendRoleToFrontend(w.role),
                 outlet: w.outlet?.name || '-',
                 status: w.status
-            }));
+            })) : [];
 
             setWorkers(mappedWorkers);
         } catch (error) {
@@ -63,15 +63,14 @@ export const useWorkers = () => {
     }, []);
 
     // Helper to map roles
-    const mapBackendRoleToFrontend = (role: string) => {
-        const map: Record<string, string> = {
+    const mapBackendRoleToFrontend = (role: string): Worker['role'] => {
+        const map: Record<string, Worker['role']> = {
             'WORKER': 'Pekerja',
             'ADMIN_OUTLET': 'Admin Outlet',
             'OUTLET_ADMIN': 'Admin Outlet',
             'DRIVER': 'Driver',
-            'USER': 'Pekerja' // Fallback
         };
-        return map[role] || role;
+        return map[role] || 'Pekerja';
     };
 
     const mapFrontendRoleToBackend = (role: string) => {
@@ -85,9 +84,9 @@ export const useWorkers = () => {
 
     const filteredWorkers = useMemo(() => {
         return workers.filter(worker => {
-            const matchesSearch = worker.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                worker.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                worker.phone.includes(searchTerm);
+            const matchesSearch = (worker.name?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+                (worker.email?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+                (worker.phone?.includes(searchTerm) || false);
 
             const matchesRole = roleFilter === 'Semua Role' || worker.role === roleFilter;
             const matchesStatus = statusFilter === 'Semua Status' || worker.status === statusFilter;
