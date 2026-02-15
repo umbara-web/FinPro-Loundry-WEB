@@ -1,6 +1,6 @@
 import React from 'react';
 import { EmployeePerformance } from './types';
-import { Star } from 'lucide-react';
+import { Store } from 'lucide-react';
 
 interface PerformanceTableProps {
     data: EmployeePerformance[];
@@ -18,7 +18,7 @@ export const PerformanceTable: React.FC<PerformanceTableProps> = ({ data }) => {
                         <th className="px-6 py-4">Employee</th>
                         <th className="px-6 py-4">Role</th>
                         <th className="px-6 py-4">Total Jobs</th>
-                        <th className="px-6 py-4">Rating</th>
+                        <th className="px-6 py-4">Cabang</th>
                         <th className="px-6 py-4">On-Time</th>
                         <th className="px-6 py-4">Attendance</th>
                     </tr>
@@ -34,16 +34,17 @@ export const PerformanceTable: React.FC<PerformanceTableProps> = ({ data }) => {
                             </td>
                             <td className="px-6 py-4">
                                 <span className={`px-2 py-1 rounded text-[10px] border ${emp.role === 'Driver' ? 'bg-orange-500/10 text-orange-400 border-orange-500/20' :
-                                        emp.role === 'Pekerja' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' :
-                                            'bg-purple-500/10 text-purple-400 border-purple-500/20'
+                                    emp.role === 'Pekerja' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' :
+                                        'bg-purple-500/10 text-purple-400 border-purple-500/20'
                                     }`}>
                                     {emp.role}
                                 </span>
                             </td>
                             <td className="px-6 py-4 font-bold text-white">{emp.jobsCompleted}</td>
                             <td className="px-6 py-4">
-                                <div className="flex items-center gap-1 text-yellow-500 font-bold">
-                                    <Star size={12} fill="currentColor" /> {emp.rating}
+                                <div className="flex items-center gap-2 text-gray-300">
+                                    <Store size={14} className="text-gray-500" />
+                                    <span className="text-xs font-medium">{emp.outlet}</span>
                                 </div>
                             </td>
                             <td className="px-6 py-4">

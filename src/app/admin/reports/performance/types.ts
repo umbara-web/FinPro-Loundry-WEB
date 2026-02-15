@@ -4,7 +4,7 @@ export interface EmployeePerformance {
     role: 'Pekerja' | 'Driver' | 'Admin Outlet';
     avatar: string;
     jobsCompleted: number; // Total tasks/orders handled
-    rating: number; // 1-5 stars
+    outlet: string; // Branch/outlet name
     onTimeRate: number; // Percentage
     attendance: number; // Percentage
 }

@@ -1,6 +1,34 @@
 import { useState, useMemo, useEffect, useCallback } from 'react';
 import api from '@/src/app/utils/api';
 import { LaundryItem, ItemFormData } from '../types';
+import { toast } from 'sonner';
+
+// Map backend enum values to frontend display values
+const mapCategory = (cat: string): string => {
+    switch (cat) {
+        case 'CUCI_SETRIKA': return 'Cuci Setrika';
+        case 'SATUAN': return 'Satuan';
+        case 'DRY_CLEAN': return 'Dry Clean';
+        default: return cat;
+    }
+};
+
+const mapUnit = (unit: string): string => {
+    switch (unit) {
+        case 'KG': return 'kg';
+        case 'PCS': return 'pcs';
+        case 'M2': return 'm²';
+        default: return unit;
+    }
+};
+
+const mapStatus = (status: string): string => {
+    switch (status) {
+        case 'ACTIVE': return 'Aktif';
+        case 'INACTIVE': return 'Non-Aktif';
+        default: return status;
+    }
+};
 
 export const useItems = () => {
     const [laundryItems, setLaundryItems] = useState<LaundryItem[]>([]);
@@ -16,7 +44,6 @@ export const useItems = () => {
     const [editFormData, setEditFormData] = useState<ItemFormData>({
         name: '',
         category: 'Cuci Setrika',
-        price: '',
         unit: 'kg',
         status: 'Aktif',
     });
@@ -26,7 +53,16 @@ export const useItems = () => {
         try {
             setLoading(true);
             const response = await api.get('/api/items');
-            setLaundryItems(response.data);
+            const raw = Array.isArray(response.data) ? response.data : [];
+            // Map backend enums to display values
+            const mapped: LaundryItem[] = raw.map((item: any) => ({
+                id: item.id,
+                name: item.name,
+                category: mapCategory(item.category),
+                unit: mapUnit(item.unit),
+                status: mapStatus(item.status),
+            }));
+            setLaundryItems(mapped);
         } catch (error) {
             console.error('Failed to fetch items:', error);
         } finally {
@@ -82,10 +118,11 @@ export const useItems = () => {
         if (window.confirm('Apakah Anda yakin ingin menghapus item ini?')) {
             try {
                 await api.delete(`/api/items/${itemId}`);
-                fetchItems(); // Refresh data
+                setLaundryItems(prev => prev.filter(item => item.id !== itemId));
+                toast.success('Item berhasil dihapus');
             } catch (error) {
                 console.error('Failed to delete item:', error);
-                alert('Gagal menghapus item.');
+                toast.error('Gagal menghapus item.');
             }
         }
     };
@@ -95,7 +132,6 @@ export const useItems = () => {
         setEditFormData({
             name: item.name,
             category: item.category,
-            price: item.price.toString(),
             unit: item.unit,
             status: item.status,
         });
@@ -115,8 +151,8 @@ export const useItems = () => {
     const handleUpdateItem = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!editFormData.name || !editFormData.price || !editingItem) {
-            alert('Nama dan harga harus diisi!');
+        if (!editFormData.name || !editingItem) {
+            toast.error('Nama harus diisi!');
             return;
         }
 
@@ -124,18 +160,17 @@ export const useItems = () => {
             await api.put(`/api/items/${editingItem.id}`, {
                 name: editFormData.name,
                 category: editFormData.category,
-                price: editFormData.price,
                 unit: editFormData.unit,
                 status: editFormData.status,
             });
 
-            alert('Item berhasil diperbarui!');
+            toast.success('Item berhasil diperbarui!');
             setShowEditModal(false);
             setEditingItem(null);
             fetchItems(); // Refresh data from server
         } catch (error) {
             console.error('Failed to update item:', error);
-            alert('Gagal memperbarui item.');
+            toast.error('Gagal memperbarui item.');
         }
     };
 

@@ -110,47 +110,24 @@ const EditItemModal: React.FC<EditItemModalProps> = ({
                         </div>
                     </div>
 
-                    {/* Harga dan Status */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label className="block text-sm font-bold text-gray-300 mb-2">
-                                Harga / Unit <span className="text-red-500">*</span>
-                            </label>
-                            <div className="relative">
-                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                                    Rp
-                                </span>
-                                <input
-                                    type="number"
-                                    name="price"
-                                    value={formData.price}
-                                    onChange={onInputChange}
-                                    placeholder="0"
-                                    min="0"
-                                    className="w-full bg-[#131C25] border border-gray-700 rounded-xl pl-12 pr-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#137FEC]"
-                                    required
-                                />
-                            </div>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-bold text-gray-300 mb-2">
-                                Status <span className="text-red-500">*</span>
-                            </label>
-                            <select
-                                name="status"
-                                value={formData.status}
-                                onChange={onInputChange}
-                                className="w-full bg-[#131C25] border border-gray-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#137FEC]"
-                                required
-                            >
-                                {ITEM_STATUSES.map((status) => (
-                                    <option key={status} value={status}>
-                                        {status}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
+                    {/* Status */}
+                    <div>
+                        <label className="block text-sm font-bold text-gray-300 mb-2">
+                            Status <span className="text-red-500">*</span>
+                        </label>
+                        <select
+                            name="status"
+                            value={formData.status}
+                            onChange={onInputChange}
+                            className="w-full bg-[#131C25] border border-gray-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#137FEC]"
+                            required
+                        >
+                            {ITEM_STATUSES.map((status) => (
+                                <option key={status} value={status}>
+                                    {status}
+                                </option>
+                            ))}
+                        </select>
                     </div>
 
                     {/* Modal Footer */}

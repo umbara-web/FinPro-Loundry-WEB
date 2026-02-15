@@ -14,24 +14,27 @@ export const useOrders = () => {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                console.log('[useOrders] Fetching from /api/orders...');
-                const res = await api.get('/api/orders');
+                console.log('[useOrders] Fetching from /api/admin/orders...');
+                const res = await api.get('/api/admin/orders');
                 console.log('[useOrders] Response:', res.data);
 
-                if (!res.data || !Array.isArray(res.data)) {
+                // Map backend data to frontend structure expected by OrderTable
+                const ordersData = res.data.data || res.data;
+                
+                if (!ordersData || !Array.isArray(ordersData)) {
                     setOrders([]);
                     return;
                 }
 
                 // Map backend data to frontend structure expected by OrderTable
-                const mappedOrders = res.data.map((o: any) => ({
-                    id: o.invoiceId || o.id,
-                    customer: o.user?.name || 'Unknown',
-                    type: o.serviceType === 'WASH_AND_FOLD' ? 'Regular' : o.serviceType, // Simple mapping
+                const mappedOrders = ordersData.map((o: any) => ({
+                    id: o.invoice_id || o.id,
+                    customer: o.pickup_request?.customer?.name || o.user?.name || 'Unknown',
+                    type: o.service_type === 'WASH_AND_FOLD' ? 'Regular' : o.service_type || 'Regular', // Simple mapping
                     outlet: o.outlet?.name || 'Unknown',
                     status: o.status,
-                    amount: `Rp ${o.totalAmount.toLocaleString('id-ID')}`,
-                    date: new Date(o.createdAt).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })
+                    amount: `Rp ${(o.total_amount || o.totalAmount || 0).toLocaleString('id-ID')}`,
+                    date: new Date(o.created_at || o.createdAt).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })
                 }));
                 setOrders(mappedOrders);
             } catch (error) {

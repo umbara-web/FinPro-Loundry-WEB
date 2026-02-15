@@ -35,6 +35,7 @@ export const OutletTable: React.FC<OutletTableProps> = ({
                     <thead className="bg-[#233648]/30 text-[10px] font-bold text-gray-500 uppercase tracking-widest border-b border-gray-800">
                         <tr>
                             <th className="px-8 py-5">Info Outlet</th>
+                            <th className="px-6 py-5">Kota</th>
                             <th className="px-6 py-5">Kontak & Manajer</th>
                             <th className="px-6 py-5">Jam Operasional</th>
                             <th className="px-6 py-5">Status</th>
@@ -55,6 +56,12 @@ export const OutletTable: React.FC<OutletTableProps> = ({
                                                 <MapPin size={12} /> {o.address}
                                             </div>
                                         </div>
+                                    </div>
+                                </td>
+                                <td className="px-6 py-6">
+                                    <div className="flex items-center gap-1 text-sm text-gray-300">
+                                        <MapPin size={14} className="text-gray-500" />
+                                        {o.city || '-'}
                                     </div>
                                 </td>
                                 <td className="px-6 py-6">

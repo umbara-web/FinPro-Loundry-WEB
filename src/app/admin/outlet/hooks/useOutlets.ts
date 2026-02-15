@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { Outlet, OutletFormData } from '../types';
 import api from '@/src/app/utils/api';
 import { useAuth } from '@/src/context/AuthContext';
+import { toast } from 'sonner';
 
 export const useOutlets = () => {
     const { user } = useAuth();
@@ -17,12 +18,12 @@ export const useOutlets = () => {
         try {
             if (user?.role === 'OUTLET_ADMIN' && user?.outlet_id) {
                 // If Outlet Admin, only fetch their specific outlet
-                const res = await api.get(`/api/outlets/${user.outlet_id}`);
+                const res = await api.get(`/api/outlets/${user.outlet_id}?_t=${Date.now()}`);
                 // Ensure result is an array or single object wrapped in array
                 setOutlets(Array.isArray(res.data) ? res.data : [res.data]);
             } else if (user?.role === 'SUPER_ADMIN') {
                 // If Super Admin, fetch all
-                const res = await api.get('/api/outlets');
+                const res = await api.get(`/api/outlets?_t=${Date.now()}`);
                 setOutlets(res.data);
             } else {
                 // Fallback / Other roles shouldn't see this or handle appropriately
@@ -42,11 +43,19 @@ export const useOutlets = () => {
     const deleteOutlet = async (id: string) => {
         if (window.confirm('Apakah Anda yakin ingin menghapus outlet ini?')) {
             try {
-                await api.delete(`/api/outlets/${id}`);
-                fetchOutlets(); // Refresh list
-            } catch (error) {
-                console.error('Failed to delete:', error);
-                alert('Gagal menghapus outlet');
+                console.log('[useOutlets] Deleting outlet with id:', id);
+                const res = await api.delete(`/api/outlets/${id}`);
+                console.log('[useOutlets] Delete response:', res.data);
+
+                // Remove the outlet from local state — no need to re-fetch
+                setOutlets(prev => prev.filter(outlet => outlet.id !== id));
+                toast.success('Outlet berhasil dihapus');
+            } catch (error: any) {
+                console.error('[useOutlets] Failed to delete:', error);
+                console.error('[useOutlets] Response status:', error.response?.status);
+                console.error('[useOutlets] Response data:', error.response?.data);
+                const errorMessage = error.response?.data?.error || error.message || 'Gagal menghapus outlet';
+                toast.error(errorMessage);
             }
         }
     };
@@ -55,10 +64,11 @@ export const useOutlets = () => {
         try {
             await api.put(`/api/outlets/${id}`, data);
             fetchOutlets(); // Refresh
+            toast.success('Outlet berhasil diupdate');
             return true;
         } catch (error) {
             console.error(error);
-            alert('Gagal mengupdate outlet');
+            toast.error('Gagal mengupdate outlet');
             return false;
         }
     };

@@ -54,7 +54,7 @@ export default function ItemsPage() {
                 Kelola Item Laundry
               </h1>
               <p className="text-[#92ADC9] mt-1">
-                Atur daftar layanan, harga, dan kategori laundry Anda
+                Atur daftar layanan dan kategori laundry Anda
               </p>
             </div>
             <Link href="/admin/item/additem">

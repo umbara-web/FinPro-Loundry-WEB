@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { WorkerFormData, WORKER_ROLES, WORKER_STATUSES } from '../types';
+import { Outlet } from '../../outlet/types';
 
 interface AddWorkerModalProps {
     isOpen: boolean;
@@ -8,6 +9,7 @@ interface AddWorkerModalProps {
     onSubmit: (data: WorkerFormData) => void;
     initialData?: WorkerFormData;
     isEdit?: boolean;
+    outlets?: Outlet[];
 }
 
 export const AddWorkerModal: React.FC<AddWorkerModalProps> = ({
@@ -15,7 +17,8 @@ export const AddWorkerModal: React.FC<AddWorkerModalProps> = ({
     onClose,
     onSubmit,
     initialData,
-    isEdit = false
+    isEdit = false,
+    outlets = []
 }) => {
     const defaultData: WorkerFormData = {
         name: '',
@@ -130,15 +133,30 @@ export const AddWorkerModal: React.FC<AddWorkerModalProps> = ({
 
                     <div>
                         <label className="block text-sm font-medium text-slate-300 mb-1">Outlet Penempatan</label>
-                        <input
-                            type="text"
-                            name="outlet"
-                            value={formData.outlet}
-                            onChange={handleChange}
-                            placeholder="Contoh: Cabang Jakarta Selatan"
-                            className="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-emerald-500"
-                            required
-                        />
+                        {outlets && outlets.length > 0 ? (
+                            <select
+                                name="outlet"
+                                value={formData.outlet}
+                                onChange={handleChange}
+                                className="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-emerald-500"
+                                required
+                            >
+                                <option value="">Pilih Outlet</option>
+                                {outlets.map(outlet => (
+                                    <option key={outlet.id} value={outlet.name}>{outlet.name}</option>
+                                ))}
+                            </select>
+                        ) : (
+                            <input
+                                type="text"
+                                name="outlet"
+                                value={formData.outlet}
+                                onChange={handleChange}
+                                placeholder="Contoh: Cabang Jakarta Selatan"
+                                className="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-emerald-500"
+                                required
+                            />
+                        )}
                     </div>
 
                     <div className="flex gap-3 pt-4">
