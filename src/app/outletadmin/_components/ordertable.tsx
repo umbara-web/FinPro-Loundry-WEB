@@ -1,6 +1,6 @@
 
 import { Eye, Pencil, Printer, ChevronLeft, ChevronRight } from "lucide-react";
-import { Order } from "@/src/app/outletadmin/types";
+import { Order } from "@/src/app/outletadmin/_types";
 
 interface OrderTableProps {
     orders: Order[];
