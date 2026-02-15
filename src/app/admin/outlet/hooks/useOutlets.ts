@@ -1,8 +1,10 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Outlet, OutletFormData } from '../types';
 import api from '@/src/app/utils/api';
+import { useAuth } from '@/src/context/AuthContext';
 
 export const useOutlets = () => {
+    const { user } = useAuth();
     const [outlets, setOutlets] = useState<Outlet[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
@@ -13,8 +15,19 @@ export const useOutlets = () => {
 
     const fetchOutlets = async () => {
         try {
-            const res = await api.get('/api/outlets');
-            setOutlets(res.data);
+            if (user?.role === 'OUTLET_ADMIN' && user?.outlet_id) {
+                // If Outlet Admin, only fetch their specific outlet
+                const res = await api.get(`/api/outlets/${user.outlet_id}`);
+                // Ensure result is an array or single object wrapped in array
+                setOutlets(Array.isArray(res.data) ? res.data : [res.data]);
+            } else if (user?.role === 'SUPER_ADMIN') {
+                // If Super Admin, fetch all
+                const res = await api.get('/api/outlets');
+                setOutlets(res.data);
+            } else {
+                // Fallback / Other roles shouldn't see this or handle appropriately
+                setOutlets([]);
+            }
         } catch (error) {
             console.error('Error fetching outlets:', error);
         } finally {

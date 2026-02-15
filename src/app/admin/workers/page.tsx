@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import SidebarDashboard from '@/app/components/mainsidebar';
+import SidebarDashboard from '@/src/app/admin/allorder/components/mainsidebar';
 import { Plus } from 'lucide-react';
 import { WorkerStats } from './components/WorkerStats';
 import { WorkerTable } from './components/WorkerTable';

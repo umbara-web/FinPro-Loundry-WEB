@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Search, Store } from 'lucide-react';
-import SidebarDashboard from '@/app/components/mainsidebar';
+import SidebarDashboard from '@/src/app/admin/allorder/components/mainsidebar';
 import { useStaffAssignment } from './hooks/useStaffAssignment';
 import OutletList from './components/OutletList';
 import AvailableStaff from './components/AvailableStaff';
