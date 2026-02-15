@@ -1,6 +1,5 @@
 'use client';
 
-import SidebarDashboard from '@/src/app/admin/allorder/components/mainsidebar';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -67,48 +66,45 @@ export default function KelolaOutlet() {
   };
 
   return (
-    <div className="flex bg-[#101922] min-h-screen text-white">
-      <SidebarDashboard />
-      <main className="flex-1 p-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex justify-between items-start mb-10">
-            <div>
-              <h1 className="text-4xl font-black mb-2 tracking-tight">Kelola Outlet</h1>
-              <p className="text-gray-400">Kelola data, lokasi, dan status operasional seluruh cabang laundry.</p>
-            </div>
-
-            <Link
-              href="/admin/outlet/newoutlet"
-              className="bg-[#137FEC] hover:bg-blue-600 px-6 py-3 rounded-xl font-bold flex gap-2 items-center shadow-lg shadow-blue-500/20 hover:cursor-pointer transition-all"
-            >
-              <Plus size={20} /> Tambah Outlet Baru
-            </Link>
+    <div className="p-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex justify-between items-start mb-10">
+          <div>
+            <h1 className="text-4xl font-black mb-2 tracking-tight">Kelola Outlet</h1>
+            <p className="text-gray-400">Kelola data, lokasi, dan status operasional seluruh cabang laundry.</p>
           </div>
 
-          <OutletFilter
-            searchTerm={searchTerm}
-            onSearchChange={setSearchTerm}
-            statusFilter={statusFilter}
-            onStatusChange={setStatusFilter}
-            statusOptions={statusOptions}
-            cityFilter={cityFilter}
-            onCityChange={setCityFilter}
-            cityOptions={cities}
-          />
-
-          <OutletTable
-            outlets={paginatedOutlets}
-            loading={loading}
-            onEdit={handleEdit}
-            onDelete={deleteOutlet}
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-            itemsPerPage={itemsPerPage}
-            totalItems={totalItems}
-          />
+          <Link
+            href="/admin/outlet/newoutlet"
+            className="bg-[#137FEC] hover:bg-blue-600 px-6 py-3 rounded-xl font-bold flex gap-2 items-center shadow-lg shadow-blue-500/20 hover:cursor-pointer transition-all"
+          >
+            <Plus size={20} /> Tambah Outlet Baru
+          </Link>
         </div>
-      </main>
+
+        <OutletFilter
+          searchTerm={searchTerm}
+          onSearchChange={setSearchTerm}
+          statusFilter={statusFilter}
+          onStatusChange={setStatusFilter}
+          statusOptions={statusOptions}
+          cityFilter={cityFilter}
+          onCityChange={setCityFilter}
+          cityOptions={cities}
+        />
+
+        <OutletTable
+          outlets={paginatedOutlets}
+          loading={loading}
+          onEdit={handleEdit}
+          onDelete={deleteOutlet}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+          itemsPerPage={itemsPerPage}
+          totalItems={totalItems}
+        />
+      </div>
 
       <EditOutletModal
         isOpen={showEditModal}

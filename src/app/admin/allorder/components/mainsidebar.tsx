@@ -58,13 +58,6 @@ function SidebarDashboard() {
       </nav>
 
       <div className="mt-auto pt-6 border-t border-gray-800 space-y-3">
-        <div className="flex items-center gap-3 p-2 bg-[#233648]/40 rounded-xl">
-          <img className="w-10 h-10 rounded-full" src="https://i.pravatar.cc/150?u=budi" alt="Budi" />
-          <div className="overflow-hidden">
-            <p className="text-sm font-bold truncate">Budi Santoso</p>
-            <p className="text-[10px] text-gray-500">Admin</p>
-          </div>
-        </div>
         <button
           onClick={handleLogout}
           className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-all hover:cursor-pointer"
