@@ -11,20 +11,22 @@ interface RoleGuardProps {
 }
 
 export default function RoleGuard({ children, allowedRoles }: RoleGuardProps) {
-  const { user, isAuthenticated, isLoading } = useAuth();
+  const { user, isAuthenticated, isLoading, isLoggingOut } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
     if (!isLoading) {
       if (!isAuthenticated) {
-        toast.error('Anda harus login terlebih dahulu');
+        if (!isLoggingOut) {
+          toast.error('Anda harus login terlebih dahulu');
+        }
         router.push('/auth/login');
       } else if (user && !allowedRoles.includes(user.role)) {
         toast.error('Anda tidak memiliki akses ke halaman ini');
         router.push('/');
       }
     }
-  }, [isAuthenticated, isLoading, user, router, allowedRoles]);
+  }, [isAuthenticated, isLoading, user, router, JSON.stringify(allowedRoles), isLoggingOut]);
 
   if (isLoading) {
     // You might want to replace this with a proper loading spinner component
