@@ -19,6 +19,8 @@ function SidebarDashboard() {
     { label: 'KEUANGAN', isHeader: true },
     { label: 'Transaksi', icon: <TrendingUp size={20} /> },
     { label: 'Laporan', icon: <Package size={20} /> },
+    { label: 'LAPORAN KINERJA', isHeader: true },
+    { label: 'Laporan Kinerja Karyawan', icon: <TrendingUp size={20} />, href: '/admin/performance' },
   ];
 
   return (
