@@ -20,7 +20,7 @@ export default function AdminPerformanceReport() {
     } = usePerformanceReport('all');
 
     return (
-        <div className="p-8 overflow-y-auto">
+        <div className="p-8 h-screen">
             <div className="flex justify-between items-start mb-8">
                 <div>
                     <nav className="text-xs text-slate-500 mb-2">Admin / <span className="text-slate-300">Performance</span></nav>
@@ -42,11 +42,14 @@ export default function AdminPerformanceReport() {
                 onDateChange={setDate}
             />
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div className="lg:col-span-2">
+            <div className="mt-8 space-y-8">
+                {/* Employee Performance Details - Full Width */}
+                <div className="w-full">
                     <PerformanceTable data={performanceData} />
                 </div>
-                <div>
+                
+                {/* Top Performing Employees - Below */}
+                <div className="w-full">
                     <EmployeeChart data={topPerformers} />
                 </div>
             </div>
