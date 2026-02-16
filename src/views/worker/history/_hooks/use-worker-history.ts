@@ -56,7 +56,7 @@ export const useWorkerHistory = () => {
         if (taskType !== 'ALL') params.append('taskType', taskType);
 
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/worker/history?${params.toString()}`,
+          `${process.env.BASE_API_URL}/worker/history?${params.toString()}`,
           { credentials: 'include' }
         );
         if (res.ok) {
