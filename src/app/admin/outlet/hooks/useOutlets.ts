@@ -18,12 +18,12 @@ export const useOutlets = () => {
         try {
             if (user?.role === 'OUTLET_ADMIN' && user?.outlet_id) {
                 // If Outlet Admin, only fetch their specific outlet
-                const res = await api.get(`/api/outlets/${user.outlet_id}?_t=${Date.now()}`);
+                const res = await api.get(`/outlets/${user.outlet_id}?_t=${Date.now()}`);
                 // Ensure result is an array or single object wrapped in array
                 setOutlets(Array.isArray(res.data) ? res.data : [res.data]);
             } else if (user?.role === 'SUPER_ADMIN') {
                 // If Super Admin, fetch all
-                const res = await api.get(`/api/outlets?_t=${Date.now()}`);
+                const res = await api.get(`/outlets?_t=${Date.now()}`);
                 setOutlets(res.data);
             } else {
                 // Fallback / Other roles shouldn't see this or handle appropriately
@@ -44,7 +44,7 @@ export const useOutlets = () => {
         if (window.confirm('Apakah Anda yakin ingin menghapus outlet ini?')) {
             try {
                 console.log('[useOutlets] Deleting outlet with id:', id);
-                const res = await api.delete(`/api/outlets/${id}`);
+                const res = await api.delete(`/outlets/${id}`);
                 console.log('[useOutlets] Delete response:', res.data);
 
                 // Remove the outlet from local state — no need to re-fetch
@@ -62,7 +62,7 @@ export const useOutlets = () => {
 
     const updateOutlet = async (id: string, data: OutletFormData) => {
         try {
-            await api.put(`/api/outlets/${id}`, data);
+            await api.put(`/outlets/${id}`, data);
             fetchOutlets(); // Refresh
             toast.success('Outlet berhasil diupdate');
             return true;

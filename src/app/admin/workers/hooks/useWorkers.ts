@@ -26,17 +26,17 @@ export const useWorkers = () => {
             // Define outlet fetch promise based on role
             let outletPromise;
             if (user?.role === 'OUTLET_ADMIN' && user?.outlet_id) {
-                outletPromise = api.get(`/api/outlets/${user.outlet_id}`)
+                outletPromise = api.get(`/outlets/${user.outlet_id}`)
                     .then(res => Array.isArray(res.data) ? res.data : [res.data]);
             } else if (user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN') {
                 // Fetch all outlets for admin users
-                outletPromise = api.get('/api/outlets').then(res => res.data.data || res.data);
+                outletPromise = api.get('/outlets').then(res => res.data.data || res.data);
             } else {
                 outletPromise = Promise.resolve([]);
             }
 
             const [workersRes, outletsData] = await Promise.all([
-                api.get('/api/workers'),
+                api.get('/workers'),
                 outletPromise
             ]);
 
@@ -142,7 +142,7 @@ export const useWorkers = () => {
             };
 
             console.log('Sending worker payload:', payload);
-            const res = await api.post('/api/workers', payload);
+            const res = await api.post('/workers', payload);
             console.log('Add worker response:', res.data);
             fetchData(); // Refresh
         } catch (error: any) {
@@ -165,7 +165,7 @@ export const useWorkers = () => {
                 outletId: matchedOutlet?.id
             };
 
-            await api.put(`/api/workers/${id}`, payload);
+            await api.put(`/workers/${id}`, payload);
             fetchData();
         } catch (error) {
             console.error('Failed to update worker:', error);
@@ -176,7 +176,7 @@ export const useWorkers = () => {
     const deleteWorker = async (id: number | string) => {
         if (confirm('Apakah Anda yakin ingin menghapus pengguna ini?')) {
             try {
-                await api.delete(`/api/workers/${id}`);
+                await api.delete(`/workers/${id}`);
                 fetchData();
             } catch (error) {
                 console.error('Failed to delete:', error);

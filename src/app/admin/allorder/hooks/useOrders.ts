@@ -44,13 +44,13 @@ export const useOrders = () => {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                console.log('[useOrders] Fetching from /api/admin/orders...');
-                const res = await api.get('/api/admin/orders');
+                console.log('[useOrders] Fetching from /admin/orders...');
+                const res = await api.get('/admin/orders');
                 console.log('[useOrders] Response:', res.data);
 
                 // Map backend data to frontend structure expected by OrderTable
                 const ordersData = res.data.data || res.data;
-                
+
                 if (!ordersData || !Array.isArray(ordersData)) {
                     // Use mock data if API returns empty
                     setOrders(MOCK_ORDERS);

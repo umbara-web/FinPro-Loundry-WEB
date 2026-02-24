@@ -35,10 +35,10 @@ export const useStaffAssignment = () => {
             // Fetch outlets based on role
             let outletsData: any[] = [];
             if (user?.role === 'OUTLET_ADMIN' && user?.outlet_id) {
-                const res = await api.get(`/api/outlets/${user.outlet_id}`);
+                const res = await api.get(`/outlets/${user.outlet_id}`);
                 outletsData = Array.isArray(res.data) ? res.data : [res.data];
             } else if (user?.role === 'SUPER_ADMIN' || user?.role === 'ADMIN') {
-                const res = await api.get('/api/outlets');
+                const res = await api.get('/outlets');
                 outletsData = res.data.data || res.data;
             }
 
@@ -56,7 +56,7 @@ export const useStaffAssignment = () => {
             setOutlets(mappedOutlets);
 
             // Fetch workers
-            const workersRes = await api.get('/api/workers');
+            const workersRes = await api.get('/workers');
             const workersData = workersRes.data.data || workersRes.data;
 
             console.log('Workers data:', workersData);
