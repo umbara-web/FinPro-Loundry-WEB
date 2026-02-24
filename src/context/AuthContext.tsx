@@ -66,7 +66,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(me.data);
       setIsAuthenticated(true);
 
-      if (me.data.role === 'ADMIN') {
+      if (me.data.role === 'SUPER_ADMIN') {
         window.location.assign('/admin/dashboard');
       } else if (me.data.role === 'OUTLET_ADMIN') {
         window.location.assign('/outletadmin/dashboard');

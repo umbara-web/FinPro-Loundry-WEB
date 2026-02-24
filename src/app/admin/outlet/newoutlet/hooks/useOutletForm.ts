@@ -20,7 +20,7 @@ export const useOutletForm = () => {
                 status: data.status,
             };
 
-            await api.post('/api/outlets', payload);
+            await api.post('/outlets', payload);
 
             router.push('/admin/outlet');
             return true;
