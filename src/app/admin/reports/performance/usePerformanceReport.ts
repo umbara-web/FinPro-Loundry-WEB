@@ -26,7 +26,7 @@ export const usePerformanceReport = (defaultOutletId: string = 'all') => {
     useEffect(() => {
         const fetchOutlets = async () => {
             try {
-                const res = await api.get('/api/outlets');
+                const res = await api.get('/outlets');
                 const data: OutletFromAPI[] = Array.isArray(res.data) ? res.data : [];
                 setOutlets(data.map((o) => ({ id: o.id, name: o.name })));
             } catch (error) {
