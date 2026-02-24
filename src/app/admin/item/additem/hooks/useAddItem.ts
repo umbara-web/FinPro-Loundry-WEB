@@ -28,7 +28,7 @@ export const useAddItem = () => {
         }
 
         try {
-            await api.post('/api/items', {
+            await api.post('/items', {
                 name: formData.name,
                 category: formData.category,
                 unit: formData.unit,
