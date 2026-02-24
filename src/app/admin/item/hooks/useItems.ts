@@ -52,7 +52,7 @@ export const useItems = () => {
     const fetchItems = useCallback(async () => {
         try {
             setLoading(true);
-            const response = await api.get('/api/items');
+            const response = await api.get('/items');
             const raw = Array.isArray(response.data) ? response.data : [];
             // Map backend enums to display values
             const mapped: LaundryItem[] = raw.map((item: any) => ({
